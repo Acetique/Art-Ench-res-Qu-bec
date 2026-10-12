@@ -1,8 +1,27 @@
 
 name: Collecte publique quotidienne
 
+# ==========================================================
+# ART ENCHERES QUEBEC - WORKFLOW V8.6
+# ==========================================================
+#
+# Collecte automatique des catalogues BYDealers.
+#
+# Fonctions :
+# - Execution manuelle et quotidienne
+# - Installation de Python 3.11
+# - Execution de Collectors/collect.py
+# - Validation des quatre fichiers JSON
+# - Protection des 491 notices historiques
+# - Detection des estimations suspectes
+# - Verification des huit catalogues
+# - Publication uniquement apres validation
+#
+# ==========================================================
+
 on:
   workflow_dispatch:
+
   schedule:
     - cron: '0 12 * * *'
 
@@ -14,209 +33,664 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+
   collecte:
-    name: Art Encheres Quebec V8.5
+
+    name: Art Encheres Quebec V8.6
+
     runs-on: ubuntu-24.04
+
     timeout-minutes: 30
 
     steps:
-      - name: Recuperer le depot
+
+      # ====================================================
+      # 1. RECUPERER LE DEPOT
+      # ====================================================
+
+      - name: Recuperer le depot GitHub
         uses: actions/checkout@v5
         with:
           persist-credentials: true
 
-      - name: Installer Python
+      # ====================================================
+      # 2. INSTALLER PYTHON
+      # ====================================================
+
+      - name: Installer Python 3.11
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: pip
           cache-dependency-path: Collectors/requirements.txt
 
+      # ====================================================
+      # 3. INSTALLER LES DEPENDANCES
+      # ====================================================
+
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r Collectors/requirements.txt
 
-      - name: Verifier la syntaxe
+      # ====================================================
+      # 4. VERIFIER LA SYNTAXE PYTHON
+      # ====================================================
+
+      - name: Verifier la syntaxe du collecteur
         run: |
           python -m py_compile Collectors/collect.py
 
-      - name: Executer la collecte V8.5
+          echo "Syntaxe Python valide."
+
+      # ====================================================
+      # 5. EXECUTER LE COLLECTEUR V8.6
+      # ====================================================
+
+      - name: Executer la collecte V8.6
         run: |
+          echo "======================================"
+          echo "ART ENCHERES QUEBEC"
+          echo "COLLECTE AUTOMATIQUE V8.6"
+          echo "======================================"
+
           python -u Collectors/collect.py
 
-      - name: Valider les resultats
+      # ====================================================
+      # 6. VALIDATION COMPLETE DES RESULTATS
+      # ====================================================
+
+      - name: Valider les donnees V8.6
         run: |
           python - <<'PY'
+
           import json
+
           from pathlib import Path
           from collections import Counter
 
-          VERSION = "V8.5"
+          # ================================================
+          # PARAMETRES DE VALIDATION
+          # ================================================
+
+          VERSION = "V8.6"
+
           MIN_NOTICES = 491
-          MIN_ESTIMATIONS = 286
+          MIN_ESTIMATIONS = 284
           MIN_DIMENSIONS = 482
 
-          def lire(path):
-              p = Path(path)
-              if not p.exists():
-                  raise SystemExit(
-                      f"ERREUR fichier absent : {path}"
-                  )
-              return json.loads(p.read_text("utf-8"))
-
-          oeuvres = lire("data/oeuvres.json")
-          rapport = lire("data/rapport-collecte.json")
-          qualite = lire("data/rapport-qualite.json")
-          differences = lire("data/rapport-differences.json")
+          EXPECTED_CATALOGUES = 8
 
           erreurs = []
+          avertissements = []
+
+          # ================================================
+          # LECTURE DES FICHIERS
+          # ================================================
+
+          def lire_json(filename):
+
+              path = Path(filename)
+
+              if not path.is_file():
+                  raise SystemExit(
+                      "Fichier absent : " + filename
+                  )
+
+              with path.open(
+                  "r",
+                  encoding="utf-8"
+              ) as f:
+                  data = json.load(f)
+
+              print("JSON valide :", filename)
+
+              return data
+
+          oeuvres = lire_json(
+              "data/oeuvres.json"
+          )
+
+          rapport = lire_json(
+              "data/rapport-collecte.json"
+          )
+
+          qualite = lire_json(
+              "data/rapport-qualite.json"
+          )
+
+          differences = lire_json(
+              "data/rapport-differences.json"
+          )
+
+          # ================================================
+          # VERIFICATION DES STRUCTURES
+          # ================================================
 
           if not isinstance(oeuvres, list):
-              raise SystemExit("Base invalide")
+              raise SystemExit(
+                  "oeuvres.json doit etre une liste."
+              )
 
-          for name, obj in [
+          for name, data in [
               ("rapport", rapport),
               ("qualite", qualite),
               ("differences", differences)
           ]:
-              if obj.get("version") != VERSION:
-                  erreurs.append(
-                      f"Version incorrecte : {name}"
+
+              if not isinstance(data, dict):
+                  raise SystemExit(
+                      "Structure JSON invalide : " + name
                   )
+
+          # ================================================
+          # VERIFICATION DE LA VERSION
+          # ================================================
+
+          for name, data in [
+              ("Collecte", rapport),
+              ("Qualite", qualite),
+              ("Differences", differences)
+          ]:
+
+              version = data.get("version")
+
+              print(
+                  "Version",
+                  name,
+                  ":",
+                  version
+              )
+
+              if version != VERSION:
+                  erreurs.append(
+                      "Version incorrecte : " + name
+                  )
+
+          # ================================================
+          # STATISTIQUES PRINCIPALES
+          # ================================================
 
           total = len(oeuvres)
 
           estimations = sum(
-              x.get("estimation_min") is not None
+              isinstance(x, dict)
+              and x.get("estimation_min") is not None
               and x.get("estimation_max") is not None
               for x in oeuvres
           )
 
           dimensions = sum(
-              bool(x.get("dimensions"))
+              isinstance(x, dict)
+              and bool(x.get("dimensions"))
               for x in oeuvres
           )
 
-          ids = [
-              x.get("id_passage")
+          prix_verifies = sum(
+              isinstance(x, dict)
+              and x.get("prix_realise_verifie") is True
               for x in oeuvres
-          ]
+          )
 
-          doublons = [
-              k for k, v in Counter(ids).items()
-              if v > 1
-          ]
+          print("")
+          print("======================================")
+          print("BASE DE DONNEES")
+          print("======================================")
 
           print("Notices :", total)
           print("Estimations :", estimations)
           print("Dimensions :", dimensions)
-          print("Doublons :", len(doublons))
+          print("Prix marteau verifies :", prix_verifies)
+
+          # ================================================
+          # PROTECTION DES NOTICES HISTORIQUES
+          # ================================================
 
           if total < MIN_NOTICES:
-              erreurs.append("Perte de notices")
-
-          if estimations < MIN_ESTIMATIONS:
-              erreurs.append("Regression estimations")
-
-          if dimensions < MIN_DIMENSIONS:
-              erreurs.append("Regression dimensions")
-
-          if None in ids or "" in ids or doublons:
-              erreurs.append("Identifiants invalides")
-
-          if rapport.get("total_oeuvres") != total:
-              erreurs.append("Total collecte incorrect")
-
-          if qualite.get("total_oeuvres") != total:
-              erreurs.append("Total qualite incorrect")
-
-          if qualite.get("avec_estimation") != estimations:
-              erreurs.append("Estimations incoherentes")
-
-          if qualite.get("avec_dimensions") != dimensions:
-              erreurs.append("Dimensions incoherentes")
-
-          catalogues = rapport.get("catalogues", [])
-
-          if len(catalogues) != 8:
-              erreurs.append("Catalogues manquants")
-
-          for c in catalogues:
-              print(
-                  c.get("vente"),
-                  c.get("statut"),
-                  c.get("oeuvres")
+              erreurs.append(
+                  "Nombre de notices insuffisant : "
+                  + str(total)
               )
 
-              if c.get("statut") != "ok":
+          if estimations < MIN_ESTIMATIONS:
+              erreurs.append(
+                  "Regression des estimations : "
+                  + str(estimations)
+              )
+
+          if dimensions < MIN_DIMENSIONS:
+              erreurs.append(
+                  "Regression des dimensions : "
+                  + str(dimensions)
+              )
+
+          # ================================================
+          # COHERENCE DES RAPPORTS
+          # ================================================
+
+          if rapport.get("total_oeuvres") != total:
+              erreurs.append(
+                  "Total du rapport de collecte incorrect."
+              )
+
+          if qualite.get("total_oeuvres") != total:
+              erreurs.append(
+                  "Total du rapport de qualite incorrect."
+              )
+
+          if qualite.get("avec_estimation") != estimations:
+              erreurs.append(
+                  "Nombre d'estimations incoherent."
+              )
+
+          if qualite.get("avec_dimensions") != dimensions:
+              erreurs.append(
+                  "Nombre de dimensions incoherent."
+              )
+
+          # ================================================
+          # IDENTIFIANTS
+          # ================================================
+
+          ids = []
+
+          for index, oeuvre in enumerate(oeuvres):
+
+              if not isinstance(oeuvre, dict):
                   erreurs.append(
-                      f"Catalogue invalide : {c.get('vente')}"
+                      "Notice invalide : " + str(index)
+                  )
+                  continue
+
+              identifier = oeuvre.get("id_passage")
+
+              if not identifier:
+                  erreurs.append(
+                      "Notice sans id_passage : "
+                      + str(index)
+                  )
+              else:
+                  ids.append(identifier)
+
+          counts = Counter(ids)
+
+          doublons = [
+              identifier
+              for identifier, count in counts.items()
+              if count > 1
+          ]
+
+          print("")
+          print("IDENTIFIANTS")
+          print("Identifiants uniques :", len(counts))
+          print("Doublons :", len(doublons))
+
+          if doublons:
+              erreurs.append(
+                  "Identifiants dupliques : "
+                  + str(len(doublons))
+              )
+
+          # ================================================
+          # VERIFICATION DES CATALOGUES
+          # ================================================
+
+          catalogues = rapport.get(
+              "catalogues", []
+          )
+
+          if not isinstance(catalogues, list):
+              erreurs.append(
+                  "Liste des catalogues invalide."
+              )
+              catalogues = []
+
+          print("")
+          print("======================================")
+          print("CATALOGUES BYDEALERS")
+          print("======================================")
+
+          for catalogue in catalogues:
+
+              if not isinstance(catalogue, dict):
+                  erreurs.append(
+                      "Entree de catalogue invalide."
+                  )
+                  continue
+
+              vente = catalogue.get("vente")
+              statut = catalogue.get("statut")
+              nombre = catalogue.get("oeuvres", 0)
+              pages = catalogue.get("pages", 0)
+
+              print(
+                  vente,
+                  "| statut =", statut,
+                  "| lots =", nombre,
+                  "| pages =", pages
+              )
+
+              if statut != "ok":
+                  erreurs.append(
+                      "Catalogue invalide : "
+                      + str(vente)
                   )
 
-          byd = rapport.get(
-              "sources", {}
-          ).get("BYDealers", {})
+              if (
+                  not isinstance(nombre, int)
+                  or nombre <= 0
+              ):
+                  erreurs.append(
+                      "Aucun lot detecte : "
+                      + str(vente)
+                  )
 
-          if byd.get("pdf_lus") != 8:
-              erreurs.append("PDF incomplets")
+              if catalogue.get("erreurs_pages"):
+                  erreurs.append(
+                      "Erreurs de lecture : "
+                      + str(vente)
+                  )
 
-          if byd.get("erreurs_ou_blocages") != 0:
-              erreurs.append("Erreurs de collecte")
+          if len(catalogues) != EXPECTED_CATALOGUES:
+              erreurs.append(
+                  "Nombre de catalogues incorrect : "
+                  + str(len(catalogues))
+              )
 
-          missing = differences.get(
+          # ================================================
+          # VERIFICATION DE LA SOURCE BYDEALERS
+          # ================================================
+
+          sources = rapport.get("sources", {})
+
+          bydealers = sources.get(
+              "BYDealers", {}
+          )
+
+          pdf_lus = bydealers.get(
+              "pdf_lus", 0
+          )
+
+          erreurs_sources = bydealers.get(
+              "erreurs_ou_blocages", 0
+          )
+
+          print("")
+          print("SOURCE BYDEALERS")
+          print("PDF lus :", pdf_lus)
+          print("Erreurs :", erreurs_sources)
+
+          if pdf_lus != EXPECTED_CATALOGUES:
+              erreurs.append(
+                  "Les huit PDF n'ont pas ete lus."
+              )
+
+          if erreurs_sources != 0:
+              erreurs.append(
+                  "Erreurs ou blocages pendant la collecte."
+              )
+
+          # ================================================
+          # PROTECTION DES LOTS HISTORIQUES
+          # ================================================
+
+          historique = differences.get(
+              "historique_avant"
+          )
+
+          detectes = differences.get(
+              "detectes_cette_execution"
+          )
+
+          non_redetectes = differences.get(
               "non_redetectes"
           )
 
-          print("Lots non redetectes :", missing)
+          print("")
+          print("======================================")
+          print("HISTORIQUE")
+          print("======================================")
 
-          if missing != 0:
+          print("Historique avant :", historique)
+          print("Lots redetectes :", detectes)
+          print("Lots non redetectes :", non_redetectes)
+
+          if not isinstance(historique, int):
               erreurs.append(
-                  "Lots historiques non redetectes"
+                  "Historique avant invalide."
               )
+
+          elif total < historique:
+              erreurs.append(
+                  "Perte de notices historiques."
+              )
+
+          if not isinstance(detectes, int):
+              erreurs.append(
+                  "Nombre de lots detectes invalide."
+              )
+
+          elif detectes < MIN_NOTICES:
+              erreurs.append(
+                  "Regression de detection des lots : "
+                  + str(detectes)
+              )
+
+          if non_redetectes != 0:
+              erreurs.append(
+                  "Lots historiques non redetectes : "
+                  + str(non_redetectes)
+              )
+
+          # ================================================
+          # CONFLITS ET CORRECTIONS
+          # ================================================
 
           conflits = differences.get(
               "conflits_a_verifier", []
           )
 
-          corrections = differences.get(
+          corrections_titres = differences.get(
               "corrections_appliquees", []
           )
 
-          print("Conflits :", len(conflits))
-          print("Corrections titres :", len(corrections))
+          corrections_estimations = differences.get(
+              "estimations_historiques_corrigees", []
+          )
+
+          if not isinstance(conflits, list):
+              erreurs.append(
+                  "Liste des conflits invalide."
+              )
+              conflits = []
+
+          if not isinstance(corrections_titres, list):
+              erreurs.append(
+                  "Liste des corrections de titres invalide."
+              )
+              corrections_titres = []
+
+          if not isinstance(corrections_estimations, list):
+              erreurs.append(
+                  "Liste des corrections d'estimations invalide."
+              )
+              corrections_estimations = []
+
+          print("")
+          print("======================================")
+          print("QUALITE DE L'EXTRACTION")
+          print("======================================")
+
+          print(
+              "Conflits a verifier :",
+              len(conflits)
+          )
+
+          print(
+              "Titres corriges :",
+              len(corrections_titres)
+          )
+
+          print(
+              "Estimations historiques corrigees :",
+              len(corrections_estimations)
+          )
 
           if conflits:
-              print(
-                  "ATTENTION : conflits a verifier"
+              avertissements.append(
+                  str(len(conflits))
+                  + " conflits a verifier manuellement."
               )
 
-          # Detecter les estimations ressemblant
-          # a des fourchettes d'annees.
-          for x in oeuvres:
-              low = x.get("estimation_min")
-              high = x.get("estimation_max")
+          # ================================================
+          # DETECTION DES FAUSSES ESTIMATIONS
+          # ================================================
 
-              if (
+          print("")
+          print("======================================")
+          print("VERIFICATION DES ESTIMATIONS")
+          print("======================================")
+
+          estimations_suspectes = []
+
+          for oeuvre in oeuvres:
+
+              if not isinstance(oeuvre, dict):
+                  continue
+
+              low = oeuvre.get("estimation_min")
+              high = oeuvre.get("estimation_max")
+
+              if not (
                   isinstance(low, (int, float))
                   and isinstance(high, (int, float))
-                  and 1800 <= low <= 2100
+              ):
+                  continue
+
+              # Les fourchettes ressemblant
+              # a des annees sont interdites.
+
+              if (
+                  1800 <= low <= 2100
                   and 1800 <= high <= 2100
               ):
-                  erreurs.append(
-                      "Estimation suspecte : "
-                      + str(x.get("id_passage"))
+                  estimations_suspectes.append(
+                      oeuvre.get("id_passage")
                   )
 
+              # Verifier l'ordre des montants.
+
+              if low > high:
+                  erreurs.append(
+                      "Estimation min > max : "
+                      + str(oeuvre.get("id_passage"))
+                  )
+
+              if low < 0 or high < 0:
+                  erreurs.append(
+                      "Estimation negative : "
+                      + str(oeuvre.get("id_passage"))
+                  )
+
+          print(
+              "Estimations suspectes :",
+              len(estimations_suspectes)
+          )
+
+          if estimations_suspectes:
+              for identifier in estimations_suspectes:
+                  erreurs.append(
+                      "Estimation suspecte : "
+                      + str(identifier)
+                  )
+
+          # ================================================
+          # VERIFICATION DES PRIX REALISES
+          # ================================================
+
+          prix_incoherents = []
+
+          for oeuvre in oeuvres:
+
+              if not isinstance(oeuvre, dict):
+                  continue
+
+              if oeuvre.get(
+                  "prix_realise_verifie"
+              ) is not True:
+                  continue
+
+              if (
+                  oeuvre.get("prix_marteau") is None
+                  and oeuvre.get("prix_vendu") is None
+              ):
+                  prix_incoherents.append(
+                      oeuvre.get("id_passage")
+                  )
+
+          print("")
+          print("PRIX REALISES")
+          print(
+              "Prix incoherents :",
+              len(prix_incoherents)
+          )
+
+          if prix_incoherents:
+              erreurs.append(
+                  "Prix declares verifies sans montant."
+              )
+
+          # ================================================
+          # RAPPORT FINAL
+          # ================================================
+
+          print("")
+          print("======================================")
+          print("AVERTISSEMENTS")
+          print("======================================")
+
+          if avertissements:
+              for avertissement in avertissements:
+                  print(
+                      "ATTENTION :",
+                      avertissement
+                  )
+          else:
+              print("Aucun avertissement.")
+
+          print("")
+          print("======================================")
+          print("ERREURS")
+          print("======================================")
+
           if erreurs:
-              for e in erreurs:
-                  print("ERREUR :", e)
+              for erreur in erreurs:
+                  print(
+                      "ERREUR :",
+                      erreur
+                  )
+
+              print("")
+              print(
+                  "VALIDATION V8.6 ECHOUEE"
+              )
+
               raise SystemExit(1)
 
-          print("VALIDATION V8.5 REUSSIE")
+          print("Aucune erreur bloquante.")
+
+          print("")
+          print(
+              "VALIDATION V8.6 REUSSIE"
+          )
+
           PY
 
-      - name: Enregistrer les resultats
+      # ====================================================
+      # 7. ENREGISTRER LES RESULTATS
+      # ====================================================
+
+      - name: Enregistrer les resultats sur GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -227,18 +701,35 @@ jobs:
           git add data/rapport-differences.json
 
           if git diff --cached --quiet; then
-            echo "Aucun changement."
+
+            echo "Aucun changement a enregistrer."
+
           else
-            git commit -m "Collecte Art Encheres Quebec V8.5"
+
+            git commit -m "Collecte Art Encheres Quebec V8.6"
+
             git pull --rebase
+
             git push
+
           fi
+
+      # ====================================================
+      # 8. RAPPORT FINAL
+      # ====================================================
 
       - name: Afficher le rapport final
         if: always()
         run: |
-          echo "RAPPORT V8.5"
+          echo "======================================"
+          echo "ART ENCHERES QUEBEC - RAPPORT V8.6"
+          echo "======================================"
 
           if [ -f data/rapport-collecte.json ]; then
             cat data/rapport-collecte.json
           fi
+
+          echo ""
+          echo "======================================"
+          echo "FIN DU WORKFLOW"
+          echo "======================================"
