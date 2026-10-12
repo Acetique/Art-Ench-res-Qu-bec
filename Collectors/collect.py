@@ -50,7 +50,7 @@ import requests
 # CONFIGURATION
 # ============================================================
 
-VERSION = "V8.10.2"
+VERSION = "V8.10.3"
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -66,7 +66,7 @@ REPORT_PATH = DATA / "rapport-collecte.json"
 QUALITY_PATH = DATA / "rapport-qualite.json"
 DIFF_PATH = DATA / "rapport-differences.json"
 
-USER_AGENT = "ArtEncheresQuebec/8.10.2"
+USER_AGENT = "ArtEncheresQuebec/8.10.3"
 
 TIMEOUT = 60
 MAX_PDF_BYTES = 50 * 1024 * 1024
@@ -666,13 +666,20 @@ def detect_lots(lines, known_artists, known_titles=None):
         if not header:
             continue
         number, title = header
-        if not plausible_title(title):
-            continue
         number_key = lot_number(number)
         historical_title = known_titles.get(number_key)
         exact_historical_match = bool(
             historical_title and normalize(title) == normalize(historical_title)
         )
+        # Un titre historiquement connu peut commencer par un terme de
+        # technique (ex. Oil Painting No. 2). Le titre ET le numero doivent
+        # correspondre; le seul numero ne valide jamais un candidat.
+        if not exact_historical_match and not plausible_title(title):
+            continue
+        # Les dates de catalogues, expositions et ventes ne sont pas des
+        # titres, meme lorsqu'un artiste est present a proximite.
+        if not exact_historical_match and reference_not_title(title):
+            continue
         artist = None
         bio_near = False
         for bio_index in range(max(0, index - 5), index):
@@ -1023,6 +1030,26 @@ RE_FALSE_TITLE = re.compile(
 
 # Les mois, les annees et les termes comme triptyque peuvent appartenir
 # a des titres authentiques. Ils ne sont donc plus interdits.
+
+
+RE_BIBLIO_DATE = re.compile(
+    r"(?i)^(?:mai|may|juin|june|juillet|july|octobre|october|"
+    r"novembre|november|d[eé]cembre|f[eé]vrier|february|"
+    r"janvier|january|mars|march|avril|april|ao[uû]t|august|"
+    r"septembre|september)\s+(?:au\s+\d{1,2}\s+)?"
+    r"(?:\d{1,2}\s+)?(?:au\s+)?(?:\d{1,2}\s+)?(?:19|20)\d{2}\b"
+)
+RE_CATALOGUE_REFERENCE = re.compile(
+    r"(?i)\b(?:\(lot\s*\d+\)|beaverbrook art gallery|"
+    r"mus[eé]e des beaux-arts de|fredericton|frederiction)\b"
+)
+
+
+def reference_not_title(title):
+    """Repere des fragments bibliographiques; n'interdit pas les vrais titres dates."""
+    value = clean(title)
+    return bool(RE_BIBLIO_DATE.search(value) or
+                RE_CATALOGUE_REFERENCE.search(value))
 
 
 def plausible_title(title):
@@ -2155,7 +2182,7 @@ def main():
     print("")
     print("======================================")
     print("ART ENCHERES QUEBEC")
-    print("COLLECTEUR V8.10.2")
+    print("COLLECTEUR V8.10.3")
     print("======================================")
 
     historical_records = load_database()
@@ -2434,7 +2461,7 @@ def main():
     )
 
     if missing_ids:
-        print("\nAUDIT V8.10.2 : lots historiques non redetectes :", len(missing_ids))
+        print("\nAUDIT V8.10.3 : lots historiques non redetectes :", len(missing_ids))
         for missing_id in missing_ids:
             old = database.get(missing_id, {})
             print(json.dumps({
@@ -2643,7 +2670,7 @@ def main():
 
     print("")
     print("======================================")
-    print("RESULTATS V8.10.2")
+    print("RESULTATS V8.10.3")
     print("======================================")
 
     print(
@@ -2702,7 +2729,7 @@ def main():
     )
 
     print("")
-    print("COLLECTE V8.10.2 TERMINEE")
+    print("COLLECTE V8.10.3 TERMINEE")
     print("======================================")
 
 
