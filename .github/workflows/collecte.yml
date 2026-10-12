@@ -3,7 +3,7 @@ name: Collecte publique quotidienne
 
 # ==========================================================
 # ART ENCHERES QUEBEC — WORKFLOW V8.8
-# Compatible Node.js 24
+# Actions compatibles Node.js 24
 # ==========================================================
 
 on:
@@ -21,11 +21,8 @@ concurrency:
 
 jobs:
   collecte:
-
     name: Art Encheres Quebec V8.8
-
     runs-on: ubuntu-24.04
-
     timeout-minutes: 30
 
     steps:
@@ -60,7 +57,7 @@ jobs:
           python -m pip install -r Collectors/requirements.txt
 
       # ====================================================
-      # 4. VERIFIER LA SYNTAXE PYTHON
+      # 4. VERIFIER LA SYNTAXE DU COLLECTEUR
       # ====================================================
 
       - name: Verifier la syntaxe du collecteur
@@ -168,7 +165,7 @@ jobs:
           )
 
           # ================================================
-          # STRUCTURES
+          # STRUCTURES ET VERSIONS
           # ================================================
 
           if not isinstance(oeuvres, list):
@@ -893,12 +890,12 @@ jobs:
           PY
 
       # ====================================================
-      # 7. ARCHIVER LES RAPPORTS
+      # 7. ARCHIVER LES RAPPORTS - NODE.JS 24
       # ====================================================
 
       - name: Archiver les rapports de collecte
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: rapports-collecte-v8-8
           path: |
