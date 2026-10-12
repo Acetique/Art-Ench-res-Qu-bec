@@ -1,6 +1,6 @@
 {
   "version": "V8.7",
-  "date": "2026-10-12T22:38:35.531878+00:00",
+  "date": "2026-10-12T22:50:19.817134+00:00",
   "historique_avant": 491,
   "detectes_cette_execution": 491,
   "non_redetectes": 0,
@@ -9,111 +9,6 @@
   "nettoyages": [],
   "champs_completes": [],
   "conflits_a_verifier": [],
-  "corrections_appliquees": [
-    {
-      "id_passage": "eeaf913dad21160c7bfe",
-      "vente": "Printemps 2023",
-      "lot": "07",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (nature morte) /",
-          "nouveau": "Sans titre (nature morte) / Untitled (Still Life)",
-          "motif": "extension_multiligne"
-        }
-      ]
-    },
-    {
-      "id_passage": "85e2a605557a7180ebcd",
-      "vente": "Printemps 2025",
-      "lot": "60",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "Cycle crétois 2, n o 5 –",
-          "nouveau": "Cycle crétois 2, n o 5 – Pâques",
-          "motif": "extension_multiligne"
-        }
-      ]
-    },
-    {
-      "id_passage": "6817ee1e382af0e92e78",
-      "vente": "Automne 2025",
-      "lot": "09",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (Promenade nocturne) /",
-          "nouveau": "Sans titre (Promenade nocturne) / Untitled (Evening Stroll)",
-          "motif": "extension_multiligne"
-        }
-      ]
-    },
-    {
-      "id_passage": "d589499f536e7a4febf2",
-      "vente": "Automne 2025",
-      "lot": "10",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (Maison de l’artiste) /",
-          "nouveau": "Sans titre (Maison de l’artiste) / Untitled (Artist’s House)",
-          "motif": "extension_multiligne"
-        }
-      ]
-    },
-    {
-      "id_passage": "df0adbdf85d4353d1cd4",
-      "vente": "Automne 2025",
-      "lot": "58",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (de la série La maison ) /",
-          "nouveau": "Sans titre (de la série La maison ) / Untitled (from the series La maison)",
-          "motif": "extension_multiligne"
-        }
-      ]
-    },
-    {
-      "id_passage": "a121e24e662866269aa8",
-      "vente": "Automne 2025",
-      "lot": "59",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "Losange (de la série /",
-          "nouveau": "Losange (de la série / from the series Continuum)",
-          "motif": "extension_multiligne"
-        }
-      ]
-    },
-    {
-      "id_passage": "0c03bafb8986866b6af7",
-      "vente": "Succession printemps 2026",
-      "lot": "54",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "King, Queen, and Jokers VI:",
-          "nouveau": "King, Queen, and Jokers VI: It’s a Democratic Age",
-          "motif": "extension_multiligne"
-        }
-      ]
-    },
-    {
-      "id_passage": "26f7c38292aa588889ea",
-      "vente": "Succession printemps 2026",
-      "lot": "99",
-      "corrections": [
-        {
-          "champ": "titre",
-          "ancien": "Portrait of Eddie Barnes and Ed Murphy,",
-          "nouveau": "Portrait of Eddie Barnes and Ed Murphy, Lobster Fishermen, Bay View, Nova Scotia",
-          "motif": "extension_multiligne"
-        }
-      ]
-    }
-  ],
+  "corrections_appliquees": [],
   "estimations_historiques_corrigees": []
 }
