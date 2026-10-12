@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   collecte:
-    name: Art Encheres Quebec V8
+    name: Art Encheres Quebec V8.1
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
@@ -37,44 +37,56 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r Collectors/requirements.txt
 
-      - name: Verifier le code
+      - name: Verifier la syntaxe Python
         run: |
           python -m py_compile Collectors/collect.py
 
-      - name: Executer la collecte V8
+      - name: Executer la collecte V8.1
         run: |
-          python Collectors/collect.py
+          python -u Collectors/collect.py
 
-      - name: Verifier les resultats
+      - name: Verifier les fichiers JSON
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          paths = [
-              Path("data/oeuvres.json"),
-              Path("data/rapport-collecte.json"),
-              Path("data/rapport-qualite.json"),
+          names = [
+              "data/oeuvres.json",
+              "data/rapport-collecte.json",
+              "data/rapport-qualite.json",
           ]
 
-          for path in paths:
-              with path.open(encoding="utf-8") as f:
-                  data = json.load(f)
-              print("Valide :", path)
+          for name in names:
+              path = Path(name)
+              if not path.exists():
+                  raise SystemExit(f"Fichier absent : {name}")
 
-          with paths[0].open(encoding="utf-8") as f:
+              with path.open(encoding="utf-8") as f:
+                  json.load(f)
+
+              print("JSON valide :", name)
+
+          with open("data/oeuvres.json", encoding="utf-8") as f:
               oeuvres = json.load(f)
 
-          with paths[1].open(encoding="utf-8") as f:
+          with open("data/rapport-collecte.json", encoding="utf-8") as f:
               rapport = json.load(f)
 
-          with paths[2].open(encoding="utf-8") as f:
+          with open("data/rapport-qualite.json", encoding="utf-8") as f:
               qualite = json.load(f)
 
           assert isinstance(oeuvres, list)
-          assert rapport["version"] == "V8"
-          assert qualite["version"] == "V8"
+          assert rapport["version"] == "V8.1"
+          assert qualite["version"] == "V8.1"
           assert rapport["total_oeuvres"] == len(oeuvres)
+
+          # Ne pas perdre les 488 notices de la V7.
+          if len(oeuvres) < 488:
+              raise SystemExit(
+                  "ERREUR : moins de 488 notices. "
+                  "Publication annulee."
+              )
 
           print("Notices :", len(oeuvres))
           print("Estimations :", qualite["avec_estimation"])
@@ -95,14 +107,16 @@ jobs:
           if git diff --cached --quiet; then
             echo "Aucun changement."
           else
-            git commit -m "Actualisation Art Encheres Quebec V8"
+            git commit -m "Actualisation Art Encheres Quebec V8.1"
             git pull --rebase
             git push
           fi
 
-      - name: Afficher le rapport
+      - name: Afficher le rapport final
         if: always()
         run: |
+          echo "ART ENCHERES QUEBEC V8.1"
+
           if [ -f data/rapport-collecte.json ]; then
             cat data/rapport-collecte.json
           fi
