@@ -15,23 +15,15 @@ concurrency:
 
 jobs:
   collecte:
-    name: Art Encheres Quebec V7
+    name: Art Encheres Quebec V8
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     steps:
-      # =====================================
-      # 1. RECUPERER LE DEPOT
-      # =====================================
-
       - name: Recuperer le depot
         uses: actions/checkout@v5
         with:
           persist-credentials: true
-
-      # =====================================
-      # 2. INSTALLER PYTHON
-      # =====================================
 
       - name: Installer Python
         uses: actions/setup-python@v6
@@ -40,104 +32,56 @@ jobs:
           cache: pip
           cache-dependency-path: Collectors/requirements.txt
 
-      # =====================================
-      # 3. INSTALLER LES DEPENDANCES
-      # =====================================
-
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r Collectors/requirements.txt
 
-      # =====================================
-      # 4. VERIFIER LE CODE
-      # =====================================
-
-      - name: Verifier le collecteur V7
+      - name: Verifier le code
         run: |
-          mkdir -p data
-          test -f Collectors/collect.py
           python -m py_compile Collectors/collect.py
 
-      # =====================================
-      # 5. LANCER LA COLLECTE
-      # =====================================
-
-      - name: Collecter les catalogues V7
+      - name: Executer la collecte V8
         run: |
           python Collectors/collect.py
 
-      # =====================================
-      # 6. VERIFIER LES DONNEES
-      # =====================================
-
-      - name: Verifier les fichiers JSON
+      - name: Verifier les resultats
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          files = [
-              "data/oeuvres.json",
-              "data/rapport-collecte.json",
-              "data/rapport-qualite.json",
+          paths = [
+              Path("data/oeuvres.json"),
+              Path("data/rapport-collecte.json"),
+              Path("data/rapport-qualite.json"),
           ]
 
-          for filename in files:
-              path = Path(filename)
-
-              if not path.exists():
-                  raise SystemExit(
-                      f"Fichier absent : {filename}"
-                  )
-
+          for path in paths:
               with path.open(encoding="utf-8") as f:
-                  json.load(f)
+                  data = json.load(f)
+              print("Valide :", path)
 
-              print("JSON valide :", filename)
-
-          with open(
-              "data/oeuvres.json",
-              encoding="utf-8"
-          ) as f:
+          with paths[0].open(encoding="utf-8") as f:
               oeuvres = json.load(f)
 
-          with open(
-              "data/rapport-qualite.json",
-              encoding="utf-8"
-          ) as f:
-              quality = json.load(f)
+          with paths[1].open(encoding="utf-8") as f:
+              rapport = json.load(f)
 
-          if not isinstance(oeuvres, list):
-              raise SystemExit(
-                  "Format oeuvres.json invalide"
-              )
+          with paths[2].open(encoding="utf-8") as f:
+              qualite = json.load(f)
 
-          print()
-          print("ART ENCHERES QUEBEC V7")
-          print("======================")
-          print("Total oeuvres :", len(oeuvres))
-          print(
-              "Avec estimation :",
-              quality.get("avec_estimation")
-          )
-          print(
-              "Avec dimensions :",
-              quality.get("avec_dimensions")
-          )
-          print(
-              "Rapprochements potentiels :",
-              quality.get("nombre_rapprochements")
-          )
-          print(
-              "Notices a controler :",
-              quality.get("nombre_notices_a_controler")
-          )
+          assert isinstance(oeuvres, list)
+          assert rapport["version"] == "V8"
+          assert qualite["version"] == "V8"
+          assert rapport["total_oeuvres"] == len(oeuvres)
+
+          print("Notices :", len(oeuvres))
+          print("Estimations :", qualite["avec_estimation"])
+          print("Dimensions :", qualite["avec_dimensions"])
+          print("Rapprochements :", qualite["nombre_rapprochements"])
+          print("Anomalies :", qualite["nombre_notices_a_controler"])
           PY
-
-      # =====================================
-      # 7. SAUVEGARDER SUR GITHUB
-      # =====================================
 
       - name: Enregistrer les resultats
         run: |
@@ -151,25 +95,14 @@ jobs:
           if git diff --cached --quiet; then
             echo "Aucun changement."
           else
-            git commit -m "Actualisation Art Encheres Quebec V7"
+            git commit -m "Actualisation Art Encheres Quebec V8"
             git pull --rebase
             git push
           fi
 
-      # =====================================
-      # 8. RAPPORT FINAL
-      # =====================================
-
-      - name: Rapport final
+      - name: Afficher le rapport
         if: always()
         run: |
-          echo "================================"
-          echo " ART ENCHERES QUEBEC V7"
-          echo "================================"
-
           if [ -f data/rapport-collecte.json ]; then
             cat data/rapport-collecte.json
           fi
-
-          echo ""
-          echo "Fin de la collecte."
