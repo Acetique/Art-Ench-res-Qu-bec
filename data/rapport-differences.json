@@ -1,393 +1,116 @@
 {
-  "version": "V8.9",
-  "date": "2026-10-12T23:16:59.572812+00:00",
+  "version": "V8.10.1",
+  "date": "2026-10-12T23:33:56.569698+00:00",
   "historique_avant": 491,
-  "detectes_cette_execution": 491,
-  "non_redetectes": 0,
-  "lots_non_redetectes": [],
+  "detectes_cette_execution": 480,
+  "non_redetectes": 11,
+  "lots_non_redetectes": [
+    "0d615a662073ec50c03b",
+    "1315d21490217a69db36",
+    "4c477e0d5a6b6ebac43d",
+    "6855654823804667585c",
+    "7ae91f01dd70a895b2db",
+    "81d448e1ea7c0e4a097f",
+    "81f06675b7d20fc4c85e",
+    "90401b8bcc6efb9a33c1",
+    "b7131e6dd517cde8e867",
+    "ba045ed666f6d7e1ba88",
+    "fe974181685f7f45dbba"
+  ],
+  "details_lots_non_redetectes": [
+    {
+      "id_passage": "0d615a662073ec50c03b",
+      "vente": "Automne 2023",
+      "lot": "66",
+      "artiste": "Jean Paul Lemieux",
+      "titre": "Le temps retrouvé – Kent House 1913",
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf"
+    },
+    {
+      "id_passage": "1315d21490217a69db36",
+      "vente": "Succession printemps 2026",
+      "lot": "57",
+      "artiste": "Francis Hans (Frank/Franz) Johnston",
+      "titre": "October Snow",
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
+    },
+    {
+      "id_passage": "4c477e0d5a6b6ebac43d",
+      "vente": "Automne 2024",
+      "lot": "31",
+      "artiste": "Charles Gagnon",
+      "titre": "July Painting No. 2",
+      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf"
+    },
+    {
+      "id_passage": "6855654823804667585c",
+      "vente": "Succession printemps 2026",
+      "lot": "64",
+      "artiste": "Alfred Joseph (A. J.) Casson",
+      "titre": "Early July Morning",
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
+    },
+    {
+      "id_passage": "7ae91f01dd70a895b2db",
+      "vente": "Automne 2024",
+      "lot": "05",
+      "artiste": "Alfred Pellan",
+      "titre": "Sur la plage",
+      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf"
+    },
+    {
+      "id_passage": "81d448e1ea7c0e4a097f",
+      "vente": "Automne 2025",
+      "lot": "36",
+      "artiste": "Jean Paul Riopelle",
+      "titre": "Nouvelles impressions (PM 20)",
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
+    },
+    {
+      "id_passage": "81f06675b7d20fc4c85e",
+      "vente": "Printemps 2025",
+      "lot": "23",
+      "artiste": "Henry Moore",
+      "titre": "Woman Reading",
+      "url": "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf"
+    },
+    {
+      "id_passage": "90401b8bcc6efb9a33c1",
+      "vente": "Automne 2025",
+      "lot": "49",
+      "artiste": "Françoise Sullivan",
+      "titre": "Red Glow",
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
+    },
+    {
+      "id_passage": "b7131e6dd517cde8e867",
+      "vente": "Automne 2023",
+      "lot": "02",
+      "artiste": "Léon Bellefleur",
+      "titre": "Fleurs de mai",
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf"
+    },
+    {
+      "id_passage": "ba045ed666f6d7e1ba88",
+      "vente": "Succession printemps 2026",
+      "lot": "73",
+      "artiste": "William Paterson Ewen",
+      "titre": "Oil Painting No. 2",
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
+    },
+    {
+      "id_passage": "fe974181685f7f45dbba",
+      "vente": "Automne 2025",
+      "lot": "35",
+      "artiste": "Jean Paul Riopelle",
+      "titre": "Sans titre / Untitled",
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
+    }
+  ],
   "nouveaux_passages": [],
   "nettoyages": [],
   "champs_completes": [],
-  "conflits_a_verifier": [
-    {
-      "id_passage": "41581229d7b92e46dd5f",
-      "vente": "Printemps 2023",
-      "lot": "26",
-      "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
-      "page_pdf": 11,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            8000,
-            12000
-          ],
-          "extrait": [
-            7000,
-            9000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "9701d069c15b14a64b08",
-      "vente": "Automne 2023",
-      "lot": "30",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
-      "page_pdf": 13,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            100000,
-            150000
-          ],
-          "extrait": [
-            55000,
-            65000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "7712878059a23679ac78",
-      "vente": "Automne 2023",
-      "lot": "60",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
-      "page_pdf": 42,
-      "conflits": [
-        {
-          "champ": "titre",
-          "ancien": "La scène hivernale de la rue",
-          "extrait": "années de carrière, il explore des champs artistiques qui vont de la peinture à"
-        },
-        {
-          "champ": "estimation",
-          "ancien": [
-            30000,
-            40000
-          ],
-          "extrait": [
-            35000,
-            45000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "9153f5b60e497ae80f76",
-      "vente": "Automne 2023",
-      "lot": "71",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
-      "page_pdf": 49,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            20000,
-            30000
-          ],
-          "extrait": [
-            30000,
-            40000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "be2bf065cb3fbff89e6e",
-      "vente": "Printemps 2024",
-      "lot": "05",
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page_pdf": 35,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            70000,
-            90000
-          ],
-          "extrait": [
-            35000,
-            45000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "0aa997c873cc68f06d39",
-      "vente": "Printemps 2024",
-      "lot": "52",
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page_pdf": 46,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            10000,
-            13000
-          ],
-          "extrait": [
-            15000,
-            20000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "da73718ad6d919704ace",
-      "vente": "Printemps 2024",
-      "lot": "59",
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page_pdf": 52,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            18000,
-            22000
-          ],
-          "extrait": [
-            8000,
-            12000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "b8902ff66eec57e850e2",
-      "vente": "Automne 2024",
-      "lot": "08",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page_pdf": 11,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            15000,
-            20000
-          ],
-          "extrait": [
-            20000,
-            30000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "a45c0fdf3d452c2770f7",
-      "vente": "Automne 2024",
-      "lot": "04",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page_pdf": 8,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            18000,
-            22000
-          ],
-          "extrait": [
-            5000,
-            7000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "aba5cbd2cdc1e8095b52",
-      "vente": "Automne 2024",
-      "lot": "10",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page_pdf": 11,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            40000,
-            60000
-          ],
-          "extrait": [
-            15000,
-            20000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "7193d7004426f2e5b9f8",
-      "vente": "Automne 2024",
-      "lot": "11",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page_pdf": 13,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            10000,
-            15000
-          ],
-          "extrait": [
-            5000,
-            7000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "e6d8ba31fb3c17000499",
-      "vente": "Automne 2024",
-      "lot": "13",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page_pdf": 14,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            10000,
-            15000
-          ],
-          "extrait": [
-            20000,
-            30000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "cea7804917622e0b37b7",
-      "vente": "Printemps 2025",
-      "lot": "30",
-      "url": "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf",
-      "page_pdf": 20,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            40000,
-            60000
-          ],
-          "extrait": [
-            70000,
-            90000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "b4352cfb6b805cbd2e96",
-      "vente": "Printemps 2025",
-      "lot": "09",
-      "url": "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf",
-      "page_pdf": 30,
-      "conflits": [
-        {
-          "champ": "titre",
-          "ancien": "Massawippi",
-          "extrait": "e Biennale de São Paulo, au Brésil. Jean-René Ostiguy, alors conservateur de l’art"
-        },
-        {
-          "champ": "estimation",
-          "ancien": [
-            9000,
-            12000
-          ],
-          "extrait": [
-            40000,
-            50000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "1220fc6d30f7cf7f99a0",
-      "vente": "Automne 2025",
-      "lot": "34",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page_pdf": 9,
-      "conflits": [
-        {
-          "champ": "titre",
-          "ancien": "Iceberg n o 7 (Passes)",
-          "extrait": "et 35; listée à la page 130 (cat. n o 29). / Work reproduced"
-        }
-      ]
-    },
-    {
-      "id_passage": "d589499f536e7a4febf2",
-      "vente": "Automne 2025",
-      "lot": "10",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page_pdf": 38,
-      "conflits": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (Maison de l’artiste) / Untitled (Artist’s House)",
-          "extrait": "tableaux matiéristes et colorés qui fait contrepoint aux œuvres plus sobres présentées"
-        }
-      ]
-    },
-    {
-      "id_passage": "f2c0cb75ab8c0224e45f",
-      "vente": "Printemps 2026",
-      "lot": "26",
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page_pdf": 27,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            30000,
-            40000
-          ],
-          "extrait": [
-            15000,
-            20000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "1837412d3d13e08ad076",
-      "vente": "Printemps 2026",
-      "lot": "31",
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page_pdf": 30,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            35000,
-            45000
-          ],
-          "extrait": [
-            15000,
-            20000
-          ]
-        }
-      ]
-    },
-    {
-      "id_passage": "d166213cea96661b1beb",
-      "vente": "Printemps 2026",
-      "lot": "36",
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page_pdf": 35,
-      "conflits": [
-        {
-          "champ": "estimation",
-          "ancien": [
-            25000,
-            35000
-          ],
-          "extrait": [
-            20000,
-            30000
-          ]
-        }
-      ]
-    }
-  ],
+  "conflits_a_verifier": [],
   "corrections_appliquees": [],
   "estimations_historiques_corrigees": []
 }
