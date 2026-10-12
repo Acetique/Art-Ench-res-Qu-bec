@@ -4,7 +4,7 @@
 
 """
 ART ENCHERES QUEBEC
-COLLECTEUR HISTORIQUE V8.8
+COLLECTEUR HISTORIQUE V8.9
 
 Sources :
     BYDealers - 8 catalogues historiques
@@ -50,7 +50,7 @@ import requests
 # CONFIGURATION
 # ============================================================
 
-VERSION = "V8.8"
+VERSION = "V8.9"
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -66,7 +66,7 @@ REPORT_PATH = DATA / "rapport-collecte.json"
 QUALITY_PATH = DATA / "rapport-qualite.json"
 DIFF_PATH = DATA / "rapport-differences.json"
 
-USER_AGENT = "ArtEncheresQuebec/8.8"
+USER_AGENT = "ArtEncheresQuebec/8.9"
 
 TIMEOUT = 60
 MAX_PDF_BYTES = 50 * 1024 * 1024
@@ -733,7 +733,7 @@ def reconstruct_title(lines, entry, end):
         second["text"]
     )
 
-    if not continuation:
+    if not continuation or not plausible_title(continuation):
         return title
 
     if len(continuation) > 120:
@@ -798,7 +798,7 @@ def safe_title_extension(old, new):
 
 
 # ============================================================
-# ESTIMATIONS V8.8
+# ESTIMATIONS V8.9
 # ============================================================
 
 def parse_money(value):
@@ -934,25 +934,8 @@ def estimate_candidates(section):
                     "confiance": 95
                 })
 
-    # Recherche secondaire :
-    # uniquement une fourchette comportant
-    # un symbole monetaire explicite.
-    if not candidates:
-        for line in section:
-            text = line["text"]
-
-            if "$" not in text:
-                continue
-
-            if RE_DIMENSIONS.search(text):
-                continue
-
-            for value in parse_estimate_range(text):
-                candidates.append({
-                    "valeur": value,
-                    "source": "fourchette_monetaire",
-                    "confiance": 70
-                })
+    # V8.9: aucune fourchette monetaire isolee n'est acceptee.
+    # Elle peut provenir d'une provenance ou d'un lot voisin.
 
     unique = {}
 
@@ -995,7 +978,7 @@ def extract_estimate(section):
 
 
 # ============================================================
-# DIMENSIONS V8.8
+# DIMENSIONS V8.9
 # ============================================================
 
 def format_dimension(value):
@@ -1080,6 +1063,54 @@ def extract_dimensions(section):
 
 
 # ============================================================
+# FILTRES CONSERVATEURS V8.9
+# ============================================================
+
+RE_FALSE_TITLE = re.compile(
+    r"(?i)(\b(?:mai|may|juin|june|juillet|july|octobre|october|"
+    r"novembre|november|decembre|décembre|fevrier|février|"
+    r"exposition|exhibition|catalogue|provenance|bibliographie|"
+    r"literature|art canadien important|important canadian art)\b|"
+    r"\b(?:19|20)\d{2}\b|\b\d+\s*[x×]\s*\d+|"
+    r"\b(?:cm|inches|triptyque|triptych)\b)"
+)
+
+
+def plausible_title(title):
+    value = clean(title)
+    if not (2 <= len(value) <= 140):
+        return False
+    if RE_FALSE_TITLE.search(value):
+        return False
+    if RE_ESTIMATE_LABEL.search(value) or RE_TECHNIQUE.match(value):
+        return False
+    if value.startswith(("-", "–", "—")):
+        return False
+    return True
+
+
+def safe_estimate_evidence(section, value):
+    """N'accepte que les montants adjacents a une mention explicite.
+
+    Ne garantit pas l'attribution au lot: les estimations nouvelles
+    sont soumises a revue et ne sont pas publiees automatiquement.
+    """
+    for index, line in enumerate(section):
+        if not RE_ESTIMATE_LABEL.search(line["text"]):
+            continue
+        for offset in (0, 1):
+            pos = index + offset
+            if pos >= len(section):
+                continue
+            candidate_line = section[pos]["text"]
+            if RE_DIMENSIONS.search(candidate_line):
+                continue
+            if value in parse_estimate_range(candidate_line):
+                return True
+    return False
+
+
+# ============================================================
 # METADONNEES D'UN LOT
 # ============================================================
 
@@ -1126,7 +1157,7 @@ def extract_lot_metadata(
 
 
 # ============================================================
-# IMAGES PDF V8.8
+# IMAGES PDF V8.9
 # ============================================================
 
 def image_candidates(page, document):
@@ -1378,7 +1409,7 @@ def create_notice(
         "source_page": url,
         "source_page_pdf": page_number,
 
-        "origine": "catalogue_pdf_v8_8",
+        "origine": "catalogue_pdf_v8_9",
 
         "confiance_extraction": (
             95
@@ -1587,7 +1618,7 @@ def normalize_historical(item):
 
 
 # ============================================================
-# FUSION HISTORIQUE V8.8
+# FUSION HISTORIQUE V8.9
 # ============================================================
 
 def merge_notice(old, new):
@@ -1652,17 +1683,17 @@ def merge_notice(old, new):
             old_title,
             new_title
         ):
-            merged["titre"] = new_title
-
+            # Une extension plausible reste une proposition de revue.
             corrections.append({
                 "champ": "titre",
                 "ancien": old_title,
                 "nouveau": new_title,
-                "motif": "titre_multiligne"
+                "motif": "titre_multiligne_a_verifier"
             })
 
-        elif not normalize(old_title).startswith(
-            normalize(new_title)
+        elif (
+            plausible_title(new_title)
+            and not normalize(old_title).startswith(normalize(new_title))
         ):
             conflicts.append({
                 "champ": "titre",
@@ -1717,18 +1748,13 @@ def merge_notice(old, new):
             "conflit_estimation"
         )
     ):
-        merged["estimation_min"] = new_low
-        merged["estimation_max"] = new_high
-
-        merged["estimation"] = new[
-            "estimation"
-        ]
-
-        merged["type_prix"] = "estimation"
-
-        additions.append(
-            "estimation"
-        )
+        # Ne jamais attribuer une estimation nouvelle sans revue
+        # humaine de la page PDF et du lot.
+        conflicts.append({
+            "champ": "estimation_nouvelle_a_verifier",
+            "ancien": None,
+            "extrait": [new_low, new_high]
+        })
 
     elif (
         old_low is not None
@@ -2178,7 +2204,7 @@ def main():
     print("")
     print("======================================")
     print("ART ENCHERES QUEBEC")
-    print("COLLECTEUR V8.8")
+    print("COLLECTEUR V8.9")
     print("======================================")
 
     historical_records = load_database()
@@ -2388,6 +2414,8 @@ def main():
                             "lot": item.get(
                                 "lot"
                             ),
+                            "url": item.get("url"),
+                            "page_pdf": item.get("source_page_pdf"),
                             "conflits": problems
                         })
 
@@ -2607,7 +2635,8 @@ def main():
         "note": (
             "Les prix marteau ne sont jamais "
             "inventes. Les rapprochements entre "
-            "oeuvres doivent etre verifies."
+            "oeuvres doivent etre verifies. Les nouvelles "
+            "estimations sont mises en revue avant publication."
         )
     }
 
@@ -2641,7 +2670,7 @@ def main():
 
     print("")
     print("======================================")
-    print("RESULTATS V8.8")
+    print("RESULTATS V8.9")
     print("======================================")
 
     print(
@@ -2700,7 +2729,7 @@ def main():
     )
 
     print("")
-    print("COLLECTE V8.8 TERMINEE")
+    print("COLLECTE V8.9 TERMINEE")
     print("======================================")
 
 
