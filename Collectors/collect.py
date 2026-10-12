@@ -50,7 +50,7 @@ import requests
 # CONFIGURATION
 # ============================================================
 
-VERSION = "V8.10.1"
+VERSION = "V8.10.2"
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -66,7 +66,7 @@ REPORT_PATH = DATA / "rapport-collecte.json"
 QUALITY_PATH = DATA / "rapport-qualite.json"
 DIFF_PATH = DATA / "rapport-differences.json"
 
-USER_AGENT = "ArtEncheresQuebec/8.10.1"
+USER_AGENT = "ArtEncheresQuebec/8.10.2"
 
 TIMEOUT = 60
 MAX_PDF_BYTES = 50 * 1024 * 1024
@@ -652,8 +652,14 @@ def detect_lot_header(text):
     return number, title
 
 
-def detect_lots(lines, known_artists):
-    """Repère les lots; un artiste historique ne valide PAS un faux titre."""
+def detect_lots(lines, known_artists, known_titles=None):
+    """Detection stricte + secours pour titres historiques exactement reconnus.
+
+    Le numero de lot seul ne suffit jamais a valider une ligne de PDF.
+    Un titre historique ne peut valider que son propre lot, sans remplacer
+    ni corriger automatiquement les informations historiques.
+    """
+    known_titles = known_titles or {}
     entries = []
     for index, line in enumerate(lines):
         header = detect_lot_header(line["text"])
@@ -662,30 +668,34 @@ def detect_lots(lines, known_artists):
         number, title = header
         if not plausible_title(title):
             continue
+        number_key = lot_number(number)
+        historical_title = known_titles.get(number_key)
+        exact_historical_match = bool(
+            historical_title and normalize(title) == normalize(historical_title)
+        )
         artist = None
         bio_near = False
-        for bio_index in range(max(0, index - 3), index):
+        for bio_index in range(max(0, index - 5), index):
             if not is_biography(lines[bio_index]["text"]):
                 continue
             bio_near = True
-            for artist_index in range(max(0, bio_index - 2), bio_index):
+            for artist_index in range(max(0, bio_index - 3), bio_index):
                 candidate = clean(lines[artist_index]["text"])
                 if valid_artist(candidate):
                     artist = candidate
                     break
             if artist:
                 break
-        historical_artist = known_artists.get(lot_number(number))
-        if historical_artist and bio_near:
+        historical_artist = known_artists.get(number_key)
+        if historical_artist and (bio_near or exact_historical_match):
             artist = historical_artist
-        # L'artiste historique seul ne suffit pas: le numero du lot peut
-        # aussi apparaitre dans une bibliographie ou une biographie.
-        if not artist or not bio_near:
+        if not artist or not (bio_near or exact_historical_match):
             continue
         entries.append({
             "index": index, "lot": number, "titre": title,
             "artiste": artist, "x": line["x"], "y": line["y"],
             "x2": line["x2"], "y2": line["y2"],
+            "historique_confirme": exact_historical_match,
         })
     return entries
 
@@ -1005,13 +1015,14 @@ def extract_dimensions(section):
 # ============================================================
 
 RE_FALSE_TITLE = re.compile(
-    r"(?i)(\b(?:mai|may|juin|june|juillet|july|octobre|october|"
-    r"novembre|november|decembre|décembre|fevrier|février|"
-    r"exposition|exhibition|catalogue|provenance|bibliographie|"
-    r"literature|art canadien important|important canadian art)\b|"
-    r"\b(?:19|20)\d{2}\b|\b\d+\s*[x×]\s*\d+|"
-    r"\b(?:cm|inches|triptyque|triptych)\b)"
+    r"(?i)\b(?:exposition|exhibition|catalogue|provenance|"
+    r"bibliographie|literature|art canadien important|"
+    r"important canadian art)\b|\b\d+\s*[x×]\s*\d+|"
+    r"\b(?:cm|inches)\b"
 )
+
+# Les mois, les annees et les termes comme triptyque peuvent appartenir
+# a des titres authentiques. Ils ne sont donc plus interdits.
 
 
 def plausible_title(title):
@@ -1375,7 +1386,8 @@ def parse_catalogue(
     pdf_data,
     url,
     sale,
-    known_artists
+    known_artists,
+    known_titles=None
 ):
     detected = {}
 
@@ -1404,7 +1416,8 @@ def parse_catalogue(
                 for lines in columns:
                     entries = detect_lots(
                         lines,
-                        known_artists
+                        known_artists,
+                        known_titles
                     )
 
                     all_entries.extend(
@@ -2142,7 +2155,7 @@ def main():
     print("")
     print("======================================")
     print("ART ENCHERES QUEBEC")
-    print("COLLECTEUR V8.10")
+    print("COLLECTEUR V8.10.2")
     print("======================================")
 
     historical_records = load_database()
@@ -2252,6 +2265,13 @@ def main():
                 )
             }
 
+            known_titles = {
+                lot_number(item.get("lot")): item.get("titre")
+                for item in database.values()
+                if item.get("url") == url
+                and item.get("lot") and item.get("titre")
+            }
+
             (
                 found,
                 pages,
@@ -2261,7 +2281,8 @@ def main():
                 pdf_data,
                 url,
                 sale,
-                known_artists
+                known_artists,
+                known_titles
             )
 
             stats["pdf_lus"] += 1
@@ -2413,7 +2434,7 @@ def main():
     )
 
     if missing_ids:
-        print("\nAUDIT V8.10.1 : lots historiques non redetectes :", len(missing_ids))
+        print("\nAUDIT V8.10.2 : lots historiques non redetectes :", len(missing_ids))
         for missing_id in missing_ids:
             old = database.get(missing_id, {})
             print(json.dumps({
@@ -2505,6 +2526,8 @@ def main():
         "champs_completes": additions,
 
         "conflits_a_verifier": conflicts,
+        "audit_conflits_historiques": "non_resolus_sans_revue_manuellement_documentee",
+        "absence_conflits_nouveaux_ne_prouve_pas_resolution": True,
 
         "corrections_appliquees": title_corrections,
 
@@ -2572,6 +2595,7 @@ def main():
         "conflits_a_verifier": len(
             conflicts
         ),
+        "audit_conflits_historiques": "a_verifier",
 
         "corrections_titres": len(
             title_corrections
@@ -2619,7 +2643,7 @@ def main():
 
     print("")
     print("======================================")
-    print("RESULTATS V8.10")
+    print("RESULTATS V8.10.2")
     print("======================================")
 
     print(
@@ -2678,7 +2702,7 @@ def main():
     )
 
     print("")
-    print("COLLECTE V8.10 TERMINEE")
+    print("COLLECTE V8.10.2 TERMINEE")
     print("======================================")
 
 
