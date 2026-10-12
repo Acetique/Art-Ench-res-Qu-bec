@@ -1,6 +1,6 @@
 {
-  "version": "V8.8",
-  "date": "2026-10-12T23:04:47.208777+00:00",
+  "version": "V8.9",
+  "date": "2026-10-12T23:16:59.572816+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
@@ -97,8 +97,8 @@
   "images_candidates": 548,
   "rapprochements_potentiels": 3,
   "lots_historiques_non_redetectes": 0,
-  "conflits_a_verifier": 30,
+  "conflits_a_verifier": 19,
   "corrections_titres": 0,
   "estimations_corrigees": 0,
-  "note": "Les prix marteau ne sont jamais inventes. Les rapprochements entre oeuvres doivent etre verifies."
+  "note": "Les prix marteau ne sont jamais inventes. Les rapprochements entre oeuvres doivent etre verifies. Les nouvelles estimations sont mises en revue avant publication."
 }
