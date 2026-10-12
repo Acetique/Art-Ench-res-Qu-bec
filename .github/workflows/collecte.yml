@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   collecte:
-    name: Art Encheres Quebec V8.9
+    name: Art Encheres Quebec V8.10
     runs-on: ubuntu-24.04
     timeout-minutes: 45
 
@@ -38,7 +38,7 @@ jobs:
       - name: Verifier la syntaxe du collecteur
         run: python -m py_compile Collectors/collect.py
 
-      - name: Executer la collecte V8.9
+      - name: Executer la collecte V8.10
         run: python -u Collectors/collect.py
 
       - name: Valider les rapports et la base
@@ -59,25 +59,16 @@ jobs:
               path = data / name
               if not path.is_file():
                   raise SystemExit(f'Fichier manquant : {path}')
-              docs[name] = json.loads(
-                  path.read_text(encoding='utf-8')
-              )
+              docs[name] = json.loads(path.read_text(encoding='utf-8'))
 
           raw = docs['oeuvres.json']
-          records = (
-              raw.get('oeuvres', [])
-              if isinstance(raw, dict)
-              else raw
-          )
-          assert isinstance(records, list), 'Base invalide'
-          assert len(records) >= 491, 'Perte de notices'
+          records = raw.get('oeuvres', []) if isinstance(raw, dict) else raw
+          assert isinstance(records, list), 'Base oeuvres.json invalide'
+          assert len(records) >= 491, f'Perte de notices : {len(records)}'
 
-          ids = [
-              item.get('id_passage')
-              for item in records
-          ]
-          assert all(ids), 'Identifiant manquant'
-          assert len(ids) == len(set(ids)), 'Doublons'
+          ids = [item.get('id_passage') for item in records]
+          assert all(ids), 'Identifiant de passage manquant'
+          assert len(ids) == len(set(ids)), 'Identifiants dupliques'
 
           report = docs['rapport-collecte.json']
           quality = docs['rapport-qualite.json']
@@ -88,39 +79,30 @@ jobs:
               ('qualite', quality),
               ('differences', differences),
           ]:
-              assert obj.get('version') == 'V8.9', (
+              assert obj.get('version') == 'V8.10', (
                   f'Version incorrecte : {name}'
               )
 
           assert report.get('total_oeuvres') == len(records)
           assert quality.get('total_oeuvres') == len(records)
 
-          source = report.get(
-              'sources', {}
-          ).get('BYDealers', {})
-
-          assert source.get('pdf_lus') == 8
-          assert source.get('erreurs_ou_blocages') == 0
+          bydealers = report.get('sources', {}).get('BYDealers', {})
+          assert bydealers.get('pdf_lus') == 8
+          assert bydealers.get('erreurs_ou_blocages') == 0
           assert len(report.get('catalogues', [])) == 8
           assert all(
               c.get('statut') == 'ok'
               for c in report['catalogues']
           )
-          assert report.get(
-              'lots_historiques_non_redetectes'
-          ) == 0
+          assert report.get('lots_historiques_non_redetectes') == 0
 
           for item in records:
               low = item.get('estimation_min')
               high = item.get('estimation_max')
 
               if low is not None or high is not None:
-                  assert isinstance(
-                      low, (int, float)
-                  )
-                  assert isinstance(
-                      high, (int, float)
-                  )
+                  assert isinstance(low, (int, float))
+                  assert isinstance(high, (int, float))
                   assert 1000 <= low <= high <= 100_000_000
 
               if item.get('prix_realise_verifie') is True:
@@ -129,32 +111,26 @@ jobs:
                       or item.get('prix_vendu') is not None
                   )
 
-          conflicts = differences.get(
-              'conflits_a_verifier', []
+          assert isinstance(
+              differences.get('conflits_a_verifier', []),
+              list
           )
-          assert isinstance(conflicts, list)
 
-          print('VALIDATION V8.9 REUSSIE')
+          print('VALIDATION V8.10 REUSSIE')
           print('Oeuvres :', len(records))
-          print(
-              'Estimations :',
-              quality.get('avec_estimation')
-          )
-          print(
-              'Dimensions :',
-              quality.get('avec_dimensions')
-          )
+          print('Estimations :', quality.get('avec_estimation'))
+          print('Dimensions :', quality.get('avec_dimensions'))
           print(
               'Conflits a verifier :',
-              len(conflicts)
+              len(differences.get('conflits_a_verifier', []))
           )
           PY
 
-      - name: Archiver les rapports V8.9
+      - name: Archiver les rapports V8.10
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: rapports-collecte-v8-9
+          name: rapports-collecte-v8-10
           path: |
             data/rapport-collecte.json
             data/rapport-qualite.json
@@ -170,12 +146,12 @@ jobs:
           if git diff --cached --quiet; then
             echo 'Aucun changement a enregistrer.'
           else
-            git commit -m 'Collecte BYDealers V8.9'
+            git commit -m 'Collecte BYDealers V8.10'
             git push
           fi
 
       - name: Afficher le rapport final
         run: |
-          echo 'ART ENCHERES QUEBEC - RAPPORT V8.9'
+          echo 'ART ENCHERES QUEBEC - RAPPORT V8.10'
           echo '======================================'
           cat data/rapport-collecte.json
