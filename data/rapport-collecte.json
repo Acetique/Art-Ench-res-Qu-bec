@@ -1,6 +1,6 @@
 {
   "version": "V6",
-  "date": "2026-10-12T20:47:29.339686+00:00",
+  "date": "2026-10-12T20:50:44.657347+00:00",
   "anciennes_entrees_retirees": 0,
   "sources": {
     "BYDealers": {
@@ -8,7 +8,7 @@
       "pages_accessibles": 14,
       "pdf_lus": 8,
       "oeuvres_detectees": 402,
-      "nouvelles_oeuvres": 402,
+      "nouvelles_oeuvres": 0,
       "erreurs_ou_blocages": 1
     },
     "Heffel": {
