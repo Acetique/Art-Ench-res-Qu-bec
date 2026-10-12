@@ -3,6 +3,7 @@ name: Collecte publique quotidienne
 
 on:
   workflow_dispatch:
+
   schedule:
     - cron: "0 12 * * *"
 
@@ -16,35 +17,52 @@ concurrency:
 jobs:
   collecte:
     name: Actualiser les oeuvres
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     steps:
+      # 1. Recuperer les fichiers GitHub
       - name: Recuperer le depot
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: true
 
+      # 2. Installer Python
       - name: Installer Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
+      # 3. Installer les bibliotheques
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
           pip install -r Collectors/requirements.txt
 
+      # 4. Verifier les dossiers
       - name: Verifier les dossiers
         run: |
           mkdir -p data
-          test -d Collectors
+
+          if [ ! -d "Collectors" ]; then
+            echo "ERREUR : dossier Collectors absent"
+            exit 1
+          fi
+
+          if [ ! -f "Collectors/collect.py" ]; then
+            echo "ERREUR : collect.py absent"
+            exit 1
+          fi
+
+          echo "Dossiers verifies"
           ls -la Collectors
 
+      # 5. Lancer la collecte automatique
       - name: Collecter les tableaux
         run: |
           python Collectors/collect.py
 
+      # 6. Verifier la base de donnees
       - name: Verifier les donnees JSON
         run: |
           python - <<'PY'
@@ -55,19 +73,45 @@ jobs:
 
           if not path.exists():
               raise SystemExit(
-                  "ERREUR: data/oeuvres.json absent"
+                  "ERREUR : data/oeuvres.json absent"
               )
 
           with path.open(encoding="utf-8") as f:
               data = json.load(f)
 
-          if not isinstance(data, (list, dict)):
-              raise SystemExit("Format JSON invalide")
+          if isinstance(data, list):
+              oeuvres = data
+          elif isinstance(data, dict):
+              oeuvres = data.get("oeuvres", [])
+              if not isinstance(oeuvres, list):
+                  raise SystemExit(
+                      "ERREUR : format des oeuvres invalide"
+                  )
+          else:
+              raise SystemExit(
+                  "ERREUR : format JSON invalide"
+              )
 
-          print("Fichier JSON valide")
-          print("Taille:", path.stat().st_size, "octets")
+          print("JSON valide")
+          print("Nombre d'oeuvres :", len(oeuvres))
+
+          for maison in [
+              "BYDealers", "Heffel", "Gelineau"
+          ]:
+              nombre = sum(
+                  1 for o in oeuvres
+                  if isinstance(o, dict)
+                  and o.get("maison") == maison
+              )
+              print(maison, ":", nombre)
+
+          if len(oeuvres) == 0:
+              print(
+                  "ATTENTION : aucune oeuvre recuperee"
+              )
           PY
 
+      # 7. Enregistrer automatiquement les donnees
       - name: Enregistrer les nouvelles oeuvres
         run: |
           git config user.name "github-actions[bot]"
@@ -77,8 +121,26 @@ jobs:
           git add data/
 
           if git diff --cached --quiet; then
-            echo "Aucune modification a enregistrer."
+            echo "Aucune nouvelle donnee."
           else
-            git commit -m "Mise a jour automatique des oeuvres"
+            git commit -m "Actualisation automatique des oeuvres"
             git push
+            echo "Base de donnees mise a jour."
           fi
+
+      # 8. Afficher le rapport final
+      - name: Rapport final
+        if: always()
+        run: |
+          echo "================================"
+          echo " ART ENCHERES QUEBEC V2"
+          echo "================================"
+
+          if [ -f data/rapport-collecte.json ]; then
+            cat data/rapport-collecte.json
+          else
+            echo "Aucun rapport disponible."
+          fi
+
+          echo ""
+          echo "Fin de l'execution."
