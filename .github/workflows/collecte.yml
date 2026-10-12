@@ -15,20 +15,17 @@ concurrency:
 
 jobs:
   collecte:
-    name: Actualiser les oeuvres
+    name: Art Encheres Quebec V6
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 30
 
     steps:
-
       # ========================================
       # 1. RECUPERER LE DEPOT
       # ========================================
 
       - name: Recuperer le depot
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       # ========================================
       # 2. INSTALLER PYTHON
@@ -49,122 +46,95 @@ jobs:
           pip install -r Collectors/requirements.txt
 
       # ========================================
-      # 4. VERIFIER LES DOSSIERS
+      # 4. VERIFIER LES FICHIERS
       # ========================================
 
-      - name: Verifier les dossiers
+      - name: Verifier les fichiers
         run: |
           mkdir -p data
-
-          if [ ! -f "Collectors/collect.py" ]; then
-            echo "ERREUR : collect.py absent"
-            exit 1
-          fi
-
-          if [ ! -f "Collectors/diagnostic_pdf.py" ]; then
-            echo "ERREUR : diagnostic_pdf.py absent"
-            exit 1
-          fi
-
-          echo "Fichiers verifies"
-          ls -la Collectors
+          test -f Collectors/collect.py
+          test -f Collectors/requirements.txt
+          python -m py_compile Collectors/collect.py
+          echo "Fichiers V6 valides"
 
       # ========================================
-      # 5. COLLECTER LES OEUVRES
+      # 5. COLLECTE V6
       # ========================================
 
-      - name: Collecter les tableaux
+      - name: Collecter les oeuvres V6
         run: |
           python Collectors/collect.py
 
       # ========================================
-      # 6. DIAGNOSTIC PDF V6
+      # 6. DIAGNOSTIC PDF
       # ========================================
 
-      - name: Diagnostiquer les catalogues PDF BYDealers
+      - name: Diagnostic PDF BYDealers
         run: |
-          python Collectors/diagnostic_pdf.py
+          if [ -f Collectors/diagnostic_pdf.py ]; then
+            python Collectors/diagnostic_pdf.py
+          else
+            echo "Diagnostic facultatif absent"
+          fi
 
       # ========================================
-      # 7. VERIFIER LES DONNEES JSON
+      # 7. VERIFICATION DES RESULTATS
       # ========================================
 
-      - name: Verifier les donnees JSON
+      - name: Verifier les resultats
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          fichiers = [
-              "data/oeuvres.json",
-              "data/rapport-collecte.json",
-              "data/diagnostic-pdf.json",
-          ]
-
-          for nom in fichiers:
-              chemin = Path(nom)
-
-              if not chemin.exists():
-                  raise SystemExit(
-                      f"ERREUR : {nom} absent"
-                  )
-
-              with chemin.open(
+          oeuvres = json.loads(
+              Path("data/oeuvres.json").read_text(
                   encoding="utf-8"
-              ) as f:
-                  data = json.load(f)
-
-              print(f"JSON valide : {nom}")
-
-          chemin = Path("data/oeuvres.json")
-
-          with chemin.open(
-              encoding="utf-8"
-          ) as f:
-              data = json.load(f)
-
-          if isinstance(data, list):
-              oeuvres = data
-          elif isinstance(data, dict):
-              oeuvres = data.get("oeuvres", [])
-          else:
-              raise SystemExit(
-                  "ERREUR : format invalide"
               )
+          )
 
-          if not isinstance(oeuvres, list):
-              raise SystemExit(
-                  "ERREUR : liste invalide"
+          rapport = json.loads(
+              Path("data/rapport-collecte.json").read_text(
+                  encoding="utf-8"
               )
+          )
 
-          print("==============================")
+          assert isinstance(oeuvres, list)
+          assert rapport["version"] == "V6"
+
+          print("================================")
           print("ART ENCHERES QUEBEC V6")
-          print("==============================")
+          print("================================")
+          print("Nombre total d'oeuvres :", len(oeuvres))
 
-          print("Nombre d'oeuvres :", len(oeuvres))
-
-          for maison in [
-              "BYDealers",
-              "Heffel",
-              "Gelineau",
-          ]:
-              nombre = sum(
-                  1
-                  for oeuvre in oeuvres
-                  if isinstance(oeuvre, dict)
-                  and oeuvre.get("maison") == maison
+          for maison, stats in rapport["sources"].items():
+              print()
+              print("Maison :", maison)
+              print(
+                  "PDF lus :",
+                  stats["pdf_lus"]
+              )
+              print(
+                  "Oeuvres detectees :",
+                  stats["oeuvres_detectees"]
+              )
+              print(
+                  "Nouvelles oeuvres :",
+                  stats["nouvelles_oeuvres"]
+              )
+              print(
+                  "Erreurs ou blocages :",
+                  stats["erreurs_ou_blocages"]
               )
 
-              print(maison, ":", nombre)
-
-          if len(oeuvres) == 0:
+          if not oeuvres:
               print(
-                  "ATTENTION : aucune oeuvre valide"
+                  "ATTENTION : aucune oeuvre detectee"
               )
           PY
 
       # ========================================
-      # 8. ENREGISTRER LES RESULTATS
+      # 8. ENREGISTRER LES DONNEES
       # ========================================
 
       - name: Enregistrer les resultats
@@ -175,11 +145,10 @@ jobs:
           git add data/
 
           if git diff --cached --quiet; then
-            echo "Aucune nouvelle donnee."
+            echo "Aucun changement."
           else
-            git commit -m "Actualisation collecte et diagnostic PDF"
+            git commit -m "Collecte Art Encheres Quebec V6"
             git push
-            echo "Donnees mises a jour."
           fi
 
       # ========================================
@@ -193,41 +162,10 @@ jobs:
           echo " ART ENCHERES QUEBEC V6"
           echo "================================"
 
-          echo ""
-          echo "RAPPORT DE COLLECTE"
-          echo ""
-
           if [ -f data/rapport-collecte.json ]; then
             cat data/rapport-collecte.json
           else
-            echo "Aucun rapport de collecte."
-          fi
-
-          echo ""
-          echo "DIAGNOSTIC PDF"
-          echo ""
-
-          if [ -f data/diagnostic-pdf.json ]; then
-            python - <<'PY'
-          import json
-
-          with open(
-              "data/diagnostic-pdf.json",
-              encoding="utf-8"
-          ) as f:
-              data = json.load(f)
-
-          for catalogue in data.get("catalogues", []):
-              print("Catalogue :", catalogue.get("url"))
-              print("Statut :", catalogue.get("statut"))
-              print(
-                  "Pages analysees :",
-                  len(catalogue.get("pages_analysees", []))
-              )
-              print("----------------------------")
-          PY
-          else
-            echo "Diagnostic absent."
+            echo "Rapport absent"
           fi
 
           echo ""
