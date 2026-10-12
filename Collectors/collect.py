@@ -1,21 +1,14 @@
 
-
 """
-ART ENCHERES QUEBEC V6
-Collecteur public de notices d'oeuvres.
+ART ENCHERES QUEBEC V7
+Collecte de notices historiques BYDealers.
 
-Extraction adaptee aux catalogues PDF BYDealers :
-ARTISTE
-1 9 0 4 - 1 9 9 0
-04 Album de famille
-1958
-Huile sur toile
-71,8 x 122,6 cm
-Estimation/Estimate
-80 000 - 100 000 $
-
-Ne publie pas de prix marteau non verifies.
-Ne reproduit pas les images des catalogues.
+- Analyse spatiale des pages PDF
+- Estimations rattachees aux lots
+- Conservation des anciennes notices
+- Rapprochement prudent des oeuvres
+- Controle qualite
+- Aucune invention de prix marteau
 """
 
 import hashlib
@@ -25,50 +18,63 @@ import re
 import time
 import unicodedata
 
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin, urldefrag, urlparse
+from urllib.parse import urlparse
 from urllib.robotparser import RobotFileParser
 
 import fitz
 import requests
-from bs4 import BeautifulSoup
 
-
-# =====================================================
-# CONFIGURATION
-# =====================================================
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-OUTPUT = DATA / "oeuvres.json"
-REPORT = DATA / "rapport-collecte.json"
+DATA.mkdir(exist_ok=True)
 
-VERSION = "V6"
-AGENT = "ArtEncheresQuebec/6.0"
+DB_PATH = DATA / "oeuvres.json"
+REPORT_PATH = DATA / "rapport-collecte.json"
+QUALITY_PATH = DATA / "rapport-qualite.json"
 
-TIMEOUT = 25
+VERSION = "V7"
+AGENT = "ArtEncheresQuebec/7.0"
 DELAY = 2
+TIMEOUT = 25
 MAX_BYTES = 25 * 1024 * 1024
 
-MAX_PAGES_SOURCE = 30
-MAX_PDFS_SOURCE = 8
-MAX_PAGES_PDF = 200
-
-SOURCES = {
-    "BYDealers": [
-        "https://bydealers.com/fr/",
-        "https://bydealers.com/browse-auction-catalogues/",
-        "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-        "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
-        "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-    ],
-    "Heffel": [
-        "https://www.heffel.com/Auction/",
-    ],
-    "Gelineau": [
-        "https://www.encangelineau.com/",
-    ],
+CATALOGUES = {
+    "Printemps 2023": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf"
+    ),
+    "Automne 2023": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2026/02/Catalogue_Fix_Automne_2023-1.pdf"
+    ),
+    "Printemps 2024": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2024/04/Catalogue_BYD_Printemps2024_Double.pdf"
+    ),
+    "Automne 2024": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf"
+    ),
+    "Printemps 2025": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf"
+    ),
+    "Automne 2025": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2026/02/Catalogue_Fall_2025-1.pdf"
+    ),
+    "Printemps 2026": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2026/04/Catalogue_Printemps2026.pdf"
+    ),
+    "Succession printemps 2026": (
+        "https://bydealers.com/wp-content/uploads/"
+        "2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
+    ),
 }
 
 logging.basicConfig(
@@ -79,77 +85,57 @@ logging.basicConfig(
 session = requests.Session()
 session.headers.update({
     "User-Agent": AGENT,
-    "Accept": "text/html,application/pdf;q=0.9,*/*;q=0.5",
+    "Accept": "application/pdf",
 })
 
 robots_cache = {}
 
 
-# =====================================================
-# UTILITAIRES
-# =====================================================
-
-def now():
+def timestamp():
     return datetime.now(timezone.utc).isoformat()
 
 
 def clean(value):
-    text = str(value or "")
-    text = "".join(
+    value = str(value or "")
+    value = "".join(
         " " if ord(ch) < 32 else ch
-        for ch in text
+        for ch in value
     )
-    return re.sub(r"\s+", " ", text).strip()
+    return re.sub(r"\s+", " ", value).strip()
 
 
-def normalized(value):
+def normalize(value):
     value = unicodedata.normalize(
         "NFKD", clean(value)
     )
     return "".join(
-        ch for ch in value
-        if not unicodedata.combining(ch)
-    ).lower()
+        c for c in value
+        if not unicodedata.combining(c)
+    ).casefold()
 
 
-def canonical(url):
-    return urldefrag(url)[0]
-
-
-def work_id(source, url, lot, title):
-    raw = "|".join([
-        source,
-        canonical(url),
-        str(lot or ""),
-        normalized(title),
-    ])
+def digest(*parts):
+    value = "|".join(
+        normalize(p) for p in parts
+    )
     return hashlib.sha256(
-        raw.encode("utf-8")
+        value.encode("utf-8")
     ).hexdigest()[:20]
 
 
-def amount(value):
-    digits = re.sub(
-        r"[^\d]",
-        "",
-        str(value or "")
-    )
+def number(value):
+    digits = re.sub(r"\D", "", str(value))
     return int(digits) if digits else None
 
 
-# =====================================================
-# ROBOTS.TXT ET ACCES PUBLIC
-# =====================================================
+def year_from_sale(sale):
+    match = re.search(r"20\d{2}", sale)
+    return int(match.group()) if match else None
 
-def allowed(url):
+
+def robots_allowed(url):
     parsed = urlparse(url)
-
-    if parsed.scheme not in ("http", "https"):
-        return False
-
-    origin = (
-        f"{parsed.scheme}://{parsed.netloc}"
-    )
+    origin = f"{parsed.scheme}://{parsed.netloc}"
 
     if origin not in robots_cache:
         try:
@@ -160,26 +146,19 @@ def allowed(url):
             )
 
             if response.status_code == 200:
-                rp = RobotFileParser()
-                rp.parse(response.text.splitlines())
-                robots_cache[origin] = rp
+                parser = RobotFileParser()
+                parser.parse(response.text.splitlines())
 
             elif response.status_code in (404, 410):
-                rp = RobotFileParser()
-                rp.parse([])
-                robots_cache[origin] = rp
+                parser = RobotFileParser()
+                parser.parse([])
 
             else:
-                logging.warning(
-                    "robots.txt non verifiable: %s",
-                    origin,
-                )
                 return False
 
+            robots_cache[origin] = parser
+
         except requests.RequestException:
-            logging.warning(
-                "Erreur robots.txt: %s", origin
-            )
             return False
 
     return robots_cache[origin].can_fetch(
@@ -187,10 +166,10 @@ def allowed(url):
     )
 
 
-def fetch(url):
-    if not allowed(url):
+def download_pdf(url):
+    if not robots_allowed(url):
         logging.warning(
-            "Acces refuse/non verifiable: %s",
+            "Acces interdit/non verifiable : %s",
             url,
         )
         return None
@@ -209,263 +188,155 @@ def fetch(url):
 
         response.raise_for_status()
 
-        length = int(
+        if int(
             response.headers.get(
                 "Content-Length", "0"
             ) or 0
-        )
-
-        if length > MAX_BYTES:
+        ) > MAX_BYTES:
             response.close()
             return None
 
-        parts = []
-        total = 0
+        chunks = []
+        size = 0
 
         try:
             for chunk in response.iter_content(65536):
-                total += len(chunk)
+                size += len(chunk)
 
-                if total > MAX_BYTES:
+                if size > MAX_BYTES:
                     return None
 
-                parts.append(chunk)
+                chunks.append(chunk)
         finally:
             response.close()
 
-        body = b"".join(parts)
+        content = b"".join(chunks)
         time.sleep(DELAY)
 
-        if body.startswith(b"%PDF"):
-            return "pdf", body
-
-        content_type = response.headers.get(
-            "Content-Type", ""
-        ).lower()
-
-        if (
-            "html" in content_type
-            or body.lstrip().lower().startswith(
-                (b"<!doctype", b"<html")
-            )
-        ):
-            return (
-                "html",
-                BeautifulSoup(
-                    body, "html.parser"
-                ),
-            )
-
-        return None
+        return (
+            content
+            if content.startswith(b"%PDF")
+            else None
+        )
 
     except requests.RequestException as exc:
         logging.warning(
-            "Erreur HTTP %s: %s", url, exc
+            "Telechargement impossible : %s",
+            exc,
         )
         return None
 
 
-# =====================================================
-# MOTIFS PDF BYDEALERS
-# =====================================================
+# ===========================================
+# REGLES D'EXTRACTION
+# ===========================================
 
-# Exemple : 1 9 0 4 - 1 9 9 0
-BIO_RE = re.compile(
+BIO = re.compile(
     r"^\s*((?:[12]\s*)\d\s*\d\s*\d)"
     r"\s*[-–—]\s*"
-    r"((?:[12]\s*)\d\s*\d\s*\d)\s*$"
+    r"((?:[12]\s*)\d\s*\d\s*\d)?\s*$"
 )
 
-# Exemple : 04 Album de famille
-LOT_RE = re.compile(
-    r"^\s*(\d{1,3})\s+(.{3,150})$"
+LOT = re.compile(
+    r"^\s*(\d{1,3})\s+(.{3,160})$"
 )
 
-# Exemple : Lot 22 : Guido Molinari...
-COVER_LOT_RE = re.compile(
-    r"^\s*Lot\s+(\d{1,3})\s*:",
-    re.I,
-)
-
-DIM_RE = re.compile(
+DIMENSIONS = re.compile(
     r"\d{1,3}(?:[.,]\d+)?"
-    r"\s*[×x]\s*"
+    r"\s*[x×]\s*"
     r"\d{1,3}(?:[.,]\d+)?"
-    r"(?:\s*[×x]\s*"
+    r"(?:\s*[x×]\s*"
     r"\d{1,3}(?:[.,]\d+)?)?"
     r"\s*cm\b",
     re.I,
 )
 
-EST_RE = re.compile(
-    r"([\d][\d\s\u00a0]*)"
+ESTIMATION = re.compile(
+    r"(\d[\d\s\u00a0]*)"
     r"\s*[-–—]\s*"
-    r"([\d][\d\s\u00a0]*)"
+    r"(\d[\d\s\u00a0]*)"
     r"\s*(?:\$|CAD)",
     re.I,
 )
 
-YEAR_RE = re.compile(
-    r"^(?:c\.\s*)?(?:18|19|20)\d{2}"
+YEAR = re.compile(
+    r"^(?:c\.?\s*)?(?:18|19|20)\d{2}"
     r"(?:\s*[-–]\s*(?:18|19|20)\d{2})?$",
     re.I,
 )
 
-STOP_WORDS = {
+HEADINGS = {
     "provenance",
-    "bibliographie",
-    "bibliographie/literature",
-    "literature",
     "estimation/estimate",
     "estimate",
-    "exposition",
     "exposition/exhibition",
     "exhibition",
-}
-
-BAD_ARTISTS = {
-    "bydealers",
-    "catalogue",
-    "important canadian art",
-    "art canadien important",
-    "estimation/estimate",
-    "provenance",
     "bibliographie/literature",
+    "literature",
 }
 
 
-def biography(text):
-    match = BIO_RE.fullmatch(clean(text))
+def is_biography(text):
+    match = BIO.fullmatch(clean(text))
 
     if not match:
         return False
 
-    first = amount(match.group(1))
-    second = amount(match.group(2))
+    born = number(match.group(1))
+    died = number(match.group(2))
 
-    if not first or not second:
+    if not born or not 1700 <= born <= 2026:
         return False
 
     return (
-        1700 <= first <= 2026
-        and 1700 <= second <= 2026
-        and second >= first
+        died is None
+        or born <= died <= 2026
     )
 
 
-def valid_artist(text):
+def is_artist(text):
     text = clean(text)
 
-    if not 5 <= len(text) <= 85:
+    if not 5 <= len(text) <= 90:
         return False
 
-    if normalized(text) in BAD_ARTISTS:
+    if len(text.split()) < 2:
         return False
 
-    if re.search(r"\d|@|https?://", text):
+    if re.search(r"\d|https?://|@", text):
         return False
 
-    if "/" in text:
+    if normalize(text) in HEADINGS:
         return False
 
-    if not re.search(
-        r"[A-Za-zÀ-ÿ]", text
-    ):
-        return False
-
-    return len(text.split()) >= 2
+    return bool(
+        re.search(r"[A-Za-zÀ-ÿ]", text)
+    )
 
 
-def valid_title(text):
+def is_title(text):
     text = clean(text)
 
-    if not 3 <= len(text) <= 150:
-        return False
-
-    if not re.search(
-        r"[A-Za-zÀ-ÿ]", text
-    ):
-        return False
-
-    if normalized(text) in STOP_WORDS:
-        return False
-
-    if "@" in text or "http" in text.lower():
-        return False
-
-    return True
+    return (
+        3 <= len(text) <= 160
+        and bool(
+            re.search(r"[A-Za-zÀ-ÿ]", text)
+        )
+        and normalize(text) not in HEADINGS
+        and not YEAR.fullmatch(text)
+    )
 
 
-# =====================================================
-# CREATION DES NOTICES
-# =====================================================
+# ===========================================
+# LIGNES ET COORDONNEES
+# ===========================================
 
-def create_work(
-    source,
-    url,
-    lot,
-    artist,
-    title,
-    dimensions,
-    estimate_min,
-    estimate_max,
-    page_number,
-    confidence,
-):
-    return {
-        "id": work_id(
-            source, url, lot, title
-        ),
-        "maison": source,
-        "artiste": clean(artist),
-        "titre": clean(title),
-        "lot": str(lot).zfill(2),
-        "dimensions": dimensions,
-        "image": None,
-        "prix": None,
-        "prix_marteau": None,
-        "prix_vendu": None,
-        "estimation_min": estimate_min,
-        "estimation_max": estimate_max,
-        "estimation": (
-            f"{estimate_min:,} - {estimate_max:,} CAD"
-            if estimate_min is not None
-            and estimate_max is not None
-            else None
-        ),
-        "type_prix": "estimation"
-        if estimate_min is not None
-        else "inconnu",
-        "devise": "CAD",
-        "statut": "catalogue",
-        "url": url,
-        "source_page": url,
-        "source_page_pdf": page_number,
-        "origine": "catalogue_pdf_v6",
-        "confiance_extraction": confidence,
-        "prix_realise_verifie": False,
-        "date_collecte": now(),
-    }
-
-
-# =====================================================
-# LECTURE DES LIGNES PDF
-# =====================================================
-
-def page_lines(page):
-    """
-    PyMuPDF fournit le texte et sa position.
-    On conserve l'ordre d'extraction des blocs,
-    utile dans les catalogues a plusieurs colonnes.
-    """
-
+def extract_lines(page):
     result = []
 
-    data = page.get_text(
+    for block in page.get_text(
         "dict", sort=False
-    )
-
-    for block in data.get("blocks", []):
+    ).get("blocks", []):
         if block.get("type") != 0:
             continue
 
@@ -478,123 +349,161 @@ def page_lines(page):
             if not text:
                 continue
 
+            box = line["bbox"]
+
             result.append({
                 "text": text,
-                "bbox": line.get(
-                    "bbox", [0, 0, 0, 0]
-                ),
+                "x": float(box[0]),
+                "y": float(box[1]),
+                "x2": float(box[2]),
+                "y2": float(box[3]),
             })
 
     return result
 
 
-def title_from_lines(lines, start):
+def page_columns(page):
+    lines = extract_lines(page)
+    width = float(page.rect.width)
+
+    # Une page tres large est generalement
+    # une double page de catalogue.
+    if width > 850:
+        middle = width / 2
+
+        left = [
+            x for x in lines
+            if (x["x"] + x["x2"]) / 2
+            < middle
+        ]
+
+        right = [
+            x for x in lines
+            if (x["x"] + x["x2"]) / 2
+            >= middle
+        ]
+
+        return [left, right]
+
+    return [lines]
+
+
+def find_entries(lines):
     """
-    Detecte les titres sur une ou deux lignes.
-    Ne prend pas une date ou une description
-    technique pour la suite du titre.
+    Le regroupement initial garde l'ordre
+    des blocs du PDF, comme dans la V6.
     """
 
-    first = lines[start]["text"]
+    entries = []
 
-    match = LOT_RE.match(first)
+    for i in range(2, len(lines)):
+        if not is_biography(
+            lines[i - 1]["text"]
+        ):
+            continue
 
-    if not match:
-        return None, None
+        artist = lines[i - 2]["text"]
 
-    lot = int(match.group(1))
-    title = clean(match.group(2))
+        if not is_artist(artist):
+            continue
 
-    if not 1 <= lot <= 500:
-        return None, None
-
-    if not valid_title(title):
-        return None, None
-
-    if start + 1 < len(lines):
-        following = lines[start + 1]["text"]
-
-        continuation = (
-            title.endswith("/")
-            or title.endswith("-")
-            or title.endswith(",")
+        match = LOT.match(
+            lines[i]["text"]
         )
 
-        if (
-            continuation
-            and valid_title(following)
-            and not YEAR_RE.fullmatch(following)
-            and not DIM_RE.search(following)
-            and not biography(following)
-            and not LOT_RE.match(following)
-        ):
-            title = clean(
-                title + " " + following
-            )
+        if not match:
+            continue
 
-    return lot, title
+        lot = int(match.group(1))
+        title = clean(match.group(2))
+
+        if not 1 <= lot <= 500:
+            continue
+
+        if not is_title(title):
+            continue
+
+        # Titres sur plusieurs lignes.
+        if i + 1 < len(lines):
+            following = lines[i + 1]["text"]
+
+            if (
+                title.endswith(("/", "-", ","))
+                and is_title(following)
+                and not LOT.match(following)
+                and not DIMENSIONS.search(following)
+            ):
+                title = clean(
+                    title + " " + following
+                )
+
+        entries.append({
+            "artist": artist,
+            "lot": lot,
+            "title": title,
+            "start": i,
+            "x": lines[i]["x"],
+            "y": lines[i]["y"],
+        })
+
+    return entries
 
 
-def nearby_metadata(lines, index):
-    """
-    Cherche dimensions et estimation dans la
-    notice, sans franchir le prochain artiste
-    suivi d'une ligne biographique.
-    """
+def find_metadata(lines, entries, index):
+    entry = entries[index]
+
+    start = entry["start"] + 1
+
+    if index + 1 < len(entries):
+        end = entries[index + 1]["start"] - 2
+    else:
+        end = len(lines)
+
+    end = min(
+        end,
+        start + 100,
+    )
 
     dimensions = None
     estimate_min = None
     estimate_max = None
 
-    end = min(
-        len(lines), index + 90
-    )
+    section = lines[start:end]
 
-    for j in range(index + 1, end):
-        text = lines[j]["text"]
-
-        if (
-            biography(text)
-            and j > 0
-            and valid_artist(
-                lines[j - 1]["text"]
-            )
-        ):
-            break
+    for j, line in enumerate(section):
+        text = line["text"]
 
         if dimensions is None:
-            dim = DIM_RE.search(text)
+            match = DIMENSIONS.search(text)
 
-            if dim:
-                dimensions = dim.group(0)
+            if match:
+                dimensions = match.group()
 
-        if normalized(text).startswith(
+        if normalize(text).startswith(
             ("estimation/estimate", "estimate")
         ):
-            for k in range(
-                j + 1,
-                min(j + 4, len(lines)),
-            ):
-                price_match = EST_RE.search(
-                    lines[k]["text"]
+            for candidate in section[
+                j + 1:j + 5
+            ]:
+                match = ESTIMATION.search(
+                    candidate["text"]
                 )
 
-                if price_match:
-                    low = amount(
-                        price_match.group(1)
-                    )
-                    high = amount(
-                        price_match.group(2)
-                    )
+                if not match:
+                    continue
 
-                    if (
-                        low is not None
-                        and high is not None
-                        and 100 <= low <= high
-                    ):
-                        estimate_min = low
-                        estimate_max = high
-                    break
+                low = number(match.group(1))
+                high = number(match.group(2))
+
+                if (
+                    low is not None
+                    and high is not None
+                    and 100 <= low <= high
+                ):
+                    estimate_min = low
+                    estimate_max = high
+
+                break
 
     return (
         dimensions,
@@ -603,367 +512,416 @@ def nearby_metadata(lines, index):
     )
 
 
-# =====================================================
-# EXTRACTION PDF V6
-# =====================================================
+# ===========================================
+# NOTICES
+# ===========================================
 
-def parse_pdf(body, source, url):
-    works = []
+def create_notice(
+    url,
+    sale,
+    page,
+    entry,
+    dimensions,
+    estimate_min,
+    estimate_max,
+):
+    lot = str(entry["lot"]).zfill(2)
 
-    try:
-        doc = fitz.open(
-            stream=body,
-            filetype="pdf",
-        )
+    # ID du passage aux encheres.
+    # Stable meme si le titre est corrige.
+    passage_id = digest(
+        "BYDealers", url, lot
+    )
 
-        logging.info(
-            "PDF : %s (%s pages)",
-            url, len(doc)
-        )
+    confidence = 75
 
-        for page_index in range(
-            min(len(doc), MAX_PAGES_PDF)
+    if dimensions:
+        confidence += 10
+
+    if estimate_min is not None:
+        confidence += 10
+
+    return {
+        "id": passage_id,
+        "id_passage": passage_id,
+        "id_oeuvre": None,
+        "maison": "BYDealers",
+        "artiste": entry["artist"],
+        "titre": entry["title"],
+        "lot": lot,
+        "dimensions": dimensions,
+        "vente": sale,
+        "annee_vente": year_from_sale(sale),
+        "image": None,
+        "prix": None,
+        "prix_marteau": None,
+        "prix_vendu": None,
+        "estimation_min": estimate_min,
+        "estimation_max": estimate_max,
+        "estimation": (
+            f"{estimate_min:,} - "
+            f"{estimate_max:,} CAD"
+            if estimate_min is not None
+            and estimate_max is not None
+            else None
+        ),
+        "type_prix": (
+            "estimation"
+            if estimate_min is not None
+            else "inconnu"
+        ),
+        "devise": "CAD",
+        "statut": "catalogue_historique",
+        "url": url,
+        "source_page": url,
+        "source_page_pdf": page,
+        "origine": "catalogue_pdf_v7",
+        "confiance_extraction": confidence,
+        "prix_realise_verifie": False,
+        "date_collecte": timestamp(),
+    }
+
+
+def parse_pdf(content, url, sale):
+    results = []
+
+    with fitz.open(
+        stream=content,
+        filetype="pdf",
+    ) as document:
+
+        for page_number, page in enumerate(
+            document, start=1
         ):
-            lines = page_lines(
-                doc[page_index]
-            )
+            for lines in page_columns(page):
+                entries = find_entries(lines)
 
-            for i in range(
-                2, len(lines)
-            ):
-                # Structure verifiee dans
-                # les catalogues BYDealers :
-                # artiste, dates, lot + titre.
-                if not biography(
-                    lines[i - 1]["text"]
+                for index, entry in enumerate(
+                    entries
                 ):
-                    continue
-
-                artist = lines[i - 2]["text"]
-
-                if not valid_artist(artist):
-                    continue
-
-                lot, title = title_from_lines(
-                    lines, i
-                )
-
-                if lot is None:
-                    continue
-
-                (
-                    dimensions,
-                    estimate_min,
-                    estimate_max,
-                ) = nearby_metadata(
-                    lines, i
-                )
-
-                confidence = 75
-
-                if dimensions:
-                    confidence += 10
-
-                if estimate_min is not None:
-                    confidence += 10
-
-                work = create_work(
-                    source=source,
-                    url=url,
-                    lot=lot,
-                    artist=artist,
-                    title=title,
-                    dimensions=dimensions,
-                    estimate_min=estimate_min,
-                    estimate_max=estimate_max,
-                    page_number=page_index + 1,
-                    confidence=confidence,
-                )
-
-                works.append(work)
-
-        doc.close()
-
-    except Exception as exc:
-        logging.warning(
-            "Erreur PDF %s: %s",
-            url, exc
-        )
-
-    return works
-
-
-# =====================================================
-# HTML : DONNEES STRUCTUREES
-# =====================================================
-
-def jsonld_items(value):
-    if isinstance(value, list):
-        for item in value:
-            yield from jsonld_items(item)
-
-    elif isinstance(value, dict):
-        yield value
-
-        if "@graph" in value:
-            yield from jsonld_items(
-                value["@graph"]
-            )
-
-
-def parse_html(soup, source, url):
-    works = []
-
-    for script in soup.find_all(
-        "script",
-        type="application/ld+json",
-    ):
-        try:
-            raw = json.loads(
-                script.string
-                or script.get_text()
-            )
-        except (TypeError, ValueError):
-            continue
-
-        for item in jsonld_items(raw):
-            types = item.get("@type", [])
-
-            if isinstance(types, str):
-                types = [types]
-
-            if not isinstance(types, list):
-                continue
-
-            if not set(types).intersection({
-                "VisualArtwork",
-                "Painting",
-            }):
-                continue
-
-            title = clean(item.get("name"))
-
-            creator = item.get("creator")
-
-            if isinstance(creator, dict):
-                artist = clean(
-                    creator.get("name")
-                )
-            elif isinstance(creator, str):
-                artist = clean(creator)
-            else:
-                artist = ""
-
-            if (
-                not valid_artist(artist)
-                or not valid_title(title)
-            ):
-                continue
-
-            item_url = urljoin(
-                url,
-                item.get("url") or url,
-            )
-
-            work = create_work(
-                source,
-                item_url,
-                "0",
-                artist,
-                title,
-                None,
-                None,
-                None,
-                None,
-                70,
-            )
-
-            work["lot"] = None
-            work["origine"] = "html_jsonld_v6"
-            work["statut"] = "a_verifier"
-            work["type_prix"] = "inconnu"
-
-            # Pas de republication automatique
-            # des photographies.
-            works.append(work)
-
-    return works
-
-
-# =====================================================
-# DECOUVERTE DE CATALOGUES
-# =====================================================
-
-def discover(soup, base, source):
-    found = []
-    hostname = urlparse(base).hostname
-
-    for link in soup.find_all(
-        "a", href=True
-    ):
-        url = canonical(
-            urljoin(
-                base, link["href"]
-            )
-        )
-
-        parsed = urlparse(url)
-
-        if parsed.hostname != hostname:
-            continue
-
-        if parsed.scheme not in (
-            "http", "https"
-        ):
-            continue
-
-        path = normalized(parsed.path)
-        label = normalized(
-            link.get_text(
-                " ", strip=True
-            )
-        )
-
-        is_pdf = path.endswith(".pdf")
-
-        if source == "BYDealers":
-            relevant = (
-                is_pdf
-                and "catalogue" in path
-            ) or (
-                not is_pdf
-                and any(
-                    word in path + " " + label
-                    for word in (
-                        "catalogue",
-                        "auction",
-                        "enchere",
+                    (
+                        dimensions,
+                        low,
+                        high,
+                    ) = find_metadata(
+                        lines, entries, index
                     )
-                )
-            )
 
-        elif source == "Heffel":
-            relevant = any(
-                word in path + " " + label
-                for word in (
-                    "auction",
-                    "result",
-                    "catalogue",
-                )
-            )
+                    results.append(
+                        create_notice(
+                            url,
+                            sale,
+                            page_number,
+                            entry,
+                            dimensions,
+                            low,
+                            high,
+                        )
+                    )
 
-        else:
-            relevant = any(
-                word in path + " " + label
-                for word in (
-                    "encan",
-                    "catalogue",
-                    "auction",
-                )
-            )
-
-        if relevant and url not in found:
-            found.append(url)
-
-    return found
+    return results
 
 
-# =====================================================
-# BASE DE DONNEES
-# =====================================================
+# ===========================================
+# BASE EXISTANTE
+# ===========================================
 
-def load_database():
-    if not OUTPUT.exists():
-        return {}, 0
+def load_existing():
+    if not DB_PATH.exists():
+        return []
 
-    raw = json.loads(
-        OUTPUT.read_text(
+    data = json.loads(
+        DB_PATH.read_text(
             encoding="utf-8"
         )
     )
 
-    if isinstance(raw, dict):
-        raw = raw.get("oeuvres", [])
+    if isinstance(data, dict):
+        data = data.get("oeuvres", [])
 
-    if not isinstance(raw, list):
+    if not isinstance(data, list):
         raise ValueError(
-            "Format oeuvres.json invalide"
+            "oeuvres.json invalide"
         )
 
-    database = {}
-    removed = 0
-
-    obsolete = {
-        "catalogue_pdf_non_verifie",
-        "catalogue_pdf_v5",
-    }
-
-    for record in raw:
-        if not isinstance(record, dict):
-            continue
-
-        if (
-            record.get("origine") in obsolete
-            and record.get("statut")
-            in ("a_verifier", "catalogue")
-        ):
-            removed += 1
-            continue
-
-        key = record.get("id")
-
-        if not key:
-            key = work_id(
-                record.get("maison", ""),
-                record.get("url", ""),
-                record.get("lot", ""),
-                record.get("titre", ""),
-            )
-            record["id"] = key
-
-        database[key] = record
-
-    return database, removed
-
-
-def merge(database, record):
-    key = record["id"]
-
-    if key not in database:
-        database[key] = record
-        return True
-
-    existing = database[key]
-
-    for field, value in record.items():
-        if field == "date_collecte":
-            continue
-
-        if (
-            value is not None
-            and existing.get(field)
-            in (None, "")
-        ):
-            existing[field] = value
-
-    return False
-
-
-# =====================================================
-# COLLECTE
-# =====================================================
-
-def collect_source(
-    source,
-    seeds,
-    database,
-):
-    queue = [
-        canonical(url)
-        for url in seeds
+    return [
+        item for item in data
+        if isinstance(item, dict)
     ]
 
-    visited = set()
+
+def passage_key(item):
+    url = item.get("url") or ""
+    lot = item.get("lot")
+
+    if url and lot is not None:
+        try:
+            lot = str(int(lot)).zfill(2)
+        except (ValueError, TypeError):
+            lot = str(lot)
+
+        return digest(
+            item.get("maison", ""),
+            url,
+            lot,
+        )
+
+    return item.get("id") or digest(
+        item.get("maison", ""),
+        item.get("artiste", ""),
+        item.get("titre", ""),
+    )
+
+
+def merge_records(old, fresh):
+    result = dict(old)
+
+    # La nouvelle extraction remplace les
+    # champs descriptifs seulement quand
+    # elle dispose d'une valeur.
+    fields = (
+        "artiste",
+        "titre",
+        "dimensions",
+        "estimation_min",
+        "estimation_max",
+        "estimation",
+        "type_prix",
+        "vente",
+        "annee_vente",
+        "source_page_pdf",
+        "confiance_extraction",
+    )
+
+    for field in fields:
+        value = fresh.get(field)
+
+        if value is not None:
+            result[field] = value
+
+    for field, value in fresh.items():
+        if field not in result:
+            result[field] = value
+
+    result["id_passage"] = passage_key(
+        fresh
+    )
+
+    # Ne jamais transformer une estimation
+    # en prix marteau.
+    if not result.get(
+        "prix_realise_verifie"
+    ):
+        result["prix_marteau"] = None
+        result["prix_vendu"] = None
+
+    result["origine"] = (
+        "catalogue_pdf_v7"
+    )
+
+    return result
+
+
+# ===========================================
+# RAPPROCHEMENT DES OEUVRES
+# ===========================================
+
+def dimension_key(value):
+    if not value:
+        return None
+
+    match = DIMENSIONS.search(value)
+
+    if not match:
+        return None
+
+    nums = re.findall(
+        r"\d+(?:[.,]\d+)?",
+        match.group(),
+    )
+
+    values = sorted(
+        round(
+            float(x.replace(",", ".")),
+            1,
+        )
+        for x in nums
+    )
+
+    return tuple(values)
+
+
+def identity_key(item):
+    artist = normalize(
+        item.get("artiste")
+    )
+
+    title = normalize(
+        item.get("titre")
+    )
+
+    dimensions = dimension_key(
+        item.get("dimensions")
+    )
+
+    if not (
+        artist
+        and title
+        and dimensions
+    ):
+        return None
+
+    # Normalisation legere :
+    # on ne suppose pas que deux artistes
+    # aux noms proches sont identiques.
+    title = re.sub(
+        r"[^a-z0-9]+", " ", title
+    ).strip()
+
+    return (
+        artist,
+        title,
+        dimensions,
+    )
+
+
+def group_works(records):
+    groups = defaultdict(list)
+
+    for item in records:
+        key = identity_key(item)
+
+        if key:
+            groups[key].append(item)
+
+    possible_repeats = []
+
+    for key, members in groups.items():
+        work_id = digest(
+            "oeuvre",
+            key[0],
+            key[1],
+            str(key[2]),
+        )
+
+        for member in members:
+            member["id_oeuvre"] = work_id
+
+        if len(members) > 1:
+            possible_repeats.append({
+                "id_oeuvre": work_id,
+                "artiste": members[0].get(
+                    "artiste"
+                ),
+                "titre": members[0].get(
+                    "titre"
+                ),
+                "dimensions": members[0].get(
+                    "dimensions"
+                ),
+                "nombre_passages": len(members),
+                "passages": [
+                    {
+                        "vente": m.get("vente"),
+                        "lot": m.get("lot"),
+                        "url": m.get("url"),
+                    }
+                    for m in members
+                ],
+                "verification": "requise",
+            })
+
+    return possible_repeats
+
+
+# ===========================================
+# CONTROLE QUALITE
+# ===========================================
+
+def quality_report(records, repeats):
+    issues = []
+
+    for item in records:
+        problems = []
+
+        if not item.get("dimensions"):
+            problems.append(
+                "dimensions_absentes"
+            )
+
+        if item.get(
+            "estimation_min"
+        ) is None:
+            problems.append(
+                "estimation_absente"
+            )
+
+        if item.get(
+            "titre", ""
+        ).endswith(("/", "-", ",")):
+            problems.append(
+                "titre_possiblement_tronque"
+            )
+
+        if item.get(
+            "confiance_extraction", 0
+        ) < 90:
+            problems.append(
+                "controle_manuel_recommande"
+            )
+
+        if problems:
+            issues.append({
+                "id": item.get("id"),
+                "artiste": item.get(
+                    "artiste"
+                ),
+                "titre": item.get(
+                    "titre"
+                ),
+                "problemes": problems,
+                "url": item.get("url"),
+            })
+
+    return {
+        "version": VERSION,
+        "date": timestamp(),
+        "total_oeuvres": len(records),
+        "avec_dimensions": sum(
+            bool(x.get("dimensions"))
+            for x in records
+        ),
+        "avec_estimation": sum(
+            x.get("estimation_min")
+            is not None
+            for x in records
+        ),
+        "prix_marteau_verifies": sum(
+            bool(x.get(
+                "prix_realise_verifie"
+            ))
+            for x in records
+        ),
+        "rapprochements_potentiels": repeats,
+        "nombre_rapprochements": len(repeats),
+        "anomalies": issues,
+        "nombre_notices_a_controler": len(
+            issues
+        ),
+    }
+
+
+# ===========================================
+# EXECUTION
+# ===========================================
+
+def main():
+    existing = load_existing()
+
+    database = {
+        passage_key(item): item
+        for item in existing
+    }
 
     stats = {
         "pages_consultees": 0,
@@ -974,172 +932,149 @@ def collect_source(
         "erreurs_ou_blocages": 0,
     }
 
-    while (
-        queue
-        and len(visited)
-        < MAX_PAGES_SOURCE
-    ):
-        url = queue.pop(0)
+    catalog_reports = []
 
-        if url in visited:
-            continue
-
-        if (
-            url.lower().endswith(".pdf")
-            and stats["pdf_lus"]
-            >= MAX_PDFS_SOURCE
-        ):
-            continue
-
-        visited.add(url)
-        stats["pages_consultees"] += 1
-
+    for sale, url in CATALOGUES.items():
         logging.info(
-            "%s : %s", source, url
+            "Catalogue : %s", sale
         )
 
-        result = fetch(url)
+        stats["pages_consultees"] += 1
 
-        if result is None:
+        content = download_pdf(url)
+
+        if content is None:
+            stats[
+                "erreurs_ou_blocages"
+            ] += 1
+
+            catalog_reports.append({
+                "vente": sale,
+                "statut": "indisponible",
+                "oeuvres": 0,
+            })
+
+            continue
+
+        stats["pages_accessibles"] += 1
+        stats["pdf_lus"] += 1
+
+        try:
+            works = parse_pdf(
+                content, url, sale
+            )
+
+        except Exception as exc:
+            logging.warning(
+                "Erreur extraction : %s",
+                exc,
+            )
+
             stats[
                 "erreurs_ou_blocages"
             ] += 1
             continue
 
-        kind, content = result
-
-        stats["pages_accessibles"] += 1
-
-        if kind == "pdf":
-            stats["pdf_lus"] += 1
-
-            works = parse_pdf(
-                content,
-                source,
-                url,
-            )
-
-        else:
-            works = parse_html(
-                content,
-                source,
-                url,
-            )
-
-            for link in discover(
-                content,
-                url,
-                source,
-            ):
-                if (
-                    link not in visited
-                    and link not in queue
-                ):
-                    queue.append(link)
-
         stats[
             "oeuvres_detectees"
         ] += len(works)
 
-        for work in works:
-            if merge(
-                database, work
-            ):
+        catalog_reports.append({
+            "vente": sale,
+            "statut": "ok",
+            "oeuvres": len(works),
+        })
+
+        for item in works:
+            key = passage_key(item)
+
+            if key in database:
+                database[key] = merge_records(
+                    database[key],
+                    item,
+                )
+            else:
+                database[key] = item
                 stats[
                     "nouvelles_oeuvres"
                 ] += 1
 
-    return stats
-
-
-# =====================================================
-# PROGRAMME PRINCIPAL
-# =====================================================
-
-def main():
-    DATA.mkdir(
-        parents=True,
-        exist_ok=True,
+    records = sorted(
+        database.values(),
+        key=lambda x: (
+            normalize(x.get("artiste")),
+            normalize(x.get("titre")),
+            str(x.get("annee_vente", "")),
+        ),
     )
 
-    database, removed = load_database()
+    repeats = group_works(records)
+
+    quality = quality_report(
+        records, repeats
+    )
 
     report = {
         "version": VERSION,
-        "date": now(),
-        "anciennes_entrees_retirees": removed,
-        "sources": {},
-        "total_oeuvres": 0,
+        "date": timestamp(),
+        "sources": {
+            "BYDealers": stats,
+            "Heffel": {
+                "statut": "connecteur_a_developper",
+                "oeuvres_detectees": 0,
+            },
+            "Gelineau": {
+                "statut": "connecteur_a_developper",
+                "oeuvres_detectees": 0,
+            },
+        },
+        "catalogues": catalog_reports,
+        "total_oeuvres": len(records),
+        "avec_estimation": quality[
+            "avec_estimation"
+        ],
+        "rapprochements_potentiels": len(
+            repeats
+        ),
         "note": (
-            "Les estimations de catalogue "
-            "ne sont pas des prix de vente."
+            "Notices de catalogues historiques. "
+            "Les estimations ne sont pas "
+            "des prix marteau."
         ),
     }
 
-    for source, seeds in SOURCES.items():
-        logging.info(
-            "COLLECTE %s", source
+    for path, data in (
+        (DB_PATH, records),
+        (REPORT_PATH, report),
+        (QUALITY_PATH, quality),
+    ):
+        path.write_text(
+            json.dumps(
+                data,
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
         )
 
-        report["sources"][source] = (
-            collect_source(
-                source,
-                seeds,
-                database,
-            )
-        )
-
-    records = sorted(
-        database.values(),
-        key=lambda item: (
-            item.get("maison") or "",
-            item.get("artiste") or "",
-            item.get("titre") or "",
-        ),
+    print()
+    print("ART ENCHERES QUEBEC V7")
+    print("======================")
+    print("Total :", len(records))
+    print(
+        "Estimations :",
+        quality["avec_estimation"],
     )
-
-    OUTPUT.write_text(
-        json.dumps(
-            records,
-            ensure_ascii=False,
-            indent=2,
-        ),
-        encoding="utf-8",
+    print(
+        "Rapprochements :",
+        len(repeats),
     )
-
-    report["total_oeuvres"] = len(records)
-
-    REPORT.write_text(
-        json.dumps(
-            report,
-            ensure_ascii=False,
-            indent=2,
-        ),
-        encoding="utf-8",
+    print(
+        "Notices a controler :",
+        quality[
+            "nombre_notices_a_controler"
+        ],
     )
-
-    logging.info(
-        "================================"
-    )
-    logging.info(
-        "ART ENCHERES QUEBEC V6"
-    )
-    logging.info(
-        "TOTAL : %s oeuvres",
-        len(records),
-    )
-
-    for source, stats in report[
-        "sources"
-    ].items():
-        logging.info(
-            "%s : %s oeuvres detectees, "
-            "%s nouvelles, %s PDF",
-            source,
-            stats["oeuvres_detectees"],
-            stats["nouvelles_oeuvres"],
-            stats["pdf_lus"],
-        )
 
 
 if __name__ == "__main__":
