@@ -3,29 +3,7 @@ name: Collecte publique quotidienne
 
 # ==========================================================
 # ART ENCHERES QUEBEC — WORKFLOW V8.8
-# ==========================================================
-#
-# Collecteur :
-#   Collectors/collect.py V8.8
-#
-# Sources :
-#   BYDealers - 8 catalogues historiques
-#
-# Securite :
-#   - Protection des 491 notices historiques
-#   - Verification des 8 catalogues
-#   - Verification des estimations
-#   - Verification des dimensions
-#   - Detection des doublons
-#   - Detection des caracteres parasites
-#   - Preservation des prix marteau verifies
-#   - Aucune publication si la validation echoue
-#
-# GitHub Actions :
-#   checkout v5 / Node.js 24
-#   setup-python v6 / Node.js 24
-#   Python 3.11
-#
+# Compatible Node.js 24
 # ==========================================================
 
 on:
@@ -43,6 +21,7 @@ concurrency:
 
 jobs:
   collecte:
+
     name: Art Encheres Quebec V8.8
 
     runs-on: ubuntu-24.04
@@ -112,7 +91,6 @@ jobs:
           python - <<'PY'
           import json
           import math
-          import re
           import sys
           from pathlib import Path
           from collections import Counter
@@ -915,12 +893,12 @@ jobs:
           PY
 
       # ====================================================
-      # 7. SAUVEGARDER LES RAPPORTS DE L'EXECUTION
+      # 7. ARCHIVER LES RAPPORTS
       # ====================================================
 
       - name: Archiver les rapports de collecte
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: rapports-collecte-v8-8
           path: |
@@ -931,7 +909,7 @@ jobs:
           retention-days: 30
 
       # ====================================================
-      # 8. PUBLIER LES RESULTATS SUR GITHUB
+      # 8. PUBLIER LES RESULTATS
       # ====================================================
 
       - name: Enregistrer les resultats sur GitHub
