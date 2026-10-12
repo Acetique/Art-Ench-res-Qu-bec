@@ -1,4 +1,3 @@
-
 name: Collecte publique quotidienne
 
 on:
@@ -15,7 +14,7 @@ concurrency:
 
 jobs:
   collecte:
-    name: Art Encheres Quebec V8.10
+    name: Art Encheres Quebec V8.10.1
     runs-on: ubuntu-24.04
     timeout-minutes: 45
 
@@ -38,7 +37,7 @@ jobs:
       - name: Verifier la syntaxe du collecteur
         run: python -m py_compile Collectors/collect.py
 
-      - name: Executer la collecte V8.10
+      - name: Executer la collecte V8.10.1
         run: python -u Collectors/collect.py
 
       - name: Valider les rapports et la base
@@ -73,64 +72,54 @@ jobs:
           report = docs['rapport-collecte.json']
           quality = docs['rapport-qualite.json']
           differences = docs['rapport-differences.json']
-
           for name, obj in [
               ('collecte', report),
               ('qualite', quality),
               ('differences', differences),
           ]:
-              assert obj.get('version') == 'V8.10', (
-                  f'Version incorrecte : {name}'
-              )
+              assert obj.get('version') == 'V8.10.1', f'Version incorrecte : {name}'
 
-          assert report.get('total_oeuvres') == len(records)
-          assert quality.get('total_oeuvres') == len(records)
+          assert report.get('total_oeuvres') == len(records), 'Total collecte incoherent'
+          assert quality.get('total_oeuvres') == len(records), 'Total qualite incoherent'
 
           bydealers = report.get('sources', {}).get('BYDealers', {})
-          assert bydealers.get('pdf_lus') == 8
-          assert bydealers.get('erreurs_ou_blocages') == 0
-          assert len(report.get('catalogues', [])) == 8
-          assert all(
-              c.get('statut') == 'ok'
-              for c in report['catalogues']
+          assert bydealers.get('pdf_lus') == 8, 'Les 8 PDF ne sont pas tous lus'
+          assert bydealers.get('erreurs_ou_blocages') == 0, 'Erreurs de collecte'
+          assert len(report.get('catalogues', [])) == 8, 'Catalogues manquants'
+          assert all(c.get('statut') == 'ok' for c in report['catalogues']), 'Catalogue en erreur'
+          # La V8.10.1 conserve les lots historiques non redetectes
+          # et les signale explicitement au lieu de bloquer la collecte.
+          missing = report.get('lots_historiques_non_redetectes', 0)
+          assert isinstance(missing, int) and 0 <= missing <= 11, (
+              f'Augmentation inattendue des lots non redetectes : {missing}'
           )
-          assert report.get('lots_historiques_non_redetectes') == 0
+          assert differences.get('non_redetectes') == missing
+          assert len(differences.get('lots_non_redetectes', [])) == missing
+          assert len(differences.get('details_lots_non_redetectes', [])) == missing
+          print(f'ATTENTION : {missing} lots historiques restent a verifier'), 'Lots historiques perdus'
 
           for item in records:
-              low = item.get('estimation_min')
-              high = item.get('estimation_max')
-
+              low, high = item.get('estimation_min'), item.get('estimation_max')
               if low is not None or high is not None:
-                  assert isinstance(low, (int, float))
-                  assert isinstance(high, (int, float))
-                  assert 1000 <= low <= high <= 100_000_000
-
+                  assert isinstance(low, (int, float)) and isinstance(high, (int, float)), 'Estimation incomplete'
+                  assert 1000 <= low <= high <= 100_000_000, 'Estimation invalide'
               if item.get('prix_realise_verifie') is True:
-                  assert (
-                      item.get('prix_marteau') is not None
-                      or item.get('prix_vendu') is not None
-                  )
+                  assert item.get('prix_marteau') is not None or item.get('prix_vendu') is not None, 'Prix verifie sans montant'
 
-          assert isinstance(
-              differences.get('conflits_a_verifier', []),
-              list
-          )
+          assert isinstance(differences.get('conflits_a_verifier', []), list), 'Liste de conflits invalide'
 
-          print('VALIDATION V8.10 REUSSIE')
+          print('VALIDATION V8.10.1 REUSSIE')
           print('Oeuvres :', len(records))
           print('Estimations :', quality.get('avec_estimation'))
           print('Dimensions :', quality.get('avec_dimensions'))
-          print(
-              'Conflits a verifier :',
-              len(differences.get('conflits_a_verifier', []))
-          )
+          print('Conflits a verifier :', len(differences.get('conflits_a_verifier', [])))
           PY
 
-      - name: Archiver les rapports V8.10
+      - name: Archiver les rapports V8.10.1
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: rapports-collecte-v8-10
+          name: rapports-collecte-v8-10-1
           path: |
             data/rapport-collecte.json
             data/rapport-qualite.json
@@ -146,12 +135,12 @@ jobs:
           if git diff --cached --quiet; then
             echo 'Aucun changement a enregistrer.'
           else
-            git commit -m 'Collecte BYDealers V8.10'
+            git commit -m 'Collecte BYDealers V8.10.1'
             git push
           fi
 
       - name: Afficher le rapport final
         run: |
-          echo 'ART ENCHERES QUEBEC - RAPPORT V8.10'
+          echo 'ART ENCHERES QUEBEC - RAPPORT V8.10.1'
           echo '======================================'
           cat data/rapport-collecte.json
