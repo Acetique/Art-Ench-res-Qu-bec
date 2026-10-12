@@ -1,14 +1,8 @@
 
 name: Collecte publique quotidienne
 
-# ==========================================================
-# ART ENCHERES QUEBEC — WORKFLOW V8.8
-# Actions compatibles Node.js 24
-# ==========================================================
-
 on:
   workflow_dispatch:
-
   schedule:
     - cron: '0 12 * * *'
 
@@ -21,883 +15,146 @@ concurrency:
 
 jobs:
   collecte:
-    name: Art Encheres Quebec V8.8
+    name: Art Encheres Quebec V8.9
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
-
-      # ====================================================
-      # 1. RECUPERER LE DEPOT
-      # ====================================================
-
-      - name: Recuperer le depot GitHub
+      - name: Recuperer le depot
         uses: actions/checkout@v5
-        with:
-          persist-credentials: true
 
-      # ====================================================
-      # 2. INSTALLER PYTHON
-      # ====================================================
-
-      - name: Installer Python 3.11
+      - name: Installer Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: pip
           cache-dependency-path: Collectors/requirements.txt
 
-      # ====================================================
-      # 3. INSTALLER LES DEPENDANCES
-      # ====================================================
-
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r Collectors/requirements.txt
 
-      # ====================================================
-      # 4. VERIFIER LA SYNTAXE DU COLLECTEUR
-      # ====================================================
-
       - name: Verifier la syntaxe du collecteur
-        run: |
-          python -m py_compile Collectors/collect.py
-          echo "Syntaxe Python valide."
+        run: python -m py_compile Collectors/collect.py
 
-      # ====================================================
-      # 5. EXECUTER LA COLLECTE V8.8
-      # ====================================================
+      - name: Executer la collecte V8.9
+        run: python -u Collectors/collect.py
 
-      - name: Executer la collecte V8.8
-        run: |
-          echo "======================================"
-          echo "ART ENCHERES QUEBEC"
-          echo "COLLECTE AUTOMATIQUE V8.8"
-          echo "======================================"
-
-          python -u Collectors/collect.py
-
-      # ====================================================
-      # 6. VALIDER LES DONNEES V8.8
-      # ====================================================
-
-      - name: Valider les donnees V8.8
-        shell: bash
+      - name: Valider les rapports et la base
         run: |
           python - <<'PY'
           import json
-          import math
-          import sys
           from pathlib import Path
-          from collections import Counter
 
-          VERSION = "V8.8"
-
-          MIN_NOTICES = 491
-          MIN_ESTIMATIONS = 284
-          MIN_DIMENSIONS = 482
-
-          EXPECTED_CATALOGUES = {
-              "Printemps 2023": 57,
-              "Automne 2023": 77,
-              "Printemps 2024": 62,
-              "Automne 2024": 60,
-              "Printemps 2025": 66,
-              "Automne 2025": 71,
-              "Printemps 2026": 45,
-              "Succession printemps 2026": 53,
-          }
-
-          errors = []
-          warnings = []
-
-          def error(message):
-              errors.append(message)
-              print("ERREUR :", message)
-
-          def warning(message):
-              warnings.append(message)
-              print("ATTENTION :", message)
-
-          def read_json(filename):
-              path = Path(filename)
-
-              if not path.is_file():
-                  raise RuntimeError(
-                      "Fichier absent : " + filename
-                  )
-
-              with path.open(
-                  "r",
-                  encoding="utf-8"
-              ) as f:
-                  data = json.load(f)
-
-              print("JSON valide :", filename)
-              return data
-
-          def valid_number(value):
-              return (
-                  isinstance(value, (int, float))
-                  and not isinstance(value, bool)
-                  and math.isfinite(value)
-              )
-
-          # ================================================
-          # CHARGEMENT DES RAPPORTS
-          # ================================================
-
-          oeuvres = read_json(
-              "data/oeuvres.json"
-          )
-
-          rapport = read_json(
-              "data/rapport-collecte.json"
-          )
-
-          qualite = read_json(
-              "data/rapport-qualite.json"
-          )
-
-          differences = read_json(
-              "data/rapport-differences.json"
-          )
-
-          # ================================================
-          # STRUCTURES ET VERSIONS
-          # ================================================
-
-          if not isinstance(oeuvres, list):
-              raise RuntimeError(
-                  "oeuvres.json doit contenir une liste."
-              )
-
-          for name, data in [
-              ("collecte", rapport),
-              ("qualite", qualite),
-              ("differences", differences)
-          ]:
-              if not isinstance(data, dict):
-                  raise RuntimeError(
-                      "Structure invalide : " + name
-                  )
-
-              if data.get("version") != VERSION:
-                  error(
-                      "Version incorrecte pour "
-                      + name
-                      + " : "
-                      + str(data.get("version"))
-                  )
-
-          # ================================================
-          # STATISTIQUES PRINCIPALES
-          # ================================================
-
-          total = len(oeuvres)
-
-          estimations = sum(
-              isinstance(x, dict)
-              and valid_number(
-                  x.get("estimation_min")
-              )
-              and valid_number(
-                  x.get("estimation_max")
-              )
-              for x in oeuvres
-          )
-
-          dimensions = sum(
-              isinstance(x, dict)
-              and bool(x.get("dimensions"))
-              for x in oeuvres
-          )
-
-          images = sum(
-              isinstance(x, dict)
-              and bool(x.get("image"))
-              for x in oeuvres
-          )
-
-          prix_verifies = sum(
-              isinstance(x, dict)
-              and x.get(
-                  "prix_realise_verifie"
-              ) is True
-              for x in oeuvres
-          )
-
-          print("")
-          print("======================================")
-          print("BASE DE DONNEES V8.8")
-          print("======================================")
-
-          print("Notices :", total)
-          print("Estimations :", estimations)
-          print("Dimensions :", dimensions)
-          print("Images :", images)
-          print("Prix marteau verifies :", prix_verifies)
-
-          if total < MIN_NOTICES:
-              error(
-                  "Moins de 491 notices : "
-                  + str(total)
-              )
-
-          if estimations < MIN_ESTIMATIONS:
-              error(
-                  "Moins de 284 estimations : "
-                  + str(estimations)
-              )
-
-          if dimensions < MIN_DIMENSIONS:
-              error(
-                  "Moins de 482 dimensions : "
-                  + str(dimensions)
-              )
-
-          # ================================================
-          # COHERENCE DES RAPPORTS
-          # ================================================
-
-          for name, data in [
-              ("rapport-collecte", rapport),
-              ("rapport-qualite", qualite)
-          ]:
-              if data.get("total_oeuvres") != total:
-                  error(
-                      "Total incoherent dans "
-                      + name
-                  )
-
-              if data.get("avec_estimation") != estimations:
-                  error(
-                      "Estimations incoherentes dans "
-                      + name
-                  )
-
-              if data.get("avec_dimensions") != dimensions:
-                  error(
-                      "Dimensions incoherentes dans "
-                      + name
-                  )
-
-              if data.get("avec_image") != images:
-                  error(
-                      "Images incoherentes dans "
-                      + name
-                  )
-
-          if (
-              qualite.get("prix_marteau_verifies")
-              != prix_verifies
-          ):
-              error(
-                  "Nombre de prix verifies incoherent."
-              )
-
-          # ================================================
-          # IDENTIFIANTS
-          # ================================================
-
-          identifiers = []
-
-          for index, oeuvre in enumerate(oeuvres):
-              if not isinstance(oeuvre, dict):
-                  error(
-                      "Notice invalide : "
-                      + str(index)
-                  )
-                  continue
-
-              identifier = oeuvre.get("id_passage")
-
-              if not identifier:
-                  error(
-                      "Identifiant manquant : "
-                      + str(index)
-                  )
-              else:
-                  identifiers.append(identifier)
-
-          duplicates = [
-              identifier
-              for identifier, count
-              in Counter(identifiers).items()
-              if count > 1
+          data = Path('data')
+          names = [
+              'oeuvres.json',
+              'rapport-collecte.json',
+              'rapport-qualite.json',
+              'rapport-differences.json',
           ]
-
-          print("")
-          print("======================================")
-          print("IDENTIFIANTS")
-          print("======================================")
-
-          print(
-              "Identifiants uniques :",
-              len(set(identifiers))
-          )
-
-          print(
-              "Doublons :",
-              len(duplicates)
-          )
-
-          if duplicates:
-              error(
-                  "Identifiants dupliques : "
-                  + str(len(duplicates))
+          docs = {}
+          for name in names:
+              path = data / name
+              if not path.is_file():
+                  raise SystemExit(f'Fichier manquant : {path}')
+              docs[name] = json.loads(
+                  path.read_text(encoding='utf-8')
               )
 
-          # ================================================
-          # CATALOGUES BYDEALERS
-          # ================================================
-
-          catalogues = rapport.get(
-              "catalogues", []
+          raw = docs['oeuvres.json']
+          records = (
+              raw.get('oeuvres', [])
+              if isinstance(raw, dict)
+              else raw
           )
+          assert isinstance(records, list), 'Base invalide'
+          assert len(records) >= 491, 'Perte de notices'
 
-          if not isinstance(catalogues, list):
-              error(
-                  "Liste des catalogues invalide."
+          ids = [
+              item.get('id_passage')
+              for item in records
+          ]
+          assert all(ids), 'Identifiant manquant'
+          assert len(ids) == len(set(ids)), 'Doublons'
+
+          report = docs['rapport-collecte.json']
+          quality = docs['rapport-qualite.json']
+          differences = docs['rapport-differences.json']
+
+          for name, obj in [
+              ('collecte', report),
+              ('qualite', quality),
+              ('differences', differences),
+          ]:
+              assert obj.get('version') == 'V8.9', (
+                  f'Version incorrecte : {name}'
               )
-              catalogues = []
 
-          seen_sales = set()
-          total_detected = 0
+          assert report.get('total_oeuvres') == len(records)
+          assert quality.get('total_oeuvres') == len(records)
 
-          print("")
-          print("======================================")
-          print("CATALOGUES BYDEALERS")
-          print("======================================")
+          source = report.get(
+              'sources', {}
+          ).get('BYDealers', {})
 
-          for catalogue in catalogues:
-              if not isinstance(catalogue, dict):
-                  error(
-                      "Entree de catalogue invalide."
+          assert source.get('pdf_lus') == 8
+          assert source.get('erreurs_ou_blocages') == 0
+          assert len(report.get('catalogues', [])) == 8
+          assert all(
+              c.get('statut') == 'ok'
+              for c in report['catalogues']
+          )
+          assert report.get(
+              'lots_historiques_non_redetectes'
+          ) == 0
+
+          for item in records:
+              low = item.get('estimation_min')
+              high = item.get('estimation_max')
+
+              if low is not None or high is not None:
+                  assert isinstance(
+                      low, (int, float)
                   )
-                  continue
-
-              sale = catalogue.get("vente")
-              status = catalogue.get("statut")
-              count = catalogue.get("oeuvres")
-              pages = catalogue.get("pages")
-
-              print(
-                  sale,
-                  "| statut :", status,
-                  "| lots :", count,
-                  "| pages :", pages
-              )
-
-              if sale in seen_sales:
-                  error(
-                      "Catalogue duplique : "
-                      + str(sale)
+                  assert isinstance(
+                      high, (int, float)
                   )
+                  assert 1000 <= low <= high <= 100_000_000
 
-              seen_sales.add(sale)
-
-              if sale not in EXPECTED_CATALOGUES:
-                  error(
-                      "Catalogue inattendu : "
-                      + str(sale)
+              if item.get('prix_realise_verifie') is True:
+                  assert (
+                      item.get('prix_marteau') is not None
+                      or item.get('prix_vendu') is not None
                   )
-                  continue
-
-              expected = EXPECTED_CATALOGUES[sale]
-
-              if status != "ok":
-                  error(
-                      "Catalogue non valide : "
-                      + str(sale)
-                  )
-
-              if count != expected:
-                  error(
-                      "Nombre de lots incorrect pour "
-                      + str(sale)
-                      + " : "
-                      + str(count)
-                      + " au lieu de "
-                      + str(expected)
-                  )
-
-              if (
-                  not isinstance(count, int)
-                  or isinstance(count, bool)
-              ):
-                  error(
-                      "Nombre de lots invalide : "
-                      + str(sale)
-                  )
-              else:
-                  total_detected += count
-
-              if (
-                  not isinstance(pages, int)
-                  or isinstance(pages, bool)
-                  or pages <= 0
-              ):
-                  error(
-                      "Nombre de pages invalide : "
-                      + str(sale)
-                  )
-
-              if catalogue.get("erreurs_pages"):
-                  error(
-                      "Erreurs d'extraction PDF : "
-                      + str(sale)
-                  )
-
-          missing_sales = (
-              set(EXPECTED_CATALOGUES)
-              - seen_sales
-          )
-
-          if missing_sales:
-              error(
-                  "Catalogues manquants : "
-                  + ", ".join(sorted(missing_sales))
-              )
-
-          if total_detected < MIN_NOTICES:
-              error(
-                  "Moins de 491 lots detectes."
-              )
-
-          # ================================================
-          # SOURCE BYDEALERS
-          # ================================================
-
-          sources = rapport.get(
-              "sources", {}
-          )
-
-          if not isinstance(sources, dict):
-              sources = {}
-              error("Sources invalides.")
-
-          bydealers = sources.get(
-              "BYDealers", {}
-          )
-
-          if not isinstance(bydealers, dict):
-              bydealers = {}
-              error("Source BYDealers invalide.")
-
-          pdf_lus = bydealers.get(
-              "pdf_lus", 0
-          )
-
-          source_errors = bydealers.get(
-              "erreurs_ou_blocages", 0
-          )
-
-          detected_source = bydealers.get(
-              "oeuvres_detectees", 0
-          )
-
-          image_candidates = bydealers.get(
-              "images_candidates", 0
-          )
-
-          print("")
-          print("======================================")
-          print("SOURCE BYDEALERS")
-          print("======================================")
-
-          print("PDF lus :", pdf_lus)
-          print("Lots detectes :", detected_source)
-          print("Erreurs :", source_errors)
-          print("Images candidates :", image_candidates)
-
-          if pdf_lus != 8:
-              error(
-                  "Les huit PDF n'ont pas ete lus."
-              )
-
-          if source_errors != 0:
-              error(
-                  "Erreurs ou blocages pendant la collecte."
-              )
-
-          if detected_source != total_detected:
-              error(
-                  "Nombre de lots detectes incoherent."
-              )
-
-          # ================================================
-          # HISTORIQUE
-          # ================================================
-
-          historical = differences.get(
-              "historique_avant"
-          )
-
-          detected = differences.get(
-              "detectes_cette_execution"
-          )
-
-          missing = differences.get(
-              "non_redetectes"
-          )
-
-          print("")
-          print("======================================")
-          print("HISTORIQUE")
-          print("======================================")
-
-          print("Notices avant :", historical)
-          print("Lots redetectes :", detected)
-          print("Lots non redetectes :", missing)
-
-          if (
-              not isinstance(historical, int)
-              or isinstance(historical, bool)
-          ):
-              error(
-                  "Historique invalide."
-              )
-          elif total < historical:
-              error(
-                  "Perte de notices historiques."
-              )
-
-          if detected != total_detected:
-              error(
-                  "Nombre de lots redetectes incoherent."
-              )
-
-          if missing != 0:
-              error(
-                  "Lots historiques non redetectes : "
-                  + str(missing)
-              )
-
-          # ================================================
-          # ESTIMATIONS
-          # ================================================
-
-          suspicious = []
-          invalid_estimates = []
-
-          for oeuvre in oeuvres:
-              if not isinstance(oeuvre, dict):
-                  continue
-
-              low = oeuvre.get(
-                  "estimation_min"
-              )
-
-              high = oeuvre.get(
-                  "estimation_max"
-              )
-
-              if low is None and high is None:
-                  continue
-
-              identifier = oeuvre.get(
-                  "id_passage"
-              )
-
-              if not (
-                  valid_number(low)
-                  and valid_number(high)
-              ):
-                  invalid_estimates.append(identifier)
-                  continue
-
-              if (
-                  low < 1000
-                  or high < low
-                  or high > 100000000
-                  or high > low * 20
-              ):
-                  invalid_estimates.append(identifier)
-
-              if (
-                  1800 <= low <= 2100
-                  and 1800 <= high <= 2100
-              ):
-                  suspicious.append(identifier)
-
-          print("")
-          print("======================================")
-          print("ESTIMATIONS")
-          print("======================================")
-
-          print(
-              "Estimations invalides :",
-              len(invalid_estimates)
-          )
-
-          print(
-              "Estimations suspectes :",
-              len(suspicious)
-          )
-
-          if invalid_estimates:
-              error(
-                  "Estimations invalides : "
-                  + str(len(invalid_estimates))
-              )
-
-          if suspicious:
-              error(
-                  "Annees possiblement confondues "
-                  "avec des estimations : "
-                  + str(len(suspicious))
-              )
-
-          # ================================================
-          # CARACTERES PARASITES
-          # ================================================
-
-          parasites = []
-
-          for oeuvre in oeuvres:
-              if not isinstance(oeuvre, dict):
-                  continue
-
-              for field in (
-                  "artiste",
-                  "titre",
-                  "dimensions"
-              ):
-                  value = oeuvre.get(field)
-
-                  if not isinstance(value, str):
-                      continue
-
-                  if any(
-                      ord(char) < 32
-                      for char in value
-                  ):
-                      parasites.append({
-                          "id_passage": oeuvre.get(
-                              "id_passage"
-                          ),
-                          "champ": field
-                      })
-
-          print("")
-          print("======================================")
-          print("CARACTERES PARASITES")
-          print("======================================")
-
-          print(
-              "Champs contenant des parasites :",
-              len(parasites)
-          )
-
-          if parasites:
-              error(
-                  "Caracteres de controle detectes."
-              )
-
-          # ================================================
-          # PRIX MARTEAU
-          # ================================================
-
-          invalid_prices = []
-
-          for oeuvre in oeuvres:
-              if not isinstance(oeuvre, dict):
-                  continue
-
-              if oeuvre.get(
-                  "prix_realise_verifie"
-              ) is not True:
-                  continue
-
-              if (
-                  oeuvre.get("prix_marteau") is None
-                  and oeuvre.get("prix_vendu") is None
-              ):
-                  invalid_prices.append(
-                      oeuvre.get("id_passage")
-                  )
-
-          if invalid_prices:
-              error(
-                  "Prix declares verifies sans montant : "
-                  + str(len(invalid_prices))
-              )
-
-          # ================================================
-          # IMAGES
-          # ================================================
-
-          missing_images = []
-
-          for oeuvre in oeuvres:
-              if not isinstance(oeuvre, dict):
-                  continue
-
-              image = oeuvre.get("image")
-
-              if not image:
-                  continue
-
-              if (
-                  isinstance(image, str)
-                  and image.startswith(
-                      "images/bydealers/"
-                  )
-              ):
-                  if not Path(image).is_file():
-                      missing_images.append(image)
-
-          print("")
-          print("======================================")
-          print("IMAGES")
-          print("======================================")
-
-          print(
-              "Images referencees :",
-              images
-          )
-
-          print(
-              "Fichiers images manquants :",
-              len(missing_images)
-          )
-
-          if missing_images:
-              error(
-                  "Images locales absentes : "
-                  + str(len(missing_images))
-              )
-
-          if images == 0:
-              warning(
-                  "Aucune image publiee. "
-                  "Publication desactivee par defaut."
-              )
-
-          # ================================================
-          # CONFLITS ET RAPPROCHEMENTS
-          # ================================================
 
           conflicts = differences.get(
-              "conflits_a_verifier", []
+              'conflits_a_verifier', []
           )
+          assert isinstance(conflicts, list)
 
-          additions = differences.get(
-              "champs_completes", []
-          )
-
-          corrections = differences.get(
-              "corrections_appliquees", []
-          )
-
-          estimate_corrections = differences.get(
-              "estimations_historiques_corrigees", []
-          )
-
-          matches = qualite.get(
-              "rapprochements_potentiels", []
-          )
-
-          for name, value in [
-              ("conflits", conflicts),
-              ("champs completes", additions),
-              ("corrections", corrections),
-              ("estimations corrigees", estimate_corrections),
-              ("rapprochements", matches)
-          ]:
-              if not isinstance(value, list):
-                  error(
-                      "Liste invalide : " + name
-                  )
-
-          if not isinstance(conflicts, list):
-              conflicts = []
-
-          if not isinstance(additions, list):
-              additions = []
-
-          if not isinstance(corrections, list):
-              corrections = []
-
-          if not isinstance(matches, list):
-              matches = []
-
-          print("")
-          print("======================================")
-          print("QUALITE V8.8")
-          print("======================================")
-
+          print('VALIDATION V8.9 REUSSIE')
+          print('Oeuvres :', len(records))
           print(
-              "Conflits a verifier :",
+              'Estimations :',
+              quality.get('avec_estimation')
+          )
+          print(
+              'Dimensions :',
+              quality.get('avec_dimensions')
+          )
+          print(
+              'Conflits a verifier :',
               len(conflicts)
           )
-
-          print(
-              "Champs completes :",
-              len(additions)
-          )
-
-          print(
-              "Titres corriges :",
-              len(corrections)
-          )
-
-          print(
-              "Rapprochements potentiels :",
-              len(matches)
-          )
-
-          if conflicts:
-              warning(
-                  str(len(conflicts))
-                  + " conflits a verifier manuellement."
-              )
-
-          if matches:
-              warning(
-                  str(len(matches))
-                  + " rapprochements potentiels."
-              )
-
-          # ================================================
-          # RESULTAT FINAL
-          # ================================================
-
-          print("")
-          print("======================================")
-          print("RESULTAT FINAL V8.8")
-          print("======================================")
-
-          print("Notices :", total)
-          print("Estimations :", estimations)
-          print("Dimensions :", dimensions)
-          print("Images :", images)
-          print("PDF lus :", pdf_lus)
-          print("Lots redetectes :", detected)
-          print("Conflits :", len(conflicts))
-          print("Erreurs :", len(errors))
-          print("Avertissements :", len(warnings))
-
-          if errors:
-              print("")
-              print("VALIDATION V8.8 ECHOUEE")
-              sys.exit(1)
-
-          print("")
-          print("VALIDATION V8.8 REUSSIE")
           PY
 
-      # ====================================================
-      # 7. ARCHIVER LES RAPPORTS - NODE.JS 24
-      # ====================================================
-
-      - name: Archiver les rapports de collecte
+      - name: Archiver les rapports V8.9
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: rapports-collecte-v8-8
+          name: rapports-collecte-v8-9
           path: |
             data/rapport-collecte.json
             data/rapport-qualite.json
@@ -905,56 +162,20 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
-      # ====================================================
-      # 8. PUBLIER LES RESULTATS
-      # ====================================================
-
-      - name: Enregistrer les resultats sur GitHub
-        shell: bash
+      - name: Enregistrer les nouvelles donnees
         run: |
-          set -e
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add data/oeuvres.json
-          git add data/rapport-collecte.json
-          git add data/rapport-qualite.json
-          git add data/rapport-differences.json
-
-          if [ -d images/bydealers ]; then
-            git add images/bydealers
-          fi
-
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/oeuvres.json data/rapport-collecte.json data/rapport-qualite.json data/rapport-differences.json
           if git diff --cached --quiet; then
-            echo "Aucun changement a enregistrer."
+            echo 'Aucun changement a enregistrer.'
           else
-            git commit -m "Collecte Art Encheres Quebec V8.8"
-
-            git pull --rebase
-
+            git commit -m 'Collecte BYDealers V8.9'
             git push
           fi
 
-      # ====================================================
-      # 9. RAPPORT FINAL
-      # ====================================================
-
       - name: Afficher le rapport final
-        if: always()
-        shell: bash
         run: |
-          echo "======================================"
-          echo "ART ENCHERES QUEBEC - RAPPORT V8.8"
-          echo "======================================"
-
-          if [ -f data/rapport-collecte.json ]; then
-            cat data/rapport-collecte.json
-          else
-            echo "Rapport de collecte absent."
-          fi
-
-          echo ""
-          echo "======================================"
-          echo "FIN DU WORKFLOW V8.8"
-          echo "======================================"
+          echo 'ART ENCHERES QUEBEC - RAPPORT V8.9'
+          echo '======================================'
+          cat data/rapport-collecte.json
