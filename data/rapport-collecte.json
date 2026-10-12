@@ -1,12 +1,12 @@
 {
-  "version": "V8.10.1",
-  "date": "2026-10-12T23:33:56.569716+00:00",
+  "version": "V8.10.2",
+  "date": "2026-10-12T23:42:59.025832+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
       "pages_accessibles": 8,
       "pdf_lus": 8,
-      "oeuvres_detectees": 480,
+      "oeuvres_detectees": 490,
       "nouvelles_oeuvres": 0,
       "erreurs_ou_blocages": 0,
       "images_candidates": 548
@@ -36,7 +36,7 @@
     {
       "vente": "Automne 2023",
       "statut": "ok",
-      "oeuvres": 75,
+      "oeuvres": 77,
       "pages": 64,
       "erreurs_pages": [],
       "images_candidates": 82
@@ -52,7 +52,7 @@
     {
       "vente": "Automne 2024",
       "statut": "ok",
-      "oeuvres": 58,
+      "oeuvres": 60,
       "pages": 56,
       "erreurs_pages": [],
       "images_candidates": 66
@@ -60,7 +60,7 @@
     {
       "vente": "Printemps 2025",
       "statut": "ok",
-      "oeuvres": 65,
+      "oeuvres": 66,
       "pages": 57,
       "erreurs_pages": [],
       "images_candidates": 75
@@ -68,7 +68,7 @@
     {
       "vente": "Automne 2025",
       "statut": "ok",
-      "oeuvres": 68,
+      "oeuvres": 71,
       "pages": 63,
       "erreurs_pages": [],
       "images_candidates": 78
@@ -84,7 +84,7 @@
     {
       "vente": "Succession printemps 2026",
       "statut": "ok",
-      "oeuvres": 50,
+      "oeuvres": 52,
       "pages": 106,
       "erreurs_pages": [],
       "images_candidates": 59
@@ -96,8 +96,9 @@
   "avec_image": 0,
   "images_candidates": 548,
   "rapprochements_potentiels": 3,
-  "lots_historiques_non_redetectes": 11,
-  "conflits_a_verifier": 0,
+  "lots_historiques_non_redetectes": 1,
+  "conflits_a_verifier": 3,
+  "audit_conflits_historiques": "a_verifier",
   "corrections_titres": 0,
   "estimations_corrigees": 0,
   "note": "Les prix marteau ne sont jamais inventes. Les rapprochements entre oeuvres doivent etre verifies. Les nouvelles estimations sont mises en revue avant publication."

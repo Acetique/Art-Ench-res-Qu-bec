@@ -1,95 +1,13 @@
 {
-  "version": "V8.10.1",
-  "date": "2026-10-12T23:33:56.569698+00:00",
+  "version": "V8.10.2",
+  "date": "2026-10-12T23:42:59.025826+00:00",
   "historique_avant": 491,
-  "detectes_cette_execution": 480,
-  "non_redetectes": 11,
+  "detectes_cette_execution": 490,
+  "non_redetectes": 1,
   "lots_non_redetectes": [
-    "0d615a662073ec50c03b",
-    "1315d21490217a69db36",
-    "4c477e0d5a6b6ebac43d",
-    "6855654823804667585c",
-    "7ae91f01dd70a895b2db",
-    "81d448e1ea7c0e4a097f",
-    "81f06675b7d20fc4c85e",
-    "90401b8bcc6efb9a33c1",
-    "b7131e6dd517cde8e867",
-    "ba045ed666f6d7e1ba88",
-    "fe974181685f7f45dbba"
+    "ba045ed666f6d7e1ba88"
   ],
   "details_lots_non_redetectes": [
-    {
-      "id_passage": "0d615a662073ec50c03b",
-      "vente": "Automne 2023",
-      "lot": "66",
-      "artiste": "Jean Paul Lemieux",
-      "titre": "Le temps retrouvé – Kent House 1913",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf"
-    },
-    {
-      "id_passage": "1315d21490217a69db36",
-      "vente": "Succession printemps 2026",
-      "lot": "57",
-      "artiste": "Francis Hans (Frank/Franz) Johnston",
-      "titre": "October Snow",
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
-    },
-    {
-      "id_passage": "4c477e0d5a6b6ebac43d",
-      "vente": "Automne 2024",
-      "lot": "31",
-      "artiste": "Charles Gagnon",
-      "titre": "July Painting No. 2",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf"
-    },
-    {
-      "id_passage": "6855654823804667585c",
-      "vente": "Succession printemps 2026",
-      "lot": "64",
-      "artiste": "Alfred Joseph (A. J.) Casson",
-      "titre": "Early July Morning",
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
-    },
-    {
-      "id_passage": "7ae91f01dd70a895b2db",
-      "vente": "Automne 2024",
-      "lot": "05",
-      "artiste": "Alfred Pellan",
-      "titre": "Sur la plage",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf"
-    },
-    {
-      "id_passage": "81d448e1ea7c0e4a097f",
-      "vente": "Automne 2025",
-      "lot": "36",
-      "artiste": "Jean Paul Riopelle",
-      "titre": "Nouvelles impressions (PM 20)",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
-    },
-    {
-      "id_passage": "81f06675b7d20fc4c85e",
-      "vente": "Printemps 2025",
-      "lot": "23",
-      "artiste": "Henry Moore",
-      "titre": "Woman Reading",
-      "url": "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf"
-    },
-    {
-      "id_passage": "90401b8bcc6efb9a33c1",
-      "vente": "Automne 2025",
-      "lot": "49",
-      "artiste": "Françoise Sullivan",
-      "titre": "Red Glow",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
-    },
-    {
-      "id_passage": "b7131e6dd517cde8e867",
-      "vente": "Automne 2023",
-      "lot": "02",
-      "artiste": "Léon Bellefleur",
-      "titre": "Fleurs de mai",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf"
-    },
     {
       "id_passage": "ba045ed666f6d7e1ba88",
       "vente": "Succession printemps 2026",
@@ -97,20 +15,57 @@
       "artiste": "William Paterson Ewen",
       "titre": "Oil Painting No. 2",
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
-    },
-    {
-      "id_passage": "fe974181685f7f45dbba",
-      "vente": "Automne 2025",
-      "lot": "35",
-      "artiste": "Jean Paul Riopelle",
-      "titre": "Sans titre / Untitled",
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
     }
   ],
   "nouveaux_passages": [],
   "nettoyages": [],
   "champs_completes": [],
-  "conflits_a_verifier": [],
+  "conflits_a_verifier": [
+    {
+      "id_passage": "41581229d7b92e46dd5f",
+      "vente": "Printemps 2023",
+      "lot": "26",
+      "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
+      "page_pdf": 11,
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "mai 2013"
+        }
+      ]
+    },
+    {
+      "id_passage": "275b2d4ff0d33ebf0843",
+      "vente": "Automne 2024",
+      "lot": "06",
+      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
+      "page_pdf": 21,
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "La femme usine",
+          "extrait": "novembre 2017 (lot 27)"
+        }
+      ]
+    },
+    {
+      "id_passage": "b0949a8da92118178cd3",
+      "vente": "Automne 2024",
+      "lot": "07",
+      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
+      "page_pdf": 9,
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Buste de femme",
+          "extrait": "mai au 3 juillet 1994; Beaverbrook Art Gallery, Frederiction, du 1 er au 30 octobre 1994; Musée des beaux-arts de"
+        }
+      ]
+    }
+  ],
+  "audit_conflits_historiques": "non_resolus_sans_revue_manuellement_documentee",
+  "absence_conflits_nouveaux_ne_prouve_pas_resolution": true,
   "corrections_appliquees": [],
   "estimations_historiques_corrigees": []
 }
