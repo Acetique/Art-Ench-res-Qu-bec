@@ -4,7 +4,7 @@
 
 """
 ART ENCHERES QUEBEC
-COLLECTEUR HISTORIQUE V8.9
+COLLECTEUR HISTORIQUE V8.10
 
 Sources :
     BYDealers - 8 catalogues historiques
@@ -50,7 +50,7 @@ import requests
 # CONFIGURATION
 # ============================================================
 
-VERSION = "V8.9"
+VERSION = "V8.10"
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -653,61 +653,40 @@ def detect_lot_header(text):
 
 
 def detect_lots(lines, known_artists):
+    """Repère les lots; un artiste historique ne valide PAS un faux titre."""
     entries = []
-
     for index, line in enumerate(lines):
-        header = detect_lot_header(
-            line["text"]
-        )
-
+        header = detect_lot_header(line["text"])
         if not header:
             continue
-
         number, title = header
+        if not plausible_title(title):
+            continue
         artist = None
-
-        for bio_index in range(
-            max(0, index - 3),
-            index
-        ):
-            if not is_biography(
-                lines[bio_index]["text"]
-            ):
+        bio_near = False
+        for bio_index in range(max(0, index - 3), index):
+            if not is_biography(lines[bio_index]["text"]):
                 continue
-
-            for artist_index in range(
-                max(0, bio_index - 2),
-                bio_index
-            ):
-                candidate = clean(
-                    lines[artist_index]["text"]
-                )
-
+            bio_near = True
+            for artist_index in range(max(0, bio_index - 2), bio_index):
+                candidate = clean(lines[artist_index]["text"])
                 if valid_artist(candidate):
                     artist = candidate
                     break
-
             if artist:
                 break
-
-        historical_artist = known_artists.get(
-            lot_number(number)
-        )
-
-        if historical_artist:
-            # L'identification historique est
-            # conservee lorsque le PDF produit
-            # une variante ou une initiale.
+        historical_artist = known_artists.get(lot_number(number))
+        if historical_artist and bio_near:
             artist = historical_artist
-
-        if artist:
-            entries.append({
-                "index": index,
-                "lot": number,
-                "titre": title,
-                "artiste": artist
-            })
-
+        # L'artiste historique seul ne suffit pas: le numero du lot peut
+        # aussi apparaitre dans une bibliographie ou une biographie.
+        if not artist or not bio_near:
+            continue
+        entries.append({
+            "index": index, "lot": number, "titre": title,
+            "artiste": artist, "x": line["x"], "y": line["y"],
+            "x2": line["x2"], "y2": line["y2"],
+        })
     return entries
 
 
@@ -798,7 +777,7 @@ def safe_title_extension(old, new):
 
 
 # ============================================================
-# ESTIMATIONS V8.9
+# ESTIMATIONS V8.10
 # ============================================================
 
 def parse_money(value):
@@ -875,80 +854,39 @@ def parse_estimate_range(text):
 
 
 def estimate_candidates(section):
-    """
-    Cherche les estimations dans le lot.
-
-    Priorite :
-      1. Ligne explicitement etiquetee
-      2. Ligne immediatement suivante
-      3. Fourchette monetaire isolee
-
-    Une fourchette ambigue n'est pas
-    automatiquement acceptee.
-    """
-
+    """N'accepte que les fourchettes explicitement etiquetees et proches."""
     candidates = []
-
     for index, line in enumerate(section):
-        text = line["text"]
-
-        if not RE_ESTIMATE_LABEL.search(text):
+        label = line["text"]
+        if not RE_ESTIMATE_LABEL.search(label):
             continue
-
-        values = parse_estimate_range(text)
-
+        # Le prix sur la meme ligne que le libelle est prioritaire.
+        values = parse_estimate_range(label)
         for value in values:
-            candidates.append({
-                "valeur": value,
-                "source": "libelle_explicite",
-                "confiance": 100
-            })
-
+            candidates.append({"valeur": value, "source": "libelle_explicite",
+                               "confiance": 100, "y": line["y"]})
         if values:
             continue
-
+        # La ligne suivante doit etre physiquement adjacente.
         for offset in (1, 2):
-            next_index = index + offset
-
-            if next_index >= len(section):
+            pos = index + offset
+            if pos >= len(section):
                 break
-
-            next_text = section[
-                next_index
-            ]["text"]
-
-            if (
-                detect_lot_header(next_text)
-                or is_biography(next_text)
-                or RE_DIMENSIONS.search(next_text)
-                or RE_TECHNIQUE.search(next_text)
-            ):
+            next_line = section[pos]
+            next_text = next_line["text"]
+            if (next_line["y"] - line["y2"] > 28 or
+                    abs(next_line["x"] - line["x"]) > 75 or
+                    detect_lot_header(next_text) or is_biography(next_text) or
+                    RE_DIMENSIONS.search(next_text) or RE_TECHNIQUE.search(next_text)):
                 break
-
-            for value in parse_estimate_range(
-                next_text
-            ):
-                candidates.append({
-                    "valeur": value,
-                    "source": "ligne_apres_libelle",
-                    "confiance": 95
-                })
-
-    # V8.9: aucune fourchette monetaire isolee n'est acceptee.
-    # Elle peut provenir d'une provenance ou d'un lot voisin.
-
+            for value in parse_estimate_range(next_text):
+                candidates.append({"valeur": value, "source": "ligne_adjacente",
+                                   "confiance": 95, "y": next_line["y"]})
     unique = {}
-
     for candidate in candidates:
         value = candidate["valeur"]
-
-        if (
-            value not in unique
-            or candidate["confiance"]
-            > unique[value]["confiance"]
-        ):
+        if value not in unique or candidate["confiance"] > unique[value]["confiance"]:
             unique[value] = candidate
-
     return list(unique.values())
 
 
@@ -978,7 +916,7 @@ def extract_estimate(section):
 
 
 # ============================================================
-# DIMENSIONS V8.9
+# DIMENSIONS V8.10
 # ============================================================
 
 def format_dimension(value):
@@ -1063,7 +1001,7 @@ def extract_dimensions(section):
 
 
 # ============================================================
-# FILTRES CONSERVATEURS V8.9
+# FILTRES CONSERVATEURS V8.10
 # ============================================================
 
 RE_FALSE_TITLE = re.compile(
@@ -1157,7 +1095,7 @@ def extract_lot_metadata(
 
 
 # ============================================================
-# IMAGES PDF V8.9
+# IMAGES PDF V8.10
 # ============================================================
 
 def image_candidates(page, document):
@@ -1409,7 +1347,7 @@ def create_notice(
         "source_page": url,
         "source_page_pdf": page_number,
 
-        "origine": "catalogue_pdf_v8_9",
+        "origine": "catalogue_pdf_v8_10",
 
         "confiance_extraction": (
             95
@@ -1618,7 +1556,7 @@ def normalize_historical(item):
 
 
 # ============================================================
-# FUSION HISTORIQUE V8.9
+# FUSION HISTORIQUE V8.10
 # ============================================================
 
 def merge_notice(old, new):
@@ -2204,7 +2142,7 @@ def main():
     print("")
     print("======================================")
     print("ART ENCHERES QUEBEC")
-    print("COLLECTEUR V8.9")
+    print("COLLECTEUR V8.10")
     print("======================================")
 
     historical_records = load_database()
@@ -2258,11 +2196,7 @@ def main():
         database
     )
 
-    estimate_corrections = (
-        correct_invalid_estimates(
-            database
-        )
-    )
+    estimate_corrections = []  # V8.10: aucune correction destructive automatique
 
     detected_ids = set()
 
@@ -2479,10 +2413,10 @@ def main():
     )
 
     if missing_ids:
-        raise RuntimeError(
-            "Lots historiques non redetectes : "
-            + str(len(missing_ids))
-        )
+        print("ATTENTION : lots historiques non redetectes :", len(missing_ids))
+        # La base historique est preservee, mais la collecte est refusee
+        # afin de ne pas publier des donnees non validees.
+        raise RuntimeError("Audit requis : lots historiques non redetectes")
 
     records = sorted(
         database.values(),
@@ -2670,7 +2604,7 @@ def main():
 
     print("")
     print("======================================")
-    print("RESULTATS V8.9")
+    print("RESULTATS V8.10")
     print("======================================")
 
     print(
@@ -2729,7 +2663,7 @@ def main():
     )
 
     print("")
-    print("COLLECTE V8.9 TERMINEE")
+    print("COLLECTE V8.10 TERMINEE")
     print("======================================")
 
 
