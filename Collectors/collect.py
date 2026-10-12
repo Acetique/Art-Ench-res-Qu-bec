@@ -1,6 +1,24 @@
 
 #!/usr/bin/env python3
-"""Art Encheres Quebec V8.3 — collecte prudente des catalogues BYDealers."""
+# -*- coding: utf-8 -*-
+
+"""
+ART ENCHERES QUEBEC — COLLECTEUR V8.4
+
+Fonctions :
+- Lecture des 8 catalogues publics BYDealers
+- Respect de robots.txt
+- Extraction artiste, titre, dimensions et estimations
+- Reconstruction prudente des titres multilignes
+- Rejet des faux noms d'artistes
+- Conservation des notices historiques
+- Aucun prix marteau invente
+- Rapports JSON de collecte, qualite et differences
+
+Dependances :
+    requests>=2.32,<3
+    pymupdf>=1.24,<2
+"""
 
 import hashlib
 import json
@@ -8,6 +26,7 @@ import re
 import time
 import traceback
 import unicodedata
+
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,10 +36,16 @@ from urllib.robotparser import RobotFileParser
 import fitz
 import requests
 
-VERSION = "V8.3"
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+VERSION = "V8.4"
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
+
 DATA.mkdir(parents=True, exist_ok=True)
 
 DB = DATA / "oeuvres.json"
@@ -28,47 +53,66 @@ REPORT = DATA / "rapport-collecte.json"
 QUALITY = DATA / "rapport-qualite.json"
 DIFF = DATA / "rapport-differences.json"
 
-USER_AGENT = "ArtEncheresQuebec/8.3 (catalogue public; contact: GitHub repository)"
+USER_AGENT = (
+    "ArtEncheresQuebec/8.4 "
+    "(catalogues publics; contact: GitHub repository)"
+)
+
 TIMEOUT = 40
 MAX_BYTES = 40 * 1024 * 1024
 PAUSE_SECONDS = 2
 
 CATALOGUES = {
     "Printemps 2023":
-        "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
+        "https://bydealers.com/wp-content/uploads/2023/04/"
+        "Catalogue_108p_Printemps2023_Web_Spread.pdf",
 
     "Automne 2023":
-        "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
+        "https://bydealers.com/wp-content/uploads/2026/02/"
+        "Catalogue_Fix_Automne_2023-1.pdf",
 
     "Printemps 2024":
-        "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
+        "https://bydealers.com/wp-content/uploads/2024/04/"
+        "Catalogue_BYD_Printemps2024_Double.pdf",
 
     "Automne 2024":
-        "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
+        "https://bydealers.com/wp-content/uploads/2024/10/"
+        "Catalogue_106p_Automne2024_Web_Double_pages.pdf",
 
     "Printemps 2025":
-        "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf",
+        "https://bydealers.com/wp-content/uploads/2025/12/"
+        "Catalogue_Printemps2025_Web_Double_pages.pdf",
 
     "Automne 2025":
-        "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+        "https://bydealers.com/wp-content/uploads/2026/02/"
+        "Catalogue_Fall_2025-1.pdf",
 
     "Printemps 2026":
-        "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+        "https://bydealers.com/wp-content/uploads/2026/04/"
+        "Catalogue_Printemps2026.pdf",
 
     "Succession printemps 2026":
-        "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
+        "https://bydealers.com/wp-content/uploads/2026/05/"
+        "Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
 }
 
 SESSION = requests.Session()
+
 SESSION.headers.update({
     "User-Agent": USER_AGENT,
-    "Accept": "application/pdf,*/*",
+    "Accept": "application/pdf,*/*"
 })
 
 ROBOTS = {}
 
+
+# ============================================================
+# EXPRESSIONS REGULIERES
+# ============================================================
+
 BIO = re.compile(
-    r"^\s*([12]\s*\d\s*\d\s*\d)\s*[-–—]\s*"
+    r"^\s*([12]\s*\d\s*\d\s*\d)"
+    r"\s*[-–—]\s*"
     r"([12]\s*\d\s*\d\s*\d)?\s*$"
 )
 
@@ -77,17 +121,46 @@ LOT = re.compile(
 )
 
 DIM = re.compile(
-    r"\d{1,4}(?:[.,]\d+)?\s*[x×]\s*"
+    r"\d{1,4}(?:[.,]\d+)?"
+    r"\s*[x×]\s*"
     r"\d{1,4}(?:[.,]\d+)?"
     r"(?:\s*[x×]\s*\d{1,4}(?:[.,]\d+)?)?"
     r"\s*cm\b",
-    re.I,
+    re.I
 )
 
 EST = re.compile(
-    r"(?<!\d)(\d[\d\s\u00a0,.]*)\s*[-–—]\s*"
-    r"(\d[\d\s\u00a0,.]*)\s*(?:\$|CAD)?",
-    re.I,
+    r"(?<!\d)"
+    r"(\d[\d\s\u00a0,.]*)"
+    r"\s*[-–—]\s*"
+    r"(\d[\d\s\u00a0,.]*)"
+    r"\s*(?:\$|CAD)?",
+    re.I
+)
+
+PRICE_CONTEXT = re.compile(
+    r"\b(estimation|estimate|est\.?|"
+    r"estimated|evaluation|évaluation)\b",
+    re.I
+)
+
+TITLE_ENDINGS = ("/", ":", "-", "–", "—", ",")
+
+STOP_TITLE = re.compile(
+    r"^(?:"
+    r"huile|oil|acrylique|acrylic|"
+    r"encre|ink|aquarelle|watercolour|"
+    r"lithographie|lithograph|"
+    r"sérigraphie|serigraph|"
+    r"sculpture|bronze|"
+    r"signé|signed|"
+    r"daté|dated|"
+    r"provenance|"
+    r"exposition|exhibition|"
+    r"bibliographie|literature|"
+    r"estimation|estimate"
+    r")\b",
+    re.I
 )
 
 
@@ -100,36 +173,39 @@ def timestamp():
 
 
 def clean(value):
-    s = unicodedata.normalize(
+    text = unicodedata.normalize(
         "NFKC",
         str(value or "")
     )
 
-    s = "".join(
+    text = "".join(
         " " if unicodedata.category(c).startswith("C") else c
-        for c in s
+        for c in text
     )
 
-    return re.sub(r"\s+", " ", s).strip()
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def keytext(value):
-    s = unicodedata.normalize(
+    text = unicodedata.normalize(
         "NFKD",
         clean(value)
     )
 
     return "".join(
-        c for c in s
+        c for c in text
         if not unicodedata.combining(c)
     ).casefold()
 
 
 def digest(*parts):
-    raw = "|".join(keytext(p) for p in parts)
+    source = "|".join(
+        keytext(part)
+        for part in parts
+    )
 
     return hashlib.sha256(
-        raw.encode()
+        source.encode("utf-8")
     ).hexdigest()[:20]
 
 
@@ -145,12 +221,30 @@ def passage_key(item):
         return digest(
             item.get("maison", "BYDealers"),
             item["url"],
-            lot_number(item["lot"]),
+            lot_number(item["lot"])
         )
 
     return clean(
-        item.get("id_passage") or item.get("id")
+        item.get("id_passage")
+        or item.get("id")
     )
+
+
+def write_json(path, obj):
+    temporary = path.with_suffix(
+        path.suffix + ".tmp"
+    )
+
+    temporary.write_text(
+        json.dumps(
+            obj,
+            ensure_ascii=False,
+            indent=2
+        ) + "\n",
+        encoding="utf-8"
+    )
+
+    temporary.replace(path)
 
 
 def load_db():
@@ -164,35 +258,21 @@ def load_db():
     if isinstance(obj, dict):
         obj = obj.get("oeuvres", [])
 
-    if not isinstance(obj, list) or not all(
-        isinstance(x, dict) for x in obj
-    ):
+    if not isinstance(obj, list):
         raise ValueError(
-            "data/oeuvres.json doit contenir une liste de notices."
+            "oeuvres.json doit contenir une liste."
+        )
+
+    if not all(isinstance(x, dict) for x in obj):
+        raise ValueError(
+            "Toutes les notices doivent etre des objets JSON."
         )
 
     return obj
 
 
-def write_json(path, obj):
-    tmp = path.with_suffix(
-        path.suffix + ".tmp"
-    )
-
-    tmp.write_text(
-        json.dumps(
-            obj,
-            ensure_ascii=False,
-            indent=2
-        ) + "\n",
-        encoding="utf-8",
-    )
-
-    tmp.replace(path)
-
-
 # ============================================================
-# ACCES AUTORISE AUX CATALOGUES
+# ACCES RESPONSABLE AUX PDF
 # ============================================================
 
 def allowed(url):
@@ -212,7 +292,7 @@ def allowed(url):
         response = SESSION.get(
             origin + "/robots.txt",
             timeout=TIMEOUT,
-            allow_redirects=False,
+            allow_redirects=False
         )
 
         if response.status_code in (401, 403):
@@ -220,9 +300,11 @@ def allowed(url):
 
         if response.status_code == 200:
             parser = RobotFileParser()
+
             parser.parse(
                 response.text.splitlines()
             )
+
             ROBOTS[origin] = parser
 
         elif response.status_code in (404, 410):
@@ -245,39 +327,41 @@ def allowed(url):
 def fetch_pdf(url):
     if not allowed(url):
         raise PermissionError(
-            "Acces non autorise par robots.txt "
-            "ou verification indisponible"
+            "Acces non autorise ou robots.txt indisponible."
         )
 
     with SESSION.get(
         url,
         timeout=TIMEOUT,
         stream=True,
-        allow_redirects=False,
+        allow_redirects=False
     ) as response:
-
-        response.raise_for_status()
 
         if response.is_redirect:
             raise RuntimeError(
-                "Redirection PDF non suivie par precaution"
+                "Redirection PDF refusee."
             )
+
+        response.raise_for_status()
 
         data = bytearray()
 
         for chunk in response.iter_content(
             chunk_size=65536
         ):
+            if not chunk:
+                continue
+
             data.extend(chunk)
 
             if len(data) > MAX_BYTES:
                 raise ValueError(
-                    "PDF trop volumineux"
+                    "PDF trop volumineux."
                 )
 
     if not bytes(data).startswith(b"%PDF"):
         raise ValueError(
-            "Reponse non PDF"
+            "La reponse ne contient pas un PDF."
         )
 
     time.sleep(PAUSE_SECONDS)
@@ -286,12 +370,10 @@ def fetch_pdf(url):
 
 
 # ============================================================
-# EXTRACTION DES LIGNES PDF
+# LECTURE DES LIGNES PDF
 # ============================================================
 
 def page_lines(page):
-    """Conserver l'ordre natif et les coordonnees."""
-
     result = []
 
     blocks = page.get_text(
@@ -304,23 +386,32 @@ def page_lines(page):
             continue
 
         for line in block.get("lines", []):
-            txt = clean(
+            spans = line.get("spans", [])
+
+            text = clean(
                 " ".join(
-                    s.get("text", "")
-                    for s in line.get("spans", [])
+                    span.get("text", "")
+                    for span in spans
                 )
             )
 
-            if txt and line.get("bbox"):
-                x0, y0, x1, y1 = line["bbox"]
+            if not text:
+                continue
 
-                result.append({
-                    "text": txt,
-                    "x": x0,
-                    "y": y0,
-                    "x2": x1,
-                    "y2": y1,
-                })
+            bbox = line.get("bbox")
+
+            if not bbox:
+                continue
+
+            x0, y0, x1, y1 = bbox
+
+            result.append({
+                "text": text,
+                "x": x0,
+                "y": y0,
+                "x2": x1,
+                "y2": y1
+            })
 
     return result
 
@@ -359,7 +450,7 @@ def artist_name(text):
             r"\s*\(\s*suite\s*\)\s*$",
             "",
             text,
-            flags=re.I,
+            flags=re.I
         )
     )
 
@@ -380,17 +471,16 @@ def is_bio(text):
         )
     )
 
-    died = (
-        int(
+    died = None
+
+    if match.group(2):
+        died = int(
             re.sub(
                 r"\D",
                 "",
                 match.group(2)
             )
         )
-        if match.group(2)
-        else None
-    )
 
     return (
         1700 <= born <= 2026
@@ -402,83 +492,81 @@ def is_bio(text):
 
 
 def is_artist(text):
-    """
-    Filtre les phrases de biographies,
-    les initiales seules et les provenances.
-    """
-
     text = artist_name(text)
     words = text.split()
 
     if not (
         5 <= len(text) <= 85
-        and 2 <= len(words) <= 7
+        and 2 <= len(words) <= 8
     ):
         return False
 
     if re.search(
-        r"\d|@|https?://|[.!?;«»“”]",
+        r"\d|@|https?://|[!?;«»“”]",
         text
     ):
         return False
 
-    if text[-1] in ",:":
+    if text.endswith((",", ":", ".")):
         return False
 
     blocked = {
-        "collection",
-        "private",
-        "particuliere",
-        "membre",
-        "received",
-        "following",
-        "artist",
-        "oeuvre",
-        "artiste",
-        "musee",
-        "museum",
-        "devolved",
-        "current",
-        "provenance",
-        "acquired",
-        "acquis",
-        "the",
-        "with",
-        "pour",
-        "dans",
-        "cette",
-        "that",
-        "from",
-        "depuis",
-        "etait",
-        "etude",
-        "exposition",
-        "exhibited",
+        "collection", "private",
+        "particuliere", "membre",
+        "received", "following",
+        "artist", "artiste",
+        "oeuvre", "musee", "museum",
+        "provenance", "acquired",
+        "acquis", "exposition",
+        "exhibited", "production",
+        "while", "loosening",
+        "knots", "recent",
+        "recently", "then",
+        "during", "because",
+        "where", "which",
+        "whose", "through",
+        "national", "beaux",
+        "arts", "catalogue"
     }
 
     normalized = [
-        keytext(w).strip("',()")
-        for w in words
+        keytext(word).strip(
+            "',()."
+        )
+        for word in words
     ]
 
     if any(
-        w in blocked
-        for w in normalized
+        word in blocked
+        for word in normalized
     ):
         return False
 
-    if not all(
-        re.match(
+    particles = {
+        "de", "du", "des",
+        "la", "le", "van",
+        "von", "der", "den",
+        "da", "di", "del",
+        "and", "et"
+    }
+
+    for i, word in enumerate(words):
+        stripped = word.strip("()")
+
+        if not re.match(
             r"^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'’().-]*$",
-            w
-        )
-        for w in words
-    ):
-        return False
+            word
+        ):
+            return False
 
-    # Les particules internes sont admises.
-    if not words[0][0].isupper():
-        return False
+        if i > 0 and keytext(stripped) in particles:
+            continue
+
+        if not stripped:
+            return False
+
+        if not stripped[0].isupper():
+            return False
 
     return True
 
@@ -516,13 +604,6 @@ def lot_header(text):
 
 
 def detect_entries(lines, known=None):
-    """
-    Recherche artiste + dates + lot.
-
-    Le filet de securite historique aide
-    a conserver les lots deja repertories.
-    """
-
     entries = []
 
     for i, line in enumerate(lines):
@@ -548,96 +629,181 @@ def detect_entries(lines, known=None):
                 max(0, bio_i - 2),
                 bio_i
             ):
-                if is_artist(
+                candidate = artist_name(
                     lines[artist_i]["text"]
-                ):
-                    artist = artist_name(
-                        lines[artist_i]["text"]
-                    )
+                )
+
+                if is_artist(candidate):
+                    artist = candidate
                     break
 
             if artist:
                 break
 
         if artist:
-            expected = (
-                known or {}
-            ).get(
-                lot_number(header[0])
-            )
-
-            if (
-                expected
-                and keytext(expected) != keytext(artist)
-            ):
-                # La divergence sera examinee
-                # au moment de la fusion.
-                pass
-
             entries.append({
                 "index": i,
                 "lot": header[0],
                 "titre": header[1],
-                "artiste": artist,
+                "artiste": artist
             })
 
-    # Recuperation prudente des lots connus.
+    # Filet de securite pour les lots historiques.
     if known:
         detected_lots = {
-            lot_number(e["lot"])
-            for e in entries
+            lot_number(x["lot"])
+            for x in entries
         }
 
         for i, line in enumerate(lines):
-            h = lot_header(
+            header = lot_header(
                 line["text"]
             )
 
-            if not h:
+            if not header:
                 continue
 
-            number = lot_number(
-                h[0]
+            lot = lot_number(
+                header[0]
             )
 
-            if number in detected_lots:
+            if lot in detected_lots:
                 continue
 
-            expected = known.get(
-                number
-            )
+            expected = known.get(lot)
 
             if not expected:
                 continue
 
-            if any(
-                is_bio(
-                    lines[j]["text"]
-                )
+            has_bio = any(
+                is_bio(lines[j]["text"])
                 for j in range(
                     max(0, i - 3),
                     i
                 )
-            ):
+            )
+
+            if has_bio:
                 entries.append({
                     "index": i,
-                    "lot": h[0],
-                    "titre": h[1],
-                    "artiste": expected,
+                    "lot": header[0],
+                    "titre": header[1],
+                    "artiste": expected
                 })
 
-                detected_lots.add(
-                    number
-                )
+                detected_lots.add(lot)
 
     return sorted(
         entries,
-        key=lambda e: e["index"]
+        key=lambda x: x["index"]
     )
 
 
 # ============================================================
-# EXTRACTION DES ESTIMATIONS
+# RECONSTRUCTION PRUDENTE DES TITRES
+# ============================================================
+
+def title_continuation(text):
+    text = clean(text)
+
+    if not text:
+        return False
+
+    if len(text) > 120:
+        return False
+
+    if is_bio(text):
+        return False
+
+    if lot_header(text):
+        return False
+
+    if DIM.search(text):
+        return False
+
+    if PRICE_CONTEXT.search(text):
+        return False
+
+    if STOP_TITLE.search(text):
+        return False
+
+    if re.match(
+        r"^\d{4}\s*[-–—]",
+        text
+    ):
+        return False
+
+    if not re.search(
+        r"[A-Za-zÀ-ÿ]",
+        text
+    ):
+        return False
+
+    return True
+
+
+def reconstruct_title(lines, entry, next_index):
+    """
+    Reconstruit un titre uniquement lorsque sa fin
+    indique clairement une continuation.
+
+    Le titre reconstruit reste une proposition :
+    une valeur historique differente est preservee.
+    """
+
+    original = clean(
+        entry["titre"]
+    )
+
+    if not original.endswith(
+        TITLE_ENDINGS
+    ):
+        return original
+
+    index = entry["index"]
+
+    if index + 1 >= next_index:
+        return original
+
+    first = lines[index]
+    following = lines[index + 1]
+
+    candidate = clean(
+        following["text"]
+    )
+
+    if not title_continuation(candidate):
+        return original
+
+    # Verifier la proximite verticale.
+    vertical_gap = (
+        following["y"]
+        - first["y2"]
+    )
+
+    if not (
+        -3 <= vertical_gap <= 24
+    ):
+        return original
+
+    # Eviter de rattacher une autre colonne.
+    if abs(
+        following["x"] - first["x"]
+    ) > 45:
+        return original
+
+    reconstructed = clean(
+        original + " " + candidate
+    )
+
+    if len(reconstructed) > 250:
+        return original
+
+    return reconstructed
+
+
+# ============================================================
+# ESTIMATIONS
 # ============================================================
 
 def money(value):
@@ -647,11 +813,10 @@ def money(value):
         value
     )
 
-    return (
-        int(digits)
-        if digits
-        else None
-    )
+    if not digits:
+        return None
+
+    return int(digits)
 
 
 def estimate(text):
@@ -662,84 +827,115 @@ def estimate(text):
     if not match:
         return None
 
-    lo = money(
+    low = money(
         match.group(1)
     )
 
-    hi = money(
+    high = money(
         match.group(2)
     )
 
-    if (
-        lo is None
-        or hi is None
-        or not (100 <= lo <= hi <= 100_000_000)
-        or hi > lo * 20
+    if low is None or high is None:
+        return None
+
+    if not (
+        100 <= low <= high <= 100_000_000
     ):
         return None
 
-    return lo, hi
+    if high > low * 20:
+        return None
 
+    return low, high
+
+
+def extract_estimates(section):
+    """
+    Cherche les estimations a proximite
+    d'un libelle explicite.
+
+    Ne transforme pas une fourchette quelconque
+    en prix d'estimation.
+    """
+
+    candidates = []
+
+    for i, line in enumerate(section):
+        text = line["text"]
+
+        if not PRICE_CONTEXT.search(text):
+            continue
+
+        for candidate in section[
+            i:min(i + 5, len(section))
+        ]:
+            result = estimate(
+                candidate["text"]
+            )
+
+            if result:
+                candidates.append(result)
+                break
+
+    unique = list(
+        dict.fromkeys(candidates)
+    )
+
+    if len(unique) == 1:
+        return unique[0], False
+
+    if len(unique) > 1:
+        return None, True
+
+    return None, False
+
+
+# ============================================================
+# EXTRACTION DES METADONNEES
+# ============================================================
 
 def metadata(lines, entries, index):
-    start = (
-        entries[index]["index"] + 1
-    )
+    entry = entries[index]
 
-    end = (
-        entries[index + 1]["index"]
-        if index + 1 < len(entries)
-        else len(lines)
-    )
+    start = entry["index"] + 1
+
+    if index + 1 < len(entries):
+        end = entries[index + 1]["index"]
+    else:
+        end = len(lines)
 
     section = lines[
         start:min(end, start + 140)
     ]
 
     dims = None
-    estimates = []
 
-    for i, item in enumerate(section):
-        text = item["text"]
+    for line in section:
+        match = DIM.search(
+            line["text"]
+        )
 
-        if dims is None:
-            match = DIM.search(text)
+        if match:
+            dims = clean(
+                match.group()
+            )
+            break
 
-            if match:
-                dims = clean(
-                    match.group()
-                )
-
-        normalized = keytext(text)
-
-        if (
-            "estimation" in normalized
-            or "estimate" in normalized
-        ):
-            for candidate in section[i:i + 5]:
-                found = estimate(
-                    candidate["text"]
-                )
-
-                if found:
-                    estimates.append(
-                        found
-                    )
-                    break
-
-    unique = list(
-        dict.fromkeys(estimates)
+    est, conflict = extract_estimates(
+        section
     )
 
-    return (
-        dims,
-        unique[0] if len(unique) == 1 else None,
-        len(unique) > 1,
+    title = reconstruct_title(
+        lines,
+        entry,
+        end
     )
+
+    return dims, est, conflict, title
 
 
 # ============================================================
-# CREATION D'UNE NOTICE
+# CREATION DES NOTICES
 # ============================================================
 
 def notice(
@@ -749,7 +945,8 @@ def notice(
     entry,
     dims,
     est,
-    conflict
+    conflict,
+    title
 ):
     lot = lot_number(
         entry["lot"]
@@ -766,9 +963,8 @@ def notice(
         sale
     )
 
-    lo, hi = (
-        est
-        if est
+    low, high = (
+        est if est
         else (None, None)
     )
 
@@ -779,60 +975,63 @@ def notice(
             "oeuvre-provisoire",
             passage
         ),
+
         "maison": "BYDealers",
         "artiste": entry["artiste"],
-        "titre": clean(entry["titre"]),
+        "titre": title,
         "lot": lot,
         "dimensions": dims,
+
         "vente": sale,
         "annee_vente": (
             int(year.group())
-            if year
-            else None
+            if year else None
         ),
+
         "image": None,
+
         "prix": None,
         "prix_marteau": None,
         "prix_vendu": None,
-        "estimation_min": lo,
-        "estimation_max": hi,
+
+        "estimation_min": low,
+        "estimation_max": high,
+
         "estimation": (
-            f"{lo:,} - {hi:,} CAD"
-            if est
-            else None
+            f"{low:,} - {high:,} CAD"
+            if est else None
         ),
+
         "type_prix": (
             "estimation"
-            if est
-            else "inconnu"
+            if est else "inconnu"
         ),
+
         "devise": "CAD",
         "statut": "catalogue_historique",
+
         "url": url,
         "source_page": url,
         "source_page_pdf": page_no,
-        "origine": "catalogue_pdf_v8_3",
+
+        "origine": "catalogue_pdf_v8_4",
+
         "confiance_extraction": (
-            85
-            if dims and est and not conflict
+            85 if dims and est and not conflict
             else 65
         ),
+
         "conflit_estimation": conflict,
         "prix_realise_verifie": False,
-        "date_collecte": timestamp(),
+        "date_collecte": timestamp()
     }
 
 
 # ============================================================
-# LECTURE DES PDF
+# LECTURE COMPLETE D'UN CATALOGUE
 # ============================================================
 
-def parse_pdf(
-    data,
-    url,
-    sale,
-    known=None
-):
+def parse_pdf(data, url, sale, known=None):
     detected = {}
     page_errors = []
 
@@ -843,9 +1042,7 @@ def parse_pdf(
 
         total_pages = len(doc)
 
-        for page_index in range(
-            total_pages
-        ):
+        for page_index in range(total_pages):
             try:
                 page = doc[page_index]
 
@@ -856,7 +1053,12 @@ def parse_pdf(
                     )
 
                     for j, entry in enumerate(entries):
-                        dims, est, conflict = metadata(
+                        (
+                            dims,
+                            est,
+                            conflict,
+                            title
+                        ) = metadata(
                             lines,
                             entries,
                             j
@@ -869,31 +1071,44 @@ def parse_pdf(
                             entry,
                             dims,
                             est,
-                            conflict
+                            conflict,
+                            title
                         )
 
-                        k = passage_key(
+                        key = passage_key(
                             item
                         )
 
-                        if (
-                            k not in detected
-                            or (
-                                detected[k]["estimation_min"] is None
-                                and est is not None
-                            )
-                        ):
-                            detected[k] = item
+                        if key not in detected:
+                            detected[key] = item
+                        else:
+                            previous = detected[key]
+
+                            previous_score = sum([
+                                bool(previous.get("dimensions")),
+                                previous.get("estimation_min") is not None,
+                                not previous.get("conflit_estimation")
+                            ])
+
+                            new_score = sum([
+                                bool(item.get("dimensions")),
+                                item.get("estimation_min") is not None,
+                                not item.get("conflit_estimation")
+                            ])
+
+                            if new_score > previous_score:
+                                detected[key] = item
 
             except Exception as exc:
                 page_errors.append({
                     "page": page_index + 1,
-                    "erreur": str(exc),
+                    "erreur": str(exc)
                 })
 
                 print(
                     f"ERREUR page {page_index + 1}: "
-                    f"{type(exc).__name__}: {exc}"
+                    f"{type(exc).__name__}: {exc}",
+                    flush=True
                 )
 
                 traceback.print_exc()
@@ -906,18 +1121,11 @@ def parse_pdf(
 
 
 # ============================================================
-# NETTOYAGE DE L'HISTORIQUE
+# NORMALISATION DES NOTICES HISTORIQUES
 # ============================================================
 
 def normalize_existing(item):
-    """
-    Corrige les champs deterministes.
-
-    Les prix marteau et les identifiants
-    historiques sont conserves.
-    """
-
-    x = dict(item)
+    result = dict(item)
     changes = []
 
     for field in (
@@ -926,68 +1134,56 @@ def normalize_existing(item):
         "dimensions"
     ):
         if isinstance(
-            x.get(field),
+            result.get(field),
             str
         ):
-            cleaned = (
-                artist_name(x[field])
-                if field == "artiste"
-                else clean(x[field])
-            )
-
-            if cleaned != x[field]:
-                x[field] = cleaned
-                changes.append(
-                    field
+            if field == "artiste":
+                cleaned = artist_name(
+                    result[field]
+                )
+            else:
+                cleaned = clean(
+                    result[field]
                 )
 
+            if cleaned != result[field]:
+                result[field] = cleaned
+                changes.append(field)
+
     if (
-        x.get("estimation_min") is not None
-        and x.get("estimation_max") is not None
+        result.get("estimation_min") is not None
+        and result.get("estimation_max") is not None
+        and result.get("type_prix") == "inconnu"
     ):
-        if x.get("type_prix") == "inconnu":
-            x["type_prix"] = "estimation"
-            changes.append(
-                "type_prix"
-            )
+        result["type_prix"] = "estimation"
+        changes.append("type_prix")
 
-    if not x.get("id_passage"):
-        x["id_passage"] = passage_key(
-            x
+    if not result.get("id_passage"):
+        result["id_passage"] = passage_key(
+            result
         )
+        changes.append("id_passage")
 
-        changes.append(
-            "id_passage"
-        )
-
-    if not x.get("id_oeuvre"):
-        x["id_oeuvre"] = digest(
+    if not result.get("id_oeuvre"):
+        result["id_oeuvre"] = digest(
             "oeuvre-provisoire",
-            passage_key(x)
+            passage_key(result)
         )
+        changes.append("id_oeuvre")
 
-        changes.append(
-            "id_oeuvre"
-        )
-
-    return x, changes
+    return result, changes
 
 
 # ============================================================
-# FUSION DES DONNEES
+# FUSION SANS PERTE DE DONNEES
 # ============================================================
 
 def merge_existing(old, new):
-    """
-    Conserve l'ancien en cas de contradiction.
-
-    Ne remplace jamais un prix marteau
-    par une estimation.
-    """
-
     merged = dict(old)
-    conflicts = []
+
     additions = []
+    conflicts = []
+    proposals = []
 
     for field in (
         "artiste",
@@ -999,19 +1195,53 @@ def merge_existing(old, new):
 
         if incoming and not current:
             merged[field] = incoming
-            additions.append(
-                field
-            )
+            additions.append(field)
 
         elif (
             incoming
             and current
             and keytext(incoming) != keytext(current)
         ):
+            # Un nom d'artiste invalide n'est
+            # pas un conflit documentaire.
+            if (
+                field == "artiste"
+                and not is_artist(incoming)
+            ):
+                continue
+
+            if field == "titre":
+                # Proposer une extension de titre,
+                # sans ecraser la valeur historique.
+                if (
+                    len(incoming) > len(current)
+                    and keytext(incoming).startswith(
+                        keytext(current)
+                    )
+                ):
+                    proposals.append({
+                        "champ": "titre",
+                        "ancien": current,
+                        "proposition": incoming,
+                        "motif": "titre_plus_complet"
+                    })
+
+                    continue
+
+                # Ne pas signaler comme conflit
+                # un titre simplement tronque.
+                if (
+                    len(incoming) < len(current)
+                    and keytext(current).startswith(
+                        keytext(incoming)
+                    )
+                ):
+                    continue
+
             conflicts.append({
                 "champ": field,
                 "ancien": current,
-                "extrait": incoming,
+                "extrait": incoming
             })
 
     for field in (
@@ -1024,9 +1254,7 @@ def merge_existing(old, new):
             and new.get(field) is not None
         ):
             merged[field] = new[field]
-            additions.append(
-                field
-            )
+            additions.append(field)
 
     old_pair = (
         old.get("estimation_min"),
@@ -1039,16 +1267,10 @@ def merge_existing(old, new):
     )
 
     if (
-        all(
-            v is not None
-            for v in new_pair
-        )
+        all(v is not None for v in new_pair)
         and not new.get("conflit_estimation")
     ):
-        if all(
-            v is None
-            for v in old_pair
-        ):
+        if all(v is None for v in old_pair):
             for field in (
                 "estimation_min",
                 "estimation_max",
@@ -1057,37 +1279,43 @@ def merge_existing(old, new):
                 merged[field] = new[field]
 
             merged["type_prix"] = "estimation"
-
-            additions.append(
-                "estimation"
-            )
+            additions.append("estimation")
 
         elif old_pair != new_pair:
             conflicts.append({
                 "champ": "estimation",
                 "ancien": old_pair,
-                "extrait": new_pair,
+                "extrait": new_pair
             })
 
     if new.get("conflit_estimation"):
         conflicts.append({
             "champ": "estimation",
-            "motif": "plusieurs estimations detectees",
+            "motif": (
+                "plusieurs estimations detectees"
+            )
         })
 
-    merged["id_passage"] = passage_key(
-        old
-    )
+    merged["id_passage"] = passage_key(old)
+
+    # Conserver :
+    # - id historique
+    # - id_oeuvre
+    # - prix marteau
+    # - prix vendu
+    # - provenance
+    # - autres champs existants
 
     return (
         merged,
         additions,
-        conflicts
+        conflicts,
+        proposals
     )
 
 
 # ============================================================
-# RAPPROCHEMENTS ENTRE OEUVRES
+# RAPPROCHEMENT DES OEUVRES
 # ============================================================
 
 def dimensions_key(value):
@@ -1106,9 +1334,7 @@ def dimensions_key(value):
     return tuple(
         sorted(
             round(
-                float(
-                    x.replace(",", ".")
-                ),
+                float(x.replace(",", ".")),
                 1
             )
             for x in numbers
@@ -1129,19 +1355,23 @@ def potential_matches(records):
             and item.get("artiste")
             and item.get("titre")
         ):
-            groups[(
+            key = (
                 keytext(item["artiste"]),
                 keytext(item["titre"]),
                 dims
-            )].append(item)
+            )
+
+            groups[key].append(item)
 
     result = []
 
     for group in groups.values():
-        if len({
+        passages = {
             passage_key(x)
             for x in group
-        }) < 2:
+        }
+
+        if len(passages) < 2:
             continue
 
         same_catalogue = (
@@ -1156,20 +1386,22 @@ def potential_matches(records):
             "titre": group[0]["titre"],
             "dimensions": group[0].get("dimensions"),
             "verification": "requise",
+
             "risque": (
                 "lots_distincts_meme_catalogue"
                 if same_catalogue
                 else "possible_remise_en_vente"
             ),
+
             "passages": [
                 {
                     "id_passage": passage_key(x),
                     "vente": x.get("vente"),
                     "lot": x.get("lot"),
-                    "url": x.get("url"),
+                    "url": x.get("url")
                 }
                 for x in group
-            ],
+            ]
         })
 
     return result
@@ -1182,76 +1414,83 @@ def potential_matches(records):
 def quality_report(records, matches):
     anomalies = []
 
-    for x in records:
+    for item in records:
         issues = []
 
-        if not x.get("dimensions"):
+        if not item.get("dimensions"):
             issues.append(
                 "dimensions_absentes"
             )
 
-        if x.get("estimation_min") is None:
+        if item.get("estimation_min") is None:
             issues.append(
                 "estimation_absente"
             )
 
         if clean(
-            x.get("titre")
-        ).endswith(
-            ("/", ":", "-", ",")
-        ):
+            item.get("titre")
+        ).endswith(TITLE_ENDINGS):
             issues.append(
                 "titre_possiblement_tronque"
             )
 
-        if x.get("conflit_estimation"):
+        if item.get("conflit_estimation"):
             issues.append(
                 "conflit_estimation"
             )
 
         if issues:
             anomalies.append({
-                "id": x.get("id"),
-                "id_passage": passage_key(x),
-                "artiste": x.get("artiste"),
-                "titre": x.get("titre"),
+                "id": item.get("id"),
+                "id_passage": passage_key(item),
+                "artiste": item.get("artiste"),
+                "titre": item.get("titre"),
                 "problemes": issues,
-                "url": x.get("url"),
-                "page": x.get("source_page_pdf"),
+                "url": item.get("url"),
+                "page": item.get("source_page_pdf")
             })
 
     return {
         "version": VERSION,
         "date": timestamp(),
+
         "total_oeuvres": len(records),
+
         "avec_dimensions": sum(
             bool(x.get("dimensions"))
             for x in records
         ),
+
         "avec_estimation": sum(
             x.get("estimation_min") is not None
             for x in records
         ),
+
         "prix_marteau_verifies": sum(
             bool(x.get("prix_realise_verifie"))
             for x in records
         ),
+
         "rapprochements_potentiels": matches,
+
         "nombre_rapprochements": len(matches),
+
         "anomalies": anomalies,
-        "nombre_notices_a_controler": len(anomalies),
+
+        "nombre_notices_a_controler": len(anomalies)
     }
 
 
 # ============================================================
-# COLLECTE PRINCIPALE
+# EXECUTION PRINCIPALE
 # ============================================================
 
 def main():
     original = load_db()
 
     print(
-        f"{VERSION}: {len(original)} notices existantes",
+        f"{VERSION}: {len(original)} "
+        "notices historiques chargees.",
         flush=True
     )
 
@@ -1263,26 +1502,24 @@ def main():
             old
         )
 
-        k = passage_key(
-            item
-        )
+        key = passage_key(item)
 
-        if not k:
+        if not key:
             raise ValueError(
-                "Notice sans identifiant exploitable"
+                "Notice sans identifiant exploitable."
             )
 
-        if k in db:
+        if key in db:
             raise ValueError(
-                f"Doublon de passage preexistant: {k}"
+                f"Doublon historique : {key}"
             )
 
-        db[k] = item
+        db[key] = item
 
         if changed:
             cleanup.append({
-                "id_passage": k,
-                "champs": changed,
+                "id_passage": key,
+                "champs": changed
             })
 
     historical = set(db)
@@ -1291,6 +1528,7 @@ def main():
     new_keys = []
     additions = []
     conflicts = []
+    proposals = []
     catalogues = []
 
     stats = {
@@ -1299,21 +1537,23 @@ def main():
         "pdf_lus": 0,
         "oeuvres_detectees": 0,
         "nouvelles_oeuvres": 0,
-        "erreurs_ou_blocages": 0,
+        "erreurs_ou_blocages": 0
     }
+
+    # --------------------------------------------------------
+    # COLLECTE DES CATALOGUES
+    # --------------------------------------------------------
 
     for sale, url in CATALOGUES.items():
         print(
-            f"\nCATALOGUE: {sale}",
+            f"\nCATALOGUE : {sale}",
             flush=True
         )
 
         stats["pages_consultees"] += 1
 
         try:
-            data = fetch_pdf(
-                url
-            )
+            data = fetch_pdf(url)
 
             stats["pages_accessibles"] += 1
 
@@ -1343,9 +1583,9 @@ def main():
                 )
 
             print(
-                f"pages={pages} "
-                f"lots={len(found)} "
-                f"erreurs_pages={len(page_errors)}",
+                f"Pages : {pages} | "
+                f"Lots : {len(found)} | "
+                f"Erreurs : {len(page_errors)}",
                 flush=True
             )
 
@@ -1358,54 +1598,53 @@ def main():
                 ),
                 "oeuvres": len(found),
                 "pages": pages,
-                "erreurs_pages": page_errors,
+                "erreurs_pages": page_errors
             })
 
             for item in found:
-                k = passage_key(
-                    item
-                )
+                key = passage_key(item)
 
-                seen.add(k)
+                seen.add(key)
 
-                if k in db:
-                    merged, added, problems = merge_existing(
-                        db[k],
+                if key in db:
+                    (
+                        merged,
+                        added,
+                        problems,
+                        suggested
+                    ) = merge_existing(
+                        db[key],
                         item
                     )
 
-                    db[k] = merged
+                    db[key] = merged
 
                     if added:
                         additions.append({
-                            "id_passage": k,
-                            "champs": added,
+                            "id_passage": key,
+                            "champs": added
                         })
 
                     if problems:
-                        extraction_error = any(
-                            p.get("champ") == "artiste"
-                            and not is_artist(
-                                p.get("extrait", "")
-                            )
-                            for p in problems
-                        )
-
                         conflicts.append({
-                            "id_passage": k,
+                            "id_passage": key,
                             "vente": sale,
                             "lot": item["lot"],
-                            "categorie": (
-                                "erreur_extraction_probable"
-                                if extraction_error
-                                else "verification_documentaire"
-                            ),
-                            "conflits": problems,
+                            "conflits": problems
+                        })
+
+                    if suggested:
+                        proposals.append({
+                            "id_passage": key,
+                            "vente": sale,
+                            "lot": item["lot"],
+                            "propositions": suggested
                         })
 
                 else:
-                    db[k] = item
-                    new_keys.append(k)
+                    db[key] = item
+
+                    new_keys.append(key)
 
                     stats["nouvelles_oeuvres"] += 1
 
@@ -1426,13 +1665,17 @@ def main():
                 "oeuvres": 0,
                 "erreur": (
                     f"{type(exc).__name__}: {exc}"
-                ),
+                )
             })
+
+    # --------------------------------------------------------
+    # SECURITE
+    # --------------------------------------------------------
 
     if not seen:
         raise RuntimeError(
-            "Aucun lot extrait : "
-            "aucun JSON ne sera remplace."
+            "Aucun lot extrait. "
+            "Aucun fichier ne sera remplace."
         )
 
     records = sorted(
@@ -1441,9 +1684,19 @@ def main():
             keytext(x.get("artiste")),
             keytext(x.get("titre")),
             str(x.get("annee_vente") or ""),
-            lot_number(x.get("lot")),
-        ),
+            lot_number(x.get("lot"))
+        )
     )
+
+    if len(records) < len(original):
+        raise RuntimeError(
+            "Regression du nombre de notices. "
+            "Sauvegarde annulee."
+        )
+
+    # --------------------------------------------------------
+    # ANALYSE
+    # --------------------------------------------------------
 
     matches = potential_matches(
         records
@@ -1459,69 +1712,103 @@ def main():
     )
 
     by_origin = Counter(
-        db[k].get(
-            "origine",
-            "inconnue"
-        )
-        for k in missing
+        db[key].get("origine", "inconnue")
+        for key in missing
     )
 
     differences = {
         "version": VERSION,
         "date": timestamp(),
+
         "historique_avant": len(original),
+
         "detectes_cette_execution": len(seen),
+
         "non_redetectes": len(missing),
-        "non_redetectes_par_origine": dict(by_origin),
+
+        "non_redetectes_par_origine": dict(
+            by_origin
+        ),
+
         "lots_non_redetectes": [
             {
-                "id_passage": k,
-                "vente": db[k].get("vente"),
-                "lot": db[k].get("lot"),
-                "artiste": db[k].get("artiste"),
-                "titre": db[k].get("titre"),
-                "url": db[k].get("url"),
+                "id_passage": key,
+                "vente": db[key].get("vente"),
+                "lot": db[key].get("lot"),
+                "artiste": db[key].get("artiste"),
+                "titre": db[key].get("titre"),
+                "url": db[key].get("url")
             }
-            for k in missing
+            for key in missing
         ],
+
         "nouveaux_passages": new_keys,
+
         "nettoyages": cleanup,
+
         "champs_completes": additions,
+
         "conflits_a_verifier": conflicts,
+
+        "propositions_corrections": proposals
     }
 
     report = {
         "version": VERSION,
         "date": timestamp(),
+
         "sources": {
             "BYDealers": stats,
+
             "Heffel": {
                 "statut": "connecteur_a_developper",
-                "oeuvres_detectees": 0,
+                "oeuvres_detectees": 0
             },
+
             "Gelineau": {
                 "statut": "connecteur_a_developper",
-                "oeuvres_detectees": 0,
+                "oeuvres_detectees": 0
             },
+
+            "Iegor": {
+                "statut": "connecteur_a_developper",
+                "oeuvres_detectees": 0
+            }
         },
+
         "catalogues": catalogues,
+
         "total_oeuvres": len(records),
-        "avec_estimation": quality["avec_estimation"],
-        "rapprochements_potentiels": len(matches),
-        "lots_historiques_non_redetectes": len(missing),
-        "conflits_a_verifier": len(conflicts),
-        "note": (
-            "Estimations de catalogues uniquement; "
-            "aucun prix marteau deduit."
+
+        "avec_estimation": quality[
+            "avec_estimation"
+        ],
+
+        "rapprochements_potentiels": len(
+            matches
         ),
+
+        "lots_historiques_non_redetectes": len(
+            missing
+        ),
+
+        "conflits_a_verifier": len(
+            conflicts
+        ),
+
+        "propositions_corrections": len(
+            proposals
+        ),
+
+        "note": (
+            "Estimations de catalogues uniquement. "
+            "Aucun prix marteau deduit ou invente."
+        )
     }
 
-    # Ne jamais reduire la base historique.
-    if len(records) < len(original):
-        raise RuntimeError(
-            "Regression du nombre de notices; "
-            "sauvegarde annulee."
-        )
+    # --------------------------------------------------------
+    # SAUVEGARDE
+    # --------------------------------------------------------
 
     write_json(
         DB,
@@ -1543,14 +1830,73 @@ def main():
         differences
     )
 
+    # --------------------------------------------------------
+    # RESUME
+    # --------------------------------------------------------
+
     print(
-        f"\n{VERSION}: "
-        f"{len(records)} notices, "
-        f"{len(seen)} passages detectes, "
-        f"{len(missing)} non redetectes, "
-        f"{quality['avec_estimation']} estimations, "
-        f"{len(conflicts)} conflits, "
-        f"{len(cleanup)} notices nettoyees.",
+        "\n========================================",
+        flush=True
+    )
+
+    print(
+        f"ART ENCHERES QUEBEC — {VERSION}",
+        flush=True
+    )
+
+    print(
+        "========================================",
+        flush=True
+    )
+
+    print(
+        f"Notices : {len(records)}",
+        flush=True
+    )
+
+    print(
+        f"Lots detectes : {len(seen)}",
+        flush=True
+    )
+
+    print(
+        f"Lots non redetectes : {len(missing)}",
+        flush=True
+    )
+
+    print(
+        f"Estimations : {quality['avec_estimation']}",
+        flush=True
+    )
+
+    print(
+        f"Dimensions : {quality['avec_dimensions']}",
+        flush=True
+    )
+
+    print(
+        f"Conflits : {len(conflicts)}",
+        flush=True
+    )
+
+    print(
+        f"Corrections proposees : {len(proposals)}",
+        flush=True
+    )
+
+    print(
+        f"Rapprochements : {len(matches)}",
+        flush=True
+    )
+
+    print(
+        f"Prix marteau verifies : "
+        f"{quality['prix_marteau_verifies']}",
+        flush=True
+    )
+
+    print(
+        "========================================",
         flush=True
     )
 
