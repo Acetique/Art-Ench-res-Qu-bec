@@ -1,33 +1,68 @@
 {
-  "version": "V6",
-  "date": "2026-10-12T20:54:25.739095+00:00",
-  "anciennes_entrees_retirees": 0,
+  "version": "V7",
+  "date": "2026-10-12T21:02:50.081956+00:00",
   "sources": {
     "BYDealers": {
-      "pages_consultees": 15,
-      "pages_accessibles": 14,
+      "pages_consultees": 8,
+      "pages_accessibles": 8,
       "pdf_lus": 8,
-      "oeuvres_detectees": 402,
-      "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 1
+      "oeuvres_detectees": 489,
+      "nouvelles_oeuvres": 86,
+      "erreurs_ou_blocages": 0
     },
     "Heffel": {
-      "pages_consultees": 30,
-      "pages_accessibles": 3,
-      "pdf_lus": 0,
-      "oeuvres_detectees": 0,
-      "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 27
+      "statut": "connecteur_a_developper",
+      "oeuvres_detectees": 0
     },
     "Gelineau": {
-      "pages_consultees": 2,
-      "pages_accessibles": 2,
-      "pdf_lus": 0,
-      "oeuvres_detectees": 0,
-      "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 0
+      "statut": "connecteur_a_developper",
+      "oeuvres_detectees": 0
     }
   },
-  "total_oeuvres": 402,
-  "note": "Les estimations de catalogue ne sont pas des prix de vente."
+  "catalogues": [
+    {
+      "vente": "Printemps 2023",
+      "statut": "ok",
+      "oeuvres": 57
+    },
+    {
+      "vente": "Automne 2023",
+      "statut": "ok",
+      "oeuvres": 77
+    },
+    {
+      "vente": "Printemps 2024",
+      "statut": "ok",
+      "oeuvres": 62
+    },
+    {
+      "vente": "Automne 2024",
+      "statut": "ok",
+      "oeuvres": 60
+    },
+    {
+      "vente": "Printemps 2025",
+      "statut": "ok",
+      "oeuvres": 66
+    },
+    {
+      "vente": "Automne 2025",
+      "statut": "ok",
+      "oeuvres": 71
+    },
+    {
+      "vente": "Printemps 2026",
+      "statut": "ok",
+      "oeuvres": 45
+    },
+    {
+      "vente": "Succession printemps 2026",
+      "statut": "ok",
+      "oeuvres": 51
+    }
+  ],
+  "total_oeuvres": 488,
+  "avec_estimation": 276,
+  "rapprochements_potentiels": 3,
+  "note": "Notices de catalogues historiques. Les estimations ne sont pas des prix marteau."
 }
