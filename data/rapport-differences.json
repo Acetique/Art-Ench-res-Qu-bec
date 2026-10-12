@@ -1,69 +1,15 @@
 {
-  "version": "V8.10.2",
-  "date": "2026-10-12T23:42:59.025826+00:00",
+  "version": "V8.10.3",
+  "date": "2026-10-12T23:50:11.962971+00:00",
   "historique_avant": 491,
-  "detectes_cette_execution": 490,
-  "non_redetectes": 1,
-  "lots_non_redetectes": [
-    "ba045ed666f6d7e1ba88"
-  ],
-  "details_lots_non_redetectes": [
-    {
-      "id_passage": "ba045ed666f6d7e1ba88",
-      "vente": "Succession printemps 2026",
-      "lot": "73",
-      "artiste": "William Paterson Ewen",
-      "titre": "Oil Painting No. 2",
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf"
-    }
-  ],
+  "detectes_cette_execution": 491,
+  "non_redetectes": 0,
+  "lots_non_redetectes": [],
+  "details_lots_non_redetectes": [],
   "nouveaux_passages": [],
   "nettoyages": [],
   "champs_completes": [],
-  "conflits_a_verifier": [
-    {
-      "id_passage": "41581229d7b92e46dd5f",
-      "vente": "Printemps 2023",
-      "lot": "26",
-      "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
-      "page_pdf": 11,
-      "conflits": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre / Untitled",
-          "extrait": "mai 2013"
-        }
-      ]
-    },
-    {
-      "id_passage": "275b2d4ff0d33ebf0843",
-      "vente": "Automne 2024",
-      "lot": "06",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page_pdf": 21,
-      "conflits": [
-        {
-          "champ": "titre",
-          "ancien": "La femme usine",
-          "extrait": "novembre 2017 (lot 27)"
-        }
-      ]
-    },
-    {
-      "id_passage": "b0949a8da92118178cd3",
-      "vente": "Automne 2024",
-      "lot": "07",
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page_pdf": 9,
-      "conflits": [
-        {
-          "champ": "titre",
-          "ancien": "Buste de femme",
-          "extrait": "mai au 3 juillet 1994; Beaverbrook Art Gallery, Frederiction, du 1 er au 30 octobre 1994; Musée des beaux-arts de"
-        }
-      ]
-    }
-  ],
+  "conflits_a_verifier": [],
   "audit_conflits_historiques": "non_resolus_sans_revue_manuellement_documentee",
   "absence_conflits_nouveaux_ne_prouve_pas_resolution": true,
   "corrections_appliquees": [],
