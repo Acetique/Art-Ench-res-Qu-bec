@@ -1,13 +1,13 @@
 {
-  "version": "V8.1",
-  "date": "2026-10-12T21:47:20.727755+00:00",
+  "version": "V8.2",
+  "date": "2026-10-12T21:55:54.620986+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
       "pages_accessibles": 8,
       "pdf_lus": 8,
-      "oeuvres_detectees": 398,
-      "nouvelles_oeuvres": 0,
+      "oeuvres_detectees": 491,
+      "nouvelles_oeuvres": 3,
       "erreurs_ou_blocages": 0
     },
     "Heffel": {
@@ -23,46 +23,64 @@
     {
       "vente": "Printemps 2023",
       "statut": "ok",
-      "oeuvres": 40
+      "oeuvres": 57,
+      "pages": 57,
+      "erreurs_pages": []
     },
     {
       "vente": "Automne 2023",
       "statut": "ok",
-      "oeuvres": 58
+      "oeuvres": 77,
+      "pages": 64,
+      "erreurs_pages": []
     },
     {
       "vente": "Printemps 2024",
       "statut": "ok",
-      "oeuvres": 46
+      "oeuvres": 62,
+      "pages": 57,
+      "erreurs_pages": []
     },
     {
       "vente": "Automne 2024",
       "statut": "ok",
-      "oeuvres": 50
+      "oeuvres": 60,
+      "pages": 56,
+      "erreurs_pages": []
     },
     {
       "vente": "Printemps 2025",
       "statut": "ok",
-      "oeuvres": 53
+      "oeuvres": 66,
+      "pages": 57,
+      "erreurs_pages": []
     },
     {
       "vente": "Automne 2025",
       "statut": "ok",
-      "oeuvres": 62
+      "oeuvres": 71,
+      "pages": 63,
+      "erreurs_pages": []
     },
     {
       "vente": "Printemps 2026",
       "statut": "ok",
-      "oeuvres": 39
+      "oeuvres": 45,
+      "pages": 47,
+      "erreurs_pages": []
     },
     {
       "vente": "Succession printemps 2026",
       "statut": "ok",
-      "oeuvres": 50
+      "oeuvres": 53,
+      "pages": 106,
+      "erreurs_pages": []
     }
   ],
-  "total_oeuvres": 488,
-  "avec_estimation": 280,
-  "rapprochements_potentiels": 1,
-  "note": "Les estimations des catalogues ne sont pas des prix marteau verifies."
+  "total_oeuvres": 491,
+  "avec_estimation": 284,
+  "rapprochements_potentiels": 3,
+  "lots_historiques_non_redetectes": 0,
+  "conflits_a_verifier": 40,
+  "note": "Estimations de catalogues uniquement; aucun prix marteau deduit."
 }

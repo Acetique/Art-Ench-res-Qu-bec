@@ -1,0 +1,1365 @@
+{
+  "version": "V8.2",
+  "date": "2026-10-12T21:55:54.620980+00:00",
+  "historique_avant": 488,
+  "detectes_cette_execution": 491,
+  "non_redetectes": 0,
+  "non_redetectes_par_origine": {},
+  "lots_non_redetectes": [],
+  "nouveaux_passages": [
+    "9d4672b5c5a2cac89c24",
+    "46b8b7157d580f823a39",
+    "e53339d3decc7a8b07a6"
+  ],
+  "nettoyages": [
+    {
+      "id_passage": "2f9aa01a76ea704db7da",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "3d75cee1ee1c77698fce",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "581298d3fb296ed2e3b7",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "75544a8e172f532795fb",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "da73718ad6d919704ace",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "a45c0fdf3d452c2770f7",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "53f4c5adef2b65cdb4b3",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "70941a5ef725cf50babb",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "64236865847f0a23c9fb",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d85f6f9c3c8fe273eab1",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ac51dbf55a7c165d37b9",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "9fcb8af186bd891f6c8b",
+      "champs": [
+        "artiste"
+      ]
+    },
+    {
+      "id_passage": "0c03bafb8986866b6af7",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "f2c0cb75ab8c0224e45f",
+      "champs": [
+        "titre",
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "311deae2c18f1e7f752c",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ff4a33a20d8450c485f2",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "40b33ff65e0ff8e1d104",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "5154284a9f0816afe18d",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "1315d21490217a69db36",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "2b5a3ec48ea2de8827a8",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "a121e24e662866269aa8",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "6c5859ef6ac7b7185876",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "4f18dfae47f651c2f24e",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "756d07e6aa92972d6d29",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "9094c19fb6e09a4097a6",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "679fb1dbcdd05dfcd0a0",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "a387fdf9bb6f06b6f0dc",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "c5aca100f04adb09c7ee",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "7f90afaf4631edc16949",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "cf6055712f8af21fc228",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "0e9e8081feb836b7ec54",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "4061a7525de9c0aba358",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "7193d7004426f2e5b9f8",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "2873e0cd0034965942ac",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "51cc9f26b0b798791fa2",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "883345b63cb091a6fb2a",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "9f1850299e9209dee695",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "627ef007f9cd787cc189",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ac824c043eb93c245afb",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "bf277acb84463356bbad",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "8bea0b084a269a60e039",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "008fb46cd54fce48b3e8",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "3025b2d1754d9a864af5",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "3e17d8f6ccac679fa0a4",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ed483877aa9d1b2540c6",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "1c494bd4559ba8ce6328",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "295bfab76c97085141ab",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "6817ee1e382af0e92e78",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "aba5cbd2cdc1e8095b52",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d164e68de13bc924cd45",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "b8902ff66eec57e850e2",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "ada5fb4d54a590cbd153",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "8cd738b02d8794b7010b",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "1220fc6d30f7cf7f99a0",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "2dc52e14443a5347f998",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "81d448e1ea7c0e4a097f",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d6cf49b5425dfc9c50ac",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "fe974181685f7f45dbba",
+      "champs": [
+        "titre",
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "c762195d4f923d926302",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "51fd74262485a52a2b03",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "0df7636245cccb1c094d",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "f64d7d35fc6096d1210d",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ec7d0a8000a48408dcd1",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d8d87a3ecdecfd13858e",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "969c456b46e3bbccc747",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "cea7804917622e0b37b7",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "7927b7163506fea4af43",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "7d42b4c5da772c3343a6",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ce5c668bf5a7edca6177",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "73aa4437bdd88a9ac856",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "1c527a45c023c8b34d65",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "868b043e23ae18f09ae1",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ae8c3b598b56e998e52c",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "f3ddcf68fe7c8302eba3",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "3efd22dd10ac5865536a",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "5ace478cf67441be5786",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "56fe7314d9057c647afa",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "eba1b6ff1927ff969f7f",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "e6d8ba31fb3c17000499",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "fd8d9a960c06958038ad",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "20b0958f5de5fec02402",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "e1ce15d7c5b9687f5ded",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "29e335b73e530bd2f333",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "9345441d6365bde23f2b",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "0aa997c873cc68f06d39",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "ce01357a5a92bcf84ed1",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d4640e1b69a0d56b693c",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "0fc261f55ce36cb8d4c4",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ea7b3afd57e81cb059cb",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "4969205ffec88ba5cbed",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "105f155290b73050c91e",
+      "champs": [
+        "titre",
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "b35708f8972b95ad9e2e",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "3b298a48e28e833990be",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "26f7c38292aa588889ea",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ea0d3b5f13e99171c8b5",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "25bde6c8f9eccb90630c",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "2176678742b7b6b82839",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "38a488af38de5dd6b8f8",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "21db5362b5179e062ee0",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "382849ee4669870633b9",
+      "champs": [
+        "titre",
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "a067abb7f0c4d853cc80",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "abd94b682d3df170295a",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d7d19fc23e448001b259",
+      "champs": [
+        "titre",
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "4fe5702d11b061ed1923",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "1fe8ea4987e233cebf1c",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "eeaf913dad21160c7bfe",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d166213cea96661b1beb",
+      "champs": [
+        "titre",
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "ebca58f57720e01de39e",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "41c345b5b18a1b1df085",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d3841c40883c25310c5e",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "5990446b4a586df43ee5",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d589499f536e7a4febf2",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "f331614604f629fe5ff7",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "b9e9be9b2013f0260055",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "03f1dc50d48ef252f8d3",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "a23168ad72df85e6168e",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "b309363049bda6bef2d5",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "a5a4f7c165e6074e7422",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "d60ecea104b33accba7c",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "157b14f427b928a4a4c1",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "77f20641529be09d519a",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "443e2c181b2b6d26c047",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "fc40bfa60b36fcf153ed",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "0a0b2f70e5652bf89030",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ebf1358b69d63b82b166",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "df0adbdf85d4353d1cd4",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "1477ec58cbf7a7ceb77c",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "05509707f405e279c965",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "c9e474b9682e54382287",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "cbf52a472351aa9c560d",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ba045ed666f6d7e1ba88",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "398a52f8601635c1c4f2",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "94712ca8e8a89aae472d",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "df32585ecbdededf0676",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "ecea713e586df1e0ab2f",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "9295e70d676189a89729",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "dab0b79f58de93f2860d",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "12aa42324419ebb825da",
+      "champs": [
+        "titre"
+      ]
+    },
+    {
+      "id_passage": "f34b98826ada937b9e37",
+      "champs": [
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "1837412d3d13e08ad076",
+      "champs": [
+        "titre",
+        "type_prix"
+      ]
+    },
+    {
+      "id_passage": "2d423acaab7e316ab82b",
+      "champs": [
+        "titre"
+      ]
+    }
+  ],
+  "champs_completes": [
+    {
+      "id_passage": "cf9af5af343be8e36d39",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "911c5d1a67076d4cd203",
+      "champs": [
+        "estimation"
+      ]
+    }
+  ],
+  "conflits_a_verifier": [
+    {
+      "id_passage": "58770bf7debe55ad6b4b",
+      "vente": "Printemps 2023",
+      "lot": "01",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Miyuki Tanobe",
+          "extrait": "membre de l’Ordre du Canada et a reçu la Médaille du jubilé d’or de la reine Elizabeth II."
+        }
+      ]
+    },
+    {
+      "id_passage": "53f4c5adef2b65cdb4b3",
+      "vente": "Printemps 2023",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Bruno Côté",
+          "extrait": "the artist by the current private collection, Québec"
+        }
+      ]
+    },
+    {
+      "id_passage": "495b1ae370e44313b54f",
+      "vente": "Printemps 2023",
+      "lot": "14",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Une patinoire d’autrefois, Pointe-Saint-Charles, Montréal",
+          "extrait": "Une patinoire d’autrefois,"
+        }
+      ]
+    },
+    {
+      "id_passage": "41581229d7b92e46dd5f",
+      "vente": "Printemps 2023",
+      "lot": "26",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Marcelle Ferron",
+          "extrait": "suggestif et séducteur de la couleur » [nous traduisons]."
+        }
+      ]
+    },
+    {
+      "id_passage": "1fe8ea4987e233cebf1c",
+      "vente": "Printemps 2023",
+      "lot": "31",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Paul-Émile Borduas",
+          "extrait": "Contemporary Art the following year. A few paintings from"
+        }
+      ]
+    },
+    {
+      "id_passage": "c65b92649ed5d3b668c6",
+      "vente": "Printemps 2023",
+      "lot": "32",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Claude Tousignant",
+          "extrait": "de Montréal was entirely devoted to his diptychs."
+        }
+      ]
+    },
+    {
+      "id_passage": "8f959cfc8556ee4f594d",
+      "vente": "Printemps 2023",
+      "lot": "56",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Marc Séguin",
+          "extrait": "documentary La ferme et son État ."
+        }
+      ]
+    },
+    {
+      "id_passage": "a644d27ae0e2a1410b54",
+      "vente": "Automne 2023",
+      "lot": "01",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Léon Bellefleur",
+          "extrait": "personnage du monde culture québécois »."
+        }
+      ]
+    },
+    {
+      "id_passage": "cf9325c904459863e514",
+      "vente": "Printemps 2024",
+      "lot": "01",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Léon Bellefleur",
+          "extrait": "surréaliste et automatiste ainsi que dans un imaginaire intarissable."
+        }
+      ]
+    },
+    {
+      "id_passage": "e566b6473eefde95c8ed",
+      "vente": "Printemps 2024",
+      "lot": "02",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Léon Bellefleur",
+          "extrait": "majestueuse, qui ouvrira la voie à la pleine reconnaissance de son art."
+        }
+      ]
+    },
+    {
+      "id_passage": "4fe5702d11b061ed1923",
+      "vente": "Printemps 2024",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Paul-Émile Borduas",
+          "extrait": "Borduas’s then-recent production while loosening its knots"
+        }
+      ]
+    },
+    {
+      "id_passage": "8878a46d48b001a713d8",
+      "vente": "Printemps 2024",
+      "lot": "27",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jacques Hurtubise",
+          "extrait": "the viewer’s gaze."
+        }
+      ]
+    },
+    {
+      "id_passage": "d1142f4ac1d363590681",
+      "vente": "Printemps 2024",
+      "lot": "28",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Rita Letendre",
+          "extrait": "national des beaux-arts du Québec."
+        }
+      ]
+    },
+    {
+      "id_passage": "05509707f405e279c965",
+      "vente": "Printemps 2024",
+      "lot": "31",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Serge Lemoyne",
+          "extrait": "at once.”"
+        }
+      ]
+    },
+    {
+      "id_passage": "a358a65a3b149498ff6e",
+      "vente": "Printemps 2024",
+      "lot": "38",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Léon Bellefleur",
+          "extrait": "Collection particulière / Private collection, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "b689b7ef3d746c82a8cd",
+      "vente": "Printemps 2024",
+      "lot": "39",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Pierre Blanchette",
+          "extrait": "Collection particulière / Private collection, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "bd81709554c38dab6b37",
+      "vente": "Printemps 2024",
+      "lot": "48",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "César Baldaccini",
+          "extrait": "Collection particulière / Private collection, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "799e160b87380341b28b",
+      "vente": "Printemps 2024",
+      "lot": "50",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Horatio Walker",
+          "extrait": "Collection particulière / Private collection, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "dd6729eb6e37c036d180",
+      "vente": "Printemps 2024",
+      "lot": "51",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Marc-Aurèle Fortin",
+          "extrait": "Collection particulière / Private collection, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "b57e232f31e2d5592260",
+      "vente": "Printemps 2024",
+      "lot": "53",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Marc-Aurèle Fortin",
+          "extrait": "Collection particulière / Private collection, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "9677e7374325698ba520",
+      "vente": "Printemps 2024",
+      "lot": "56",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jacques de Tonnancour",
+          "extrait": "Collection particulière / Private collection, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "ada5fb4d54a590cbd153",
+      "vente": "Printemps 2024",
+      "lot": "58",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean Paul Lemieux",
+          "extrait": "simply floats past your window.”"
+        }
+      ]
+    },
+    {
+      "id_passage": "12aa42324419ebb825da",
+      "vente": "Automne 2024",
+      "lot": "37",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Yves Gaucher",
+          "extrait": "across nearly three metres in height and width."
+        }
+      ]
+    },
+    {
+      "id_passage": "9080a73194bede8b39ff",
+      "vente": "Printemps 2025",
+      "lot": "11",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Alfred Pellan",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "8ebd9f557d2e5e96a73f",
+      "vente": "Printemps 2025",
+      "lot": "19",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Armand Vaillancourt",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "cef4fffc98f2411814c5",
+      "vente": "Printemps 2025",
+      "lot": "24",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Lynn Russell Chadwick",
+          "extrait": "J. D."
+        }
+      ]
+    },
+    {
+      "id_passage": "00ad0e47c1d023a55971",
+      "vente": "Printemps 2025",
+      "lot": "54",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean Paul Riopelle",
+          "extrait": "J. D."
+        }
+      ]
+    },
+    {
+      "id_passage": "ebca58f57720e01de39e",
+      "vente": "Printemps 2025",
+      "lot": "55",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Pierre Gauvreau",
+          "extrait": "de son œuvre."
+        }
+      ]
+    },
+    {
+      "id_passage": "1039b8c7c884c886b49b",
+      "vente": "Printemps 2025",
+      "lot": "58",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Francine Simonin",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "499c0401ae218bdd61fd",
+      "vente": "Printemps 2026",
+      "lot": "03",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean Paul Lemieux",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "2ff1b56c98b1df3c21f6",
+      "vente": "Printemps 2026",
+      "lot": "05",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Armand Vaillancourt",
+          "extrait": "Il vit toujours dans sa maison de l’avenue de l’Esplanade, à Montréal."
+        }
+      ]
+    },
+    {
+      "id_passage": "30f526002ef372fe7031",
+      "vente": "Printemps 2026",
+      "lot": "06",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Armand Vaillancourt",
+          "extrait": "pour toute collection."
+        }
+      ]
+    },
+    {
+      "id_passage": "535c502bb17e54d71842",
+      "vente": "Printemps 2026",
+      "lot": "07",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Harold Barling Town",
+          "extrait": "arts de l’Ontario (Toronto)."
+        }
+      ]
+    },
+    {
+      "id_passage": "311ed35471e5a6b27636",
+      "vente": "Printemps 2026",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Harold Barling Town",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "836ed363de2a3e02708d",
+      "vente": "Printemps 2026",
+      "lot": "09",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean-Paul Armand Mousseau",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "b14d0f76f7fb7f2326d1",
+      "vente": "Printemps 2026",
+      "lot": "11",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Léon Bellefleur",
+          "extrait": "majestueuse, qui ouvrira la voie à la pleine reconnaissance de son art."
+        }
+      ]
+    },
+    {
+      "id_passage": "9094c19fb6e09a4097a6",
+      "vente": "Printemps 2026",
+      "lot": "21",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Guido Molinari",
+          "extrait": "“anticipated by almost ten years New York’s Minimalism.”"
+        }
+      ]
+    },
+    {
+      "id_passage": "230bd8cadaa20e4b7172",
+      "vente": "Succession printemps 2026",
+      "lot": "53",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "David Brown Milne",
+          "extrait": "devoted patrons."
+        }
+      ]
+    },
+    {
+      "id_passage": "9035a7e4e70f8bab8df8",
+      "vente": "Succession printemps 2026",
+      "lot": "62",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Franklin Carmichael",
+          "extrait": "pictorial language."
+        }
+      ]
+    },
+    {
+      "id_passage": "2dc52e14443a5347f998",
+      "vente": "Succession printemps 2026",
+      "lot": "78",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean Paul Riopelle",
+          "extrait": "of nature."
+        }
+      ]
+    }
+  ]
+}
