@@ -1,6 +1,6 @@
 {
-  "version": "V8.10.3",
-  "date": "2026-10-12T23:50:11.962976+00:00",
+  "version": "V8.11",
+  "date": "2026-10-12T23:59:40.525241+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
@@ -9,7 +9,9 @@
       "oeuvres_detectees": 491,
       "nouvelles_oeuvres": 0,
       "erreurs_ou_blocages": 0,
-      "images_candidates": 548
+      "images_candidates": 548,
+      "images_associees": 184,
+      "images_ambiguës": 8
     },
     "Heffel": {
       "statut": "connecteur_a_developper",
@@ -31,7 +33,9 @@
       "oeuvres": 57,
       "pages": 57,
       "erreurs_pages": [],
-      "images_candidates": 66
+      "images_candidates": 66,
+      "images_associees": 17,
+      "images_ambiguës": 2
     },
     {
       "vente": "Automne 2023",
@@ -39,7 +43,9 @@
       "oeuvres": 77,
       "pages": 64,
       "erreurs_pages": [],
-      "images_candidates": 82
+      "images_candidates": 82,
+      "images_associees": 43,
+      "images_ambiguës": 0
     },
     {
       "vente": "Printemps 2024",
@@ -47,7 +53,9 @@
       "oeuvres": 62,
       "pages": 57,
       "erreurs_pages": [],
-      "images_candidates": 70
+      "images_candidates": 70,
+      "images_associees": 24,
+      "images_ambiguës": 4
     },
     {
       "vente": "Automne 2024",
@@ -55,7 +63,9 @@
       "oeuvres": 60,
       "pages": 56,
       "erreurs_pages": [],
-      "images_candidates": 66
+      "images_candidates": 66,
+      "images_associees": 0,
+      "images_ambiguës": 2
     },
     {
       "vente": "Printemps 2025",
@@ -63,7 +73,9 @@
       "oeuvres": 66,
       "pages": 57,
       "erreurs_pages": [],
-      "images_candidates": 75
+      "images_candidates": 75,
+      "images_associees": 39,
+      "images_ambiguës": 0
     },
     {
       "vente": "Automne 2025",
@@ -71,7 +83,9 @@
       "oeuvres": 71,
       "pages": 63,
       "erreurs_pages": [],
-      "images_candidates": 78
+      "images_candidates": 78,
+      "images_associees": 32,
+      "images_ambiguës": 0
     },
     {
       "vente": "Printemps 2026",
@@ -79,7 +93,9 @@
       "oeuvres": 45,
       "pages": 47,
       "erreurs_pages": [],
-      "images_candidates": 52
+      "images_candidates": 52,
+      "images_associees": 15,
+      "images_ambiguës": 0
     },
     {
       "vente": "Succession printemps 2026",
@@ -87,14 +103,18 @@
       "oeuvres": 53,
       "pages": 106,
       "erreurs_pages": [],
-      "images_candidates": 59
+      "images_candidates": 59,
+      "images_associees": 14,
+      "images_ambiguës": 0
     }
   ],
   "total_oeuvres": 491,
   "avec_estimation": 435,
   "avec_dimensions": 483,
-  "avec_image": 0,
+  "avec_image": 184,
   "images_candidates": 548,
+  "images_associees": 184,
+  "images_ambiguës": 8,
   "rapprochements_potentiels": 3,
   "lots_historiques_non_redetectes": 0,
   "conflits_a_verifier": 0,
