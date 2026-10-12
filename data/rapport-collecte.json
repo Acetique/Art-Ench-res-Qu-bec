@@ -1,6 +1,6 @@
 {
-  "version": "V8.2",
-  "date": "2026-10-12T21:58:48.630024+00:00",
+  "version": "V8.3",
+  "date": "2026-10-12T22:10:13.626084+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
@@ -81,6 +81,6 @@
   "avec_estimation": 284,
   "rapprochements_potentiels": 3,
   "lots_historiques_non_redetectes": 0,
-  "conflits_a_verifier": 40,
+  "conflits_a_verifier": 2,
   "note": "Estimations de catalogues uniquement; aucun prix marteau deduit."
 }
