@@ -2,21 +2,29 @@
 name: Collecte publique quotidienne
 
 # ==========================================================
-# ART ENCHERES QUEBEC - WORKFLOW V8.7
+# ART ENCHERES QUEBEC — WORKFLOW V8.7
 # ==========================================================
 #
 # Compatible avec :
 #   Collectors/collect.py V8.7
 #
-# Fonctionnement :
-#   1. Recuperer le depot
-#   2. Installer Python
-#   3. Installer les dependances
-#   4. Verifier la syntaxe du collecteur
-#   5. Executer la collecte BYDealers
-#   6. Valider les donnees
-#   7. Publier les JSON sur GitHub
-#   8. Afficher le rapport final
+# Actions compatibles Node.js 24 :
+#   actions/checkout@v5
+#   actions/setup-python@v6
+#
+# Fonctionnalites :
+# - Execution manuelle
+# - Execution quotidienne
+# - Python 3.11
+# - Verification du collecteur
+# - Collecte des 8 catalogues BYDealers
+# - Protection des 491 notices historiques
+# - Validation des estimations et dimensions
+# - Detection des doublons
+# - Detection des estimations suspectes
+# - Detection des caracteres parasites
+# - Verification des rapports
+# - Publication automatique si validation reussie
 #
 # ==========================================================
 
@@ -50,7 +58,7 @@ jobs:
       # ====================================================
 
       - name: Recuperer le depot GitHub
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: true
 
@@ -59,7 +67,7 @@ jobs:
       # ====================================================
 
       - name: Installer Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: pip
@@ -75,16 +83,17 @@ jobs:
           python -m pip install -r Collectors/requirements.txt
 
       # ====================================================
-      # 4. VERIFIER LA SYNTAXE
+      # 4. VERIFIER LA SYNTAXE PYTHON
       # ====================================================
 
-      - name: Verifier la syntaxe Python
+      - name: Verifier la syntaxe du collecteur
         run: |
           python -m py_compile Collectors/collect.py
+
           echo "Syntaxe Python valide."
 
       # ====================================================
-      # 5. EXECUTER LA COLLECTE
+      # 5. EXECUTER LA COLLECTE V8.7
       # ====================================================
 
       - name: Executer la collecte V8.7
@@ -97,7 +106,7 @@ jobs:
           python -u Collectors/collect.py
 
       # ====================================================
-      # 6. VALIDATION DES RESULTATS
+      # 6. VALIDER LES DONNEES V8.7
       # ====================================================
 
       - name: Valider les donnees V8.7
@@ -129,10 +138,11 @@ jobs:
           warnings = []
 
           # ================================================
-          # LECTURE DES JSON
+          # LECTURE DES FICHIERS JSON
           # ================================================
 
           def read_json(filename):
+
               path = Path(filename)
 
               if not path.is_file():
@@ -147,6 +157,7 @@ jobs:
                   data = json.load(f)
 
               print("JSON valide :", filename)
+
               return data
 
           oeuvres = read_json(
@@ -166,7 +177,7 @@ jobs:
           )
 
           # ================================================
-          # STRUCTURES
+          # VERIFICATION DES STRUCTURES
           # ================================================
 
           if not isinstance(oeuvres, list):
@@ -179,6 +190,7 @@ jobs:
               ("qualite", qualite),
               ("differences", differences)
           ]:
+
               if not isinstance(data, dict):
                   raise SystemExit(
                       "Structure invalide : " + name
@@ -190,7 +202,7 @@ jobs:
                   )
 
           # ================================================
-          # STATISTIQUES
+          # STATISTIQUES PRINCIPALES
           # ================================================
 
           total = len(oeuvres)
@@ -218,6 +230,7 @@ jobs:
           print("======================================")
           print("BASE DE DONNEES V8.7")
           print("======================================")
+
           print("Notices :", total)
           print("Estimations :", estimations)
           print("Dimensions :", dimensions)
@@ -240,6 +253,10 @@ jobs:
                   + str(dimensions)
               )
 
+          # ================================================
+          # COHERENCE DES RAPPORTS
+          # ================================================
+
           if rapport.get("total_oeuvres") != total:
               errors.append(
                   "Total incoherent dans rapport-collecte."
@@ -261,15 +278,17 @@ jobs:
               )
 
           # ================================================
-          # IDENTIFIANTS
+          # IDENTIFIANTS ET DOUBLONS
           # ================================================
 
           ids = []
 
           for index, oeuvre in enumerate(oeuvres):
+
               if not isinstance(oeuvre, dict):
                   errors.append(
-                      "Notice invalide : " + str(index)
+                      "Notice invalide : "
+                      + str(index)
                   )
                   continue
 
@@ -292,7 +311,10 @@ jobs:
           ]
 
           print("")
+          print("======================================")
           print("IDENTIFIANTS")
+          print("======================================")
+
           print("Identifiants uniques :", len(counts))
           print("Doublons :", len(duplicates))
 
@@ -324,6 +346,7 @@ jobs:
           seen_sales = set()
 
           for catalogue in catalogues:
+
               if not isinstance(catalogue, dict):
                   errors.append(
                       "Entree de catalogue invalide."
@@ -344,23 +367,26 @@ jobs:
 
               if sale in seen_sales:
                   errors.append(
-                      "Catalogue duplique : " + str(sale)
+                      "Catalogue duplique : "
+                      + str(sale)
                   )
 
               seen_sales.add(sale)
 
               if sale not in EXPECTED_CATALOGUES:
                   errors.append(
-                      "Catalogue inattendu : " + str(sale)
+                      "Catalogue inattendu : "
+                      + str(sale)
                   )
                   continue
 
+              expected = EXPECTED_CATALOGUES[sale]
+
               if status != "ok":
                   errors.append(
-                      "Catalogue non valide : " + str(sale)
+                      "Catalogue non valide : "
+                      + str(sale)
                   )
-
-              expected = EXPECTED_CATALOGUES[sale]
 
               if count != expected:
                   errors.append(
@@ -380,12 +406,15 @@ jobs:
 
               if catalogue.get("erreurs_pages"):
                   errors.append(
-                      "Erreurs PDF : " + str(sale)
+                      "Erreurs PDF : "
+                      + str(sale)
                   )
 
           if seen_sales != set(EXPECTED_CATALOGUES):
+
               missing_sales = (
-                  set(EXPECTED_CATALOGUES) - seen_sales
+                  set(EXPECTED_CATALOGUES)
+                  - seen_sales
               )
 
               errors.append(
@@ -394,7 +423,7 @@ jobs:
               )
 
           # ================================================
-          # STATUT SOURCE BYDEALERS
+          # STATUT DE LA SOURCE BYDEALERS
           # ================================================
 
           sources = rapport.get("sources", {})
@@ -416,7 +445,10 @@ jobs:
           )
 
           print("")
+          print("======================================")
           print("SOURCE BYDEALERS")
+          print("======================================")
+
           print("PDF lus :", pdf_lus)
           print("Lots detectes :", detected_source)
           print("Erreurs :", source_errors)
@@ -437,7 +469,7 @@ jobs:
               )
 
           # ================================================
-          # PROTECTION HISTORIQUE
+          # PROTECTION DE L'HISTORIQUE
           # ================================================
 
           historical = differences.get(
@@ -456,6 +488,7 @@ jobs:
           print("======================================")
           print("HISTORIQUE")
           print("======================================")
+
           print("Notices avant :", historical)
           print("Lots redetectes :", detected)
           print("Lots non redetectes :", missing)
@@ -464,6 +497,7 @@ jobs:
               errors.append(
                   "Historique invalide."
               )
+
           elif total < historical:
               errors.append(
                   "Perte de notices historiques."
@@ -473,6 +507,7 @@ jobs:
               errors.append(
                   "Nombre de lots redetectes invalide."
               )
+
           elif detected < MIN_NOTICES:
               errors.append(
                   "Regression de detection des lots."
@@ -485,12 +520,13 @@ jobs:
               )
 
           # ================================================
-          # ESTIMATIONS
+          # VERIFICATION DES ESTIMATIONS
           # ================================================
 
           suspicious = []
 
           for oeuvre in oeuvres:
+
               if not isinstance(oeuvre, dict):
                   continue
 
@@ -525,8 +561,14 @@ jobs:
                   )
 
           print("")
+          print("======================================")
           print("ESTIMATIONS")
-          print("Estimations suspectes :", len(suspicious))
+          print("======================================")
+
+          print(
+              "Estimations suspectes :",
+              len(suspicious)
+          )
 
           for identifier in suspicious:
               errors.append(
@@ -560,6 +602,7 @@ jobs:
               ("corrections d'estimations", estimate_corrections),
               ("nettoyages", cleanups)
           ]:
+
               if not isinstance(value, list):
                   errors.append(
                       "Liste invalide : " + name
@@ -615,10 +658,12 @@ jobs:
           control_characters = []
 
           for oeuvre in oeuvres:
+
               if not isinstance(oeuvre, dict):
                   continue
 
               for field in ("artiste", "titre"):
+
                   value = oeuvre.get(field)
 
                   if not isinstance(value, str):
@@ -634,6 +679,10 @@ jobs:
                       })
 
           print("")
+          print("======================================")
+          print("CARACTERES PARASITES")
+          print("======================================")
+
           print(
               "Caracteres parasites :",
               len(control_characters)
@@ -653,6 +702,7 @@ jobs:
           invalid_prices = []
 
           for oeuvre in oeuvres:
+
               if not isinstance(oeuvre, dict):
                   continue
 
@@ -670,9 +720,12 @@ jobs:
                   )
 
           print("")
+          print("======================================")
           print("PRIX MARTEAU")
+          print("======================================")
+
           print(
-              "Prix declares verifies sans montant :",
+              "Prix verifies sans montant :",
               len(invalid_prices)
           )
 
@@ -683,7 +736,7 @@ jobs:
               )
 
           # ================================================
-          # RESULTAT FINAL
+          # RAPPORT FINAL DE VALIDATION
           # ================================================
 
           print("")
@@ -703,14 +756,17 @@ jobs:
           print("======================================")
 
           if errors:
+
               for error in errors:
                   print("ERREUR :", error)
 
               print("")
               print("VALIDATION V8.7 ECHOUEE")
+
               raise SystemExit(1)
 
           print("Aucune erreur bloquante.")
+
           print("")
           print("VALIDATION V8.7 REUSSIE")
 
@@ -731,11 +787,17 @@ jobs:
           git add data/rapport-differences.json
 
           if git diff --cached --quiet; then
+
             echo "Aucun changement a enregistrer."
+
           else
+
             git commit -m "Collecte Art Encheres Quebec V8.7"
+
             git pull --rebase
+
             git push
+
           fi
 
       # ====================================================
