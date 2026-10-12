@@ -1,19 +1,28 @@
 {
-  "date": "2026-10-12T20:04:03.170646+00:00",
+  "version": "V3",
+  "date": "2026-10-12T20:12:35.160708+00:00",
   "sources": {
     "BYDealers": {
-      "pages_accessibles": 0,
-      "nouvelles_oeuvres": 0
+      "pages_consultees": 30,
+      "pages_accessibles": 11,
+      "oeuvres_detectees": 0,
+      "nouvelles_oeuvres": 0,
+      "erreurs_ou_blocages": 19
     },
     "Heffel": {
-      "pages_accessibles": 1,
-      "nouvelles_oeuvres": 0
+      "pages_consultees": 2,
+      "pages_accessibles": 0,
+      "oeuvres_detectees": 0,
+      "nouvelles_oeuvres": 0,
+      "erreurs_ou_blocages": 2
     },
     "Gelineau": {
-      "pages_accessibles": 1,
-      "nouvelles_oeuvres": 0
+      "pages_consultees": 1,
+      "pages_accessibles": 0,
+      "oeuvres_detectees": 0,
+      "nouvelles_oeuvres": 0,
+      "erreurs_ou_blocages": 1
     }
   },
-  "nouvelles_oeuvres": 0,
   "total_oeuvres": 0
 }
