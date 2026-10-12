@@ -3,7 +3,6 @@ name: Collecte publique quotidienne
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: "0 12 * * *"
 
@@ -18,128 +17,217 @@ jobs:
   collecte:
     name: Actualiser les oeuvres
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
-      # 1. Recuperer les fichiers GitHub
+
+      # ========================================
+      # 1. RECUPERER LE DEPOT
+      # ========================================
+
       - name: Recuperer le depot
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           persist-credentials: true
 
-      # 2. Installer Python
+      # ========================================
+      # 2. INSTALLER PYTHON
+      # ========================================
+
       - name: Installer Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # 3. Installer les bibliotheques
+      # ========================================
+      # 3. INSTALLER LES DEPENDANCES
+      # ========================================
+
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
           pip install -r Collectors/requirements.txt
 
-      # 4. Verifier les dossiers
+      # ========================================
+      # 4. VERIFIER LES DOSSIERS
+      # ========================================
+
       - name: Verifier les dossiers
         run: |
           mkdir -p data
-
-          if [ ! -d "Collectors" ]; then
-            echo "ERREUR : dossier Collectors absent"
-            exit 1
-          fi
 
           if [ ! -f "Collectors/collect.py" ]; then
             echo "ERREUR : collect.py absent"
             exit 1
           fi
 
-          echo "Dossiers verifies"
+          if [ ! -f "Collectors/diagnostic_pdf.py" ]; then
+            echo "ERREUR : diagnostic_pdf.py absent"
+            exit 1
+          fi
+
+          echo "Fichiers verifies"
           ls -la Collectors
 
-      # 5. Lancer la collecte automatique
+      # ========================================
+      # 5. COLLECTER LES OEUVRES
+      # ========================================
+
       - name: Collecter les tableaux
         run: |
           python Collectors/collect.py
 
-      # 6. Verifier la base de donnees
+      # ========================================
+      # 6. DIAGNOSTIC PDF V6
+      # ========================================
+
+      - name: Diagnostiquer les catalogues PDF BYDealers
+        run: |
+          python Collectors/diagnostic_pdf.py
+
+      # ========================================
+      # 7. VERIFIER LES DONNEES JSON
+      # ========================================
+
       - name: Verifier les donnees JSON
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          path = Path("data/oeuvres.json")
+          fichiers = [
+              "data/oeuvres.json",
+              "data/rapport-collecte.json",
+              "data/diagnostic-pdf.json",
+          ]
 
-          if not path.exists():
-              raise SystemExit(
-                  "ERREUR : data/oeuvres.json absent"
-              )
+          for nom in fichiers:
+              chemin = Path(nom)
 
-          with path.open(encoding="utf-8") as f:
+              if not chemin.exists():
+                  raise SystemExit(
+                      f"ERREUR : {nom} absent"
+                  )
+
+              with chemin.open(
+                  encoding="utf-8"
+              ) as f:
+                  data = json.load(f)
+
+              print(f"JSON valide : {nom}")
+
+          chemin = Path("data/oeuvres.json")
+
+          with chemin.open(
+              encoding="utf-8"
+          ) as f:
               data = json.load(f)
 
           if isinstance(data, list):
               oeuvres = data
           elif isinstance(data, dict):
               oeuvres = data.get("oeuvres", [])
-              if not isinstance(oeuvres, list):
-                  raise SystemExit(
-                      "ERREUR : format des oeuvres invalide"
-                  )
           else:
               raise SystemExit(
-                  "ERREUR : format JSON invalide"
+                  "ERREUR : format invalide"
               )
 
-          print("JSON valide")
+          if not isinstance(oeuvres, list):
+              raise SystemExit(
+                  "ERREUR : liste invalide"
+              )
+
+          print("==============================")
+          print("ART ENCHERES QUEBEC V6")
+          print("==============================")
+
           print("Nombre d'oeuvres :", len(oeuvres))
 
           for maison in [
-              "BYDealers", "Heffel", "Gelineau"
+              "BYDealers",
+              "Heffel",
+              "Gelineau",
           ]:
               nombre = sum(
-                  1 for o in oeuvres
-                  if isinstance(o, dict)
-                  and o.get("maison") == maison
+                  1
+                  for oeuvre in oeuvres
+                  if isinstance(oeuvre, dict)
+                  and oeuvre.get("maison") == maison
               )
+
               print(maison, ":", nombre)
 
           if len(oeuvres) == 0:
               print(
-                  "ATTENTION : aucune oeuvre recuperee"
+                  "ATTENTION : aucune oeuvre valide"
               )
           PY
 
-      # 7. Enregistrer automatiquement les donnees
-      - name: Enregistrer les nouvelles oeuvres
+      # ========================================
+      # 8. ENREGISTRER LES RESULTATS
+      # ========================================
+
+      - name: Enregistrer les resultats
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email \
-            "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add data/
 
           if git diff --cached --quiet; then
             echo "Aucune nouvelle donnee."
           else
-            git commit -m "Actualisation automatique des oeuvres"
+            git commit -m "Actualisation collecte et diagnostic PDF"
             git push
-            echo "Base de donnees mise a jour."
+            echo "Donnees mises a jour."
           fi
 
-      # 8. Afficher le rapport final
+      # ========================================
+      # 9. RAPPORT FINAL
+      # ========================================
+
       - name: Rapport final
         if: always()
         run: |
           echo "================================"
-          echo " ART ENCHERES QUEBEC V2"
+          echo " ART ENCHERES QUEBEC V6"
           echo "================================"
+
+          echo ""
+          echo "RAPPORT DE COLLECTE"
+          echo ""
 
           if [ -f data/rapport-collecte.json ]; then
             cat data/rapport-collecte.json
           else
-            echo "Aucun rapport disponible."
+            echo "Aucun rapport de collecte."
+          fi
+
+          echo ""
+          echo "DIAGNOSTIC PDF"
+          echo ""
+
+          if [ -f data/diagnostic-pdf.json ]; then
+            python - <<'PY'
+          import json
+
+          with open(
+              "data/diagnostic-pdf.json",
+              encoding="utf-8"
+          ) as f:
+              data = json.load(f)
+
+          for catalogue in data.get("catalogues", []):
+              print("Catalogue :", catalogue.get("url"))
+              print("Statut :", catalogue.get("statut"))
+              print(
+                  "Pages analysees :",
+                  len(catalogue.get("pages_analysees", []))
+              )
+              print("----------------------------")
+          PY
+          else
+            echo "Diagnostic absent."
           fi
 
           echo ""
