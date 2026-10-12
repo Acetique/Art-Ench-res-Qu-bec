@@ -1,9 +1,9 @@
 {
-  "version": "V8.4",
-  "date": "2026-10-12T22:20:53.084534+00:00",
+  "version": "V8.6",
+  "date": "2026-10-12T22:32:21.061285+00:00",
   "total_oeuvres": 491,
   "avec_dimensions": 482,
-  "avec_estimation": 286,
+  "avec_estimation": 284,
   "prix_marteau_verifies": 0,
   "rapprochements_potentiels": [
     {
@@ -864,10 +864,9 @@
       "id": "4c84da2bad976b38a96f",
       "id_passage": "c7a4597abc99340486bf",
       "artiste": "Guido Molinari",
-      "titre": "Sans titre (de la série Triangulaires) /",
+      "titre": "Sans titre (de la série Triangulaires) / Untitled (from the series Triangulaires)",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 21
@@ -915,6 +914,17 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 18
+    },
+    {
+      "id": "e09789f326ccca938793",
+      "id_passage": "c5aca100f04adb09c7ee",
+      "artiste": "Helmut Newton",
+      "titre": "Sie kommen (Undressed)",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 57
     },
     {
       "id": "50dd41c574f9f37b7979",
@@ -1345,17 +1355,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
       "page": 23
-    },
-    {
-      "id": "4458a471d10573267710",
-      "id_passage": "a75937b80f326ce9d721",
-      "artiste": "Jean Paul Riopelle",
-      "titre": "Sans titre (de la série Gitksan) /",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page": 14
     },
     {
       "id": "a96edbd1128e129b5958",
@@ -2009,6 +2008,17 @@
       "page": 46
     },
     {
+      "id": "038cac92780704c6b27f",
+      "id_passage": "c60ac7b3013233ec7a51",
+      "artiste": "Oscar Cahén",
+      "titre": "Sans titre / Untitled",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
+      "page": 18
+    },
+    {
       "id": "a0a258cd4748b159a2ac",
       "id_passage": "591070172f9178295ad7",
       "artiste": "Oscar Cahén",
@@ -2085,17 +2095,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
       "page": 20
-    },
-    {
-      "id": "a9c67dc61ba263f56ffc",
-      "id_passage": "a0ba95b57a76c43ea41f",
-      "artiste": "Pierre-Auguste Renoir",
-      "titre": "Étude de tête de jeune fille /",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page": 42
     },
     {
       "id": "5b49796f2df34dc6be2d",
@@ -2267,24 +2266,12 @@
       "id": "5dfbca5d32cc291e5b1c",
       "id_passage": "b70673abc97f1e13231c",
       "artiste": "Serge Lemoyne",
-      "titre": "Sans titre (de la série Bleu, blanc, rouge) /",
+      "titre": "Sans titre (de la série Bleu, blanc, rouge) / Untitled (from the series Bleu, blanc, rouge)",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 28
-    },
-    {
-      "id": "76331192e5167bb0b4dc",
-      "id_passage": "05509707f405e279c965",
-      "artiste": "Serge Lemoyne",
-      "titre": "Sans titre (de la série Bleu, blanc, rouge) /",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page": 29
     },
     {
       "id": "8af347c61b4caaee4115",
@@ -2301,10 +2288,9 @@
       "id": "e9f7da06760283fc9ea0",
       "id_passage": "89398fb9841ee357c430",
       "artiste": "Serge Lemoyne",
-      "titre": "Sans titre (de la série Théâtre) /",
+      "titre": "Sans titre (de la série Théâtre) / Untitled (from the series Théâtre)",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 27
@@ -2365,17 +2351,6 @@
       "page": 52
     },
     {
-      "id": "20ac7015463c527ff31b",
-      "id_passage": "d00645cb3ebaca5cfba7",
-      "artiste": "William Goodridge Roberts",
-      "titre": "Sans titre (Nature morte) /",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
-      "page": 47
-    },
-    {
       "id": "59cb24c49a56b2e343e7",
       "id_passage": "ba045ed666f6d7e1ba88",
       "artiste": "William Paterson Ewen",
@@ -2420,24 +2395,12 @@
       "page": 18
     },
     {
-      "id": "fd89f4cb07737bfbd44b",
-      "id_passage": "6009ee12ca2c53dbf8e4",
-      "artiste": "Yves Gaucher",
-      "titre": "Danse carrée :",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
-      "page": 23
-    },
-    {
       "id": "216ce2c522b9e1f78ad5",
       "id_passage": "b8a9b05852002a64f4a0",
       "artiste": "Yves Gaucher",
-      "titre": "Square Dance:",
+      "titre": "Square Dance: Blues for Green",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 20
@@ -2454,5 +2417,5 @@
       "page": 98
     }
   ],
-  "nombre_notices_a_controler": 215
+  "nombre_notices_a_controler": 212
 }

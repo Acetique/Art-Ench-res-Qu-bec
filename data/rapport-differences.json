@@ -1,153 +1,682 @@
 {
-  "version": "V8.4",
-  "date": "2026-10-12T22:20:53.084728+00:00",
+  "version": "V8.6",
+  "date": "2026-10-12T22:32:21.061360+00:00",
   "historique_avant": 491,
   "detectes_cette_execution": 491,
   "non_redetectes": 0,
-  "non_redetectes_par_origine": {},
   "lots_non_redetectes": [],
   "nouveaux_passages": [],
-  "nettoyages": [],
-  "champs_completes": [
-    {
-      "id_passage": "c60ac7b3013233ec7a51",
-      "champs": [
-        "estimation"
-      ]
-    },
-    {
-      "id_passage": "c5aca100f04adb09c7ee",
-      "champs": [
-        "estimation"
-      ]
-    }
-  ],
+  "champs_completes": [],
   "conflits_a_verifier": [
     {
-      "id_passage": "2347fac719a2b1151a98",
-      "vente": "Automne 2023",
+      "id_passage": "9345441d6365bde23f2b",
+      "vente": "Printemps 2023",
       "lot": "05",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "The Sandpile Harbour Scene, Montreal",
+          "extrait": "\u0007The Sandpile Harbour Scene, Montreal"
         }
       ]
     },
     {
-      "id_passage": "11133d45fc5f770cb78a",
-      "vente": "Automne 2023",
+      "id_passage": "eeaf913dad21160c7bfe",
+      "vente": "Printemps 2023",
+      "lot": "07",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (nature morte) /",
+          "extrait": "\u0007Sans titre (nature morte) / Untitled (Still Life)"
+        }
+      ]
+    },
+    {
+      "id_passage": "53f4c5adef2b65cdb4b3",
+      "vente": "Printemps 2023",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Campement montagnais, pêche",
+          "extrait": "\u0007Campement montagnais, pêche"
+        }
+      ]
+    },
+    {
+      "id_passage": "495b1ae370e44313b54f",
+      "vente": "Printemps 2023",
+      "lot": "14",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Une patinoire d’autrefois, Pointe-Saint-Charles, Montréal",
+          "extrait": "\u0007Une patinoire d’autrefois, Pointe-Saint-Charles, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "9f08732f61b09dcde9b4",
+      "vente": "Printemps 2023",
+      "lot": "15",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Une journée pluvieuse, rue Berri, Montréal",
+          "extrait": "\u0007Une journée pluvieuse, rue Berri, Montréal"
+        }
+      ]
+    },
+    {
+      "id_passage": "105f155290b73050c91e",
+      "vente": "Printemps 2023",
       "lot": "28",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
         }
       ]
     },
     {
-      "id_passage": "8f08319c2cbb8ab9e431",
-      "vente": "Automne 2023",
-      "lot": "29",
-      "conflits": [
-        {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
-        }
-      ]
-    },
-    {
-      "id_passage": "732fe6ff5416c3c60500",
-      "vente": "Automne 2023",
-      "lot": "39",
-      "conflits": [
-        {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
-        }
-      ]
-    },
-    {
-      "id_passage": "0c8f1b95f71d99e759fe",
-      "vente": "Printemps 2024",
-      "lot": "47",
-      "conflits": [
-        {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
-        }
-      ]
-    },
-    {
-      "id_passage": "f34b98826ada937b9e37",
-      "vente": "Automne 2024",
+      "id_passage": "969c456b46e3bbccc747",
+      "vente": "Printemps 2023",
       "lot": "38",
       "conflits": [
         {
-          "champ": "estimation",
-          "ancien": [
-            50000,
-            70000
-          ],
-          "extrait": [
-            1968,
-            1969
-          ]
+          "champ": "titre",
+          "ancien": "Odyssée-un",
+          "extrait": "\u0007Odyssée-un"
         }
       ]
     },
     {
-      "id_passage": "6ac3c4fec5ec873803b0",
-      "vente": "Automne 2024",
-      "lot": "40",
-      "conflits": [
-        {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
-        }
-      ]
-    },
-    {
-      "id_passage": "2d3bb4d1a5f9bfa47099",
-      "vente": "Printemps 2025",
-      "lot": "22",
-      "conflits": [
-        {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
-        }
-      ]
-    },
-    {
-      "id_passage": "8352cad3683445fef49a",
-      "vente": "Printemps 2025",
+      "id_passage": "d22bb4e42be7dd90ab4f",
+      "vente": "Printemps 2023",
       "lot": "39",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Je parle (n o 5) le soir fait avec les corbeaux",
+          "extrait": "\u0007Je parle (n o 5) le soir fait avec les corbeaux"
         }
       ]
     },
     {
-      "id_passage": "e0388bd5b41ad33114ff",
-      "vente": "Printemps 2025",
+      "id_passage": "1477ec58cbf7a7ceb77c",
+      "vente": "Printemps 2023",
       "lot": "47",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
         }
       ]
     },
     {
-      "id_passage": "2a48a628d29088fbab3b",
-      "vente": "Printemps 2025",
-      "lot": "49",
+      "id_passage": "deb309c81f826a0d136f",
+      "vente": "Printemps 2023",
+      "lot": "55",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Au seuil du castel, la marche des dogmes",
+          "extrait": "\u0007Au seuil du castel, la marche des dogmes"
+        }
+      ]
+    },
+    {
+      "id_passage": "d60ecea104b33accba7c",
+      "vente": "Automne 2023",
+      "lot": "07",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Petit animal",
+          "extrait": "\u0007Petit animal"
+        }
+      ]
+    },
+    {
+      "id_passage": "c762195d4f923d926302",
+      "vente": "Automne 2023",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled (n o 1)",
+          "extrait": "\u0007Sans titre / Untitled (n o 1)"
+        }
+      ]
+    },
+    {
+      "id_passage": "d6cf49b5425dfc9c50ac",
+      "vente": "Automne 2023",
+      "lot": "09",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "aba5cbd2cdc1e8095b52",
+      "vente": "Automne 2024",
+      "lot": "10",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "12aa42324419ebb825da",
+      "vente": "Automne 2024",
+      "lot": "37",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "16c50a57fc8a6428bce8",
+      "vente": "Automne 2024",
+      "lot": "45",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Étude pour Double écran",
+          "extrait": "\u0007Étude pour Double écran"
+        }
+      ]
+    },
+    {
+      "id_passage": "fc40bfa60b36fcf153ed",
+      "vente": "Automne 2024",
+      "lot": "50",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Balustrade",
+          "extrait": "\u0007Balustrade"
+        }
+      ]
+    },
+    {
+      "id_passage": "ac51dbf55a7c165d37b9",
+      "vente": "Printemps 2025",
+      "lot": "01",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Été de la Saint-Martin dans la vallée",
+          "extrait": "\u0007Été de la Saint-Martin dans la vallée"
+        }
+      ]
+    },
+    {
+      "id_passage": "9080a73194bede8b39ff",
+      "vente": "Printemps 2025",
+      "lot": "11",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Alfred Pellan",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "8ebd9f557d2e5e96a73f",
+      "vente": "Printemps 2025",
+      "lot": "19",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Armand Vaillancourt",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "cef4fffc98f2411814c5",
+      "vente": "Printemps 2025",
+      "lot": "24",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Lynn Russell Chadwick",
+          "extrait": "J. D."
+        }
+      ]
+    },
+    {
+      "id_passage": "00ad0e47c1d023a55971",
+      "vente": "Printemps 2025",
+      "lot": "54",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean Paul Riopelle",
+          "extrait": "J. D."
+        }
+      ]
+    },
+    {
+      "id_passage": "ebca58f57720e01de39e",
+      "vente": "Printemps 2025",
+      "lot": "55",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Il y a un oiseau derrière",
+          "extrait": "\u0007Il y a un oiseau derrière"
+        }
+      ]
+    },
+    {
+      "id_passage": "443e2c181b2b6d26c047",
+      "vente": "Printemps 2025",
+      "lot": "57",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Assemblage n o 19",
+          "extrait": "\u0007Assemblage n o 19"
+        }
+      ]
+    },
+    {
+      "id_passage": "1039b8c7c884c886b49b",
+      "vente": "Printemps 2025",
+      "lot": "58",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Francine Simonin",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "85e2a605557a7180ebcd",
+      "vente": "Printemps 2025",
+      "lot": "60",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Cycle crétois 2, n o 5 –",
+          "extrait": "\u0007Cycle crétois 2, n o 5 – Pâques"
+        }
+      ]
+    },
+    {
+      "id_passage": "29e335b73e530bd2f333",
+      "vente": "Automne 2025",
+      "lot": "01",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "7588e6017647d60eb474",
+      "vente": "Automne 2025",
+      "lot": "02",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Le coin de la rue Clark et de la rue Milton",
+          "extrait": "\u0007Le coin de la rue Clark et de la rue Milton"
+        }
+      ]
+    },
+    {
+      "id_passage": "940b35709f34680329e3",
+      "vente": "Automne 2025",
+      "lot": "03",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Landscape with Figures",
+          "extrait": "\u0007Landscape with Figures"
+        }
+      ]
+    },
+    {
+      "id_passage": "581298d3fb296ed2e3b7",
+      "vente": "Automne 2025",
+      "lot": "04",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Fines tiges",
+          "extrait": "\u0007Fines tiges"
+        }
+      ]
+    },
+    {
+      "id_passage": "5990446b4a586df43ee5",
+      "vente": "Automne 2025",
+      "lot": "05",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "70941a5ef725cf50babb",
+      "vente": "Automne 2025",
+      "lot": "06",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Vase cornu",
+          "extrait": "\u0007Vase cornu"
+        }
+      ]
+    },
+    {
+      "id_passage": "295bfab76c97085141ab",
+      "vente": "Automne 2025",
+      "lot": "07",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Portrait de garçon",
+          "extrait": "\u0007Portrait de garçon"
+        }
+      ]
+    },
+    {
+      "id_passage": "d164e68de13bc924cd45",
+      "vente": "Automne 2025",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "6817ee1e382af0e92e78",
+      "vente": "Automne 2025",
+      "lot": "09",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (Promenade nocturne) /",
+          "extrait": "\u0007Sans titre (Promenade nocturne) / Untitled (Evening Stroll)"
+        }
+      ]
+    },
+    {
+      "id_passage": "d589499f536e7a4febf2",
+      "vente": "Automne 2025",
+      "lot": "10",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (Maison de l’artiste) /",
+          "extrait": "\u0007Sans titre (Maison de l’artiste) / Untitled (Artist’s House)"
+        }
+      ]
+    },
+    {
+      "id_passage": "2f9aa01a76ea704db7da",
+      "vente": "Automne 2025",
+      "lot": "11",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Carry Into Future",
+          "extrait": "\u0007Carry Into Future"
+        }
+      ]
+    },
+    {
+      "id_passage": "2176678742b7b6b82839",
+      "vente": "Automne 2025",
+      "lot": "12",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Loon Team",
+          "extrait": "\u0007Loon Team"
+        }
+      ]
+    },
+    {
+      "id_passage": "38a488af38de5dd6b8f8",
+      "vente": "Automne 2025",
+      "lot": "13",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "eba1b6ff1927ff969f7f",
+      "vente": "Automne 2025",
+      "lot": "14",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Étude pour La femme",
+          "extrait": "\u0007Étude pour La femme"
+        }
+      ]
+    },
+    {
+      "id_passage": "a5a4f7c165e6074e7422",
+      "vente": "Automne 2025",
+      "lot": "15",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Dindonnet",
+          "extrait": "\u0007Dindonnet"
+        }
+      ]
+    },
+    {
+      "id_passage": "382849ee4669870633b9",
+      "vente": "Automne 2025",
+      "lot": "16",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "ce5c668bf5a7edca6177",
+      "vente": "Automne 2025",
+      "lot": "17",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Bridges, Winter",
+          "extrait": "\u0007Bridges, Winter"
+        }
+      ]
+    },
+    {
+      "id_passage": "73aa4437bdd88a9ac856",
+      "vente": "Automne 2025",
+      "lot": "18",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Inner Expansion",
+          "extrait": "\u0007Inner Expansion"
+        }
+      ]
+    },
+    {
+      "id_passage": "ecea713e586df1e0ab2f",
+      "vente": "Automne 2025",
+      "lot": "19",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Jazz Town",
+          "extrait": "\u0007Jazz Town"
+        }
+      ]
+    },
+    {
+      "id_passage": "a387fdf9bb6f06b6f0dc",
+      "vente": "Automne 2025",
+      "lot": "20",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "The Cave of Longing",
+          "extrait": "\u0007The Cave of Longing"
+        }
+      ]
+    },
+    {
+      "id_passage": "d4640e1b69a0d56b693c",
+      "vente": "Automne 2025",
+      "lot": "21",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Fond marin n o 23",
+          "extrait": "\u0007Fond marin n o 23"
+        }
+      ]
+    },
+    {
+      "id_passage": "a067abb7f0c4d853cc80",
+      "vente": "Automne 2025",
+      "lot": "22",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Bombardement",
+          "extrait": "\u0007Bombardement"
+        }
+      ]
+    },
+    {
+      "id_passage": "d7d19fc23e448001b259",
+      "vente": "Automne 2025",
+      "lot": "23",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "abd94b682d3df170295a",
+      "vente": "Automne 2025",
+      "lot": "24",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Métropole minérale",
+          "extrait": "\u0007Métropole minérale"
+        }
+      ]
+    },
+    {
+      "id_passage": "a23168ad72df85e6168e",
+      "vente": "Automne 2025",
+      "lot": "25",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "b35708f8972b95ad9e2e",
+      "vente": "Automne 2025",
+      "lot": "26",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "41c345b5b18a1b1df085",
+      "vente": "Automne 2025",
+      "lot": "27",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "d3841c40883c25310c5e",
+      "vente": "Automne 2025",
+      "lot": "28",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Trisaillie et quelque",
+          "extrait": "\u0007Trisaillie et quelque"
+        }
+      ]
+    },
+    {
+      "id_passage": "0df7636245cccb1c094d",
+      "vente": "Automne 2025",
+      "lot": "29",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Espace blanc",
+          "extrait": "\u0007Espace blanc"
+        }
+      ]
+    },
+    {
+      "id_passage": "5ace478cf67441be5786",
+      "vente": "Automne 2025",
+      "lot": "30",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Les diaboliques",
+          "extrait": "\u0007Les diaboliques"
         }
       ]
     },
@@ -157,8 +686,9 @@
       "lot": "31",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Field No. 2",
+          "extrait": "\u0007Field No. 2"
         }
       ]
     },
@@ -168,8 +698,33 @@
       "lot": "32",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Les signes s’envolent",
+          "extrait": "\u0007Les signes s’envolent"
+        }
+      ]
+    },
+    {
+      "id_passage": "b9e9be9b2013f0260055",
+      "vente": "Automne 2025",
+      "lot": "33",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Éclat cosmique",
+          "extrait": "\u0007Éclat cosmique"
+        }
+      ]
+    },
+    {
+      "id_passage": "1220fc6d30f7cf7f99a0",
+      "vente": "Automne 2025",
+      "lot": "34",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Iceberg n o 7 (Passes)",
+          "extrait": "\u0007Iceberg n o 7 (Passes)"
         }
       ]
     },
@@ -179,15 +734,21 @@
       "lot": "35",
       "conflits": [
         {
-          "champ": "estimation",
-          "ancien": [
-            20000,
-            25000
-          ],
-          "extrait": [
-            1952,
-            1953
-          ]
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "81d448e1ea7c0e4a097f",
+      "vente": "Automne 2025",
+      "lot": "36",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Nouvelles impressions (PM 20)",
+          "extrait": "\u0007Nouvelles impressions (PM 20)"
         }
       ]
     },
@@ -197,8 +758,129 @@
       "lot": "37",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Défi à l’oppression",
+          "extrait": "\u0007Défi à l’oppression"
+        }
+      ]
+    },
+    {
+      "id_passage": "a3baef462a051119553a",
+      "vente": "Automne 2025",
+      "lot": "38",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "8bea0b084a269a60e039",
+      "vente": "Automne 2025",
+      "lot": "39",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Colonne soutenue par des jaunes",
+          "extrait": "\u0007Colonne soutenue par des jaunes"
+        }
+      ]
+    },
+    {
+      "id_passage": "3e17d8f6ccac679fa0a4",
+      "vente": "Automne 2025",
+      "lot": "40",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Miroir sans image (Rouge n o 2)",
+          "extrait": "\u0007Miroir sans image (Rouge n o 2)"
+        }
+      ]
+    },
+    {
+      "id_passage": "fd8d9a960c06958038ad",
+      "vente": "Automne 2025",
+      "lot": "41",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "40b33ff65e0ff8e1d104",
+      "vente": "Automne 2025",
+      "lot": "42",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Hymne à l’automne",
+          "extrait": "\u0007Hymne à l’automne"
+        }
+      ]
+    },
+    {
+      "id_passage": "77f20641529be09d519a",
+      "vente": "Automne 2025",
+      "lot": "43",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Zaban",
+          "extrait": "\u0007Zaban"
+        }
+      ]
+    },
+    {
+      "id_passage": "2873e0cd0034965942ac",
+      "vente": "Automne 2025",
+      "lot": "44",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Circonvolution verte",
+          "extrait": "\u0007Circonvolution verte"
+        }
+      ]
+    },
+    {
+      "id_passage": "51cc9f26b0b798791fa2",
+      "vente": "Automne 2025",
+      "lot": "45",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Dominique",
+          "extrait": "\u0007Dominique"
+        }
+      ]
+    },
+    {
+      "id_passage": "ce01357a5a92bcf84ed1",
+      "vente": "Automne 2025",
+      "lot": "46",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Ballet électronique",
+          "extrait": "\u0007Ballet électronique"
+        }
+      ]
+    },
+    {
+      "id_passage": "9295e70d676189a89729",
+      "vente": "Automne 2025",
+      "lot": "47",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Danse carrée : Modulations rouges",
+          "extrait": "\u0007Danse carrée : Modulations rouges"
         }
       ]
     },
@@ -208,8 +890,21 @@
       "lot": "48",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "OR.B/Ps",
+          "extrait": "\u0007OR.B/Ps"
+        }
+      ]
+    },
+    {
+      "id_passage": "90401b8bcc6efb9a33c1",
+      "vente": "Automne 2025",
+      "lot": "49",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Red Glow",
+          "extrait": "\u0007Red Glow"
         }
       ]
     },
@@ -219,8 +914,105 @@
       "lot": "50",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Nanai No.25",
+          "extrait": "\u0007Nanai No.25"
+        }
+      ]
+    },
+    {
+      "id_passage": "311deae2c18f1e7f752c",
+      "vente": "Automne 2025",
+      "lot": "51",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Érosion partout",
+          "extrait": "\u0007Érosion partout"
+        }
+      ]
+    },
+    {
+      "id_passage": "e72248118b368e8de35b",
+      "vente": "Automne 2025",
+      "lot": "52",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Interversion",
+          "extrait": "\u0007Interversion"
+        }
+      ]
+    },
+    {
+      "id_passage": "b309363049bda6bef2d5",
+      "vente": "Automne 2025",
+      "lot": "53",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Staccato II",
+          "extrait": "\u0007Staccato II"
+        }
+      ]
+    },
+    {
+      "id_passage": "756d07e6aa92972d6d29",
+      "vente": "Automne 2025",
+      "lot": "54",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "6c5859ef6ac7b7185876",
+      "vente": "Automne 2025",
+      "lot": "55",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Parallèle jaune",
+          "extrait": "\u0007Parallèle jaune"
+        }
+      ]
+    },
+    {
+      "id_passage": "627ef007f9cd787cc189",
+      "vente": "Automne 2025",
+      "lot": "56",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Tawagamie",
+          "extrait": "\u0007Tawagamie"
+        }
+      ]
+    },
+    {
+      "id_passage": "ebf1358b69d63b82b166",
+      "vente": "Automne 2025",
+      "lot": "57",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Le n o 4, Béliveau",
+          "extrait": "\u0007Le n o 4, Béliveau"
+        }
+      ]
+    },
+    {
+      "id_passage": "df0adbdf85d4353d1cd4",
+      "vente": "Automne 2025",
+      "lot": "58",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (de la série La maison ) /",
+          "extrait": "\u0007Sans titre (de la série La maison ) / Untitled (from the series La maison)"
         }
       ]
     },
@@ -230,8 +1022,501 @@
       "lot": "59",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
+          "champ": "titre",
+          "ancien": "Losange (de la série /",
+          "extrait": "\u0007Losange (de la série / from the series Continuum)"
+        }
+      ]
+    },
+    {
+      "id_passage": "ec7d0a8000a48408dcd1",
+      "vente": "Automne 2025",
+      "lot": "60",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "La tour du port",
+          "extrait": "\u0007La tour du port"
+        }
+      ]
+    },
+    {
+      "id_passage": "ff4a33a20d8450c485f2",
+      "vente": "Automne 2025",
+      "lot": "61",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Arcs aux bleus",
+          "extrait": "\u0007Arcs aux bleus"
+        }
+      ]
+    },
+    {
+      "id_passage": "ea7b3afd57e81cb059cb",
+      "vente": "Automne 2025",
+      "lot": "62",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Port libre",
+          "extrait": "\u0007Port libre"
+        }
+      ]
+    },
+    {
+      "id_passage": "883345b63cb091a6fb2a",
+      "vente": "Automne 2025",
+      "lot": "63",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sunmove",
+          "extrait": "\u0007Sunmove"
+        }
+      ]
+    },
+    {
+      "id_passage": "0e9e8081feb836b7ec54",
+      "vente": "Automne 2025",
+      "lot": "64",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Forgotten Garden",
+          "extrait": "\u0007Forgotten Garden"
+        }
+      ]
+    },
+    {
+      "id_passage": "ae8c3b598b56e998e52c",
+      "vente": "Automne 2025",
+      "lot": "65",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Réflexions du soleil sur un lac de glacier",
+          "extrait": "\u0007Réflexions du soleil sur un lac de glacier"
+        }
+      ]
+    },
+    {
+      "id_passage": "c5aca100f04adb09c7ee",
+      "vente": "Automne 2025",
+      "lot": "66",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sie kommen (Undressed)",
+          "extrait": "\u0007Sie kommen (Undressed)"
+        }
+      ]
+    },
+    {
+      "id_passage": "7f90afaf4631edc16949",
+      "vente": "Automne 2025",
+      "lot": "67",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Chromatic Intersection",
+          "extrait": "\u0007Chromatic Intersection"
+        }
+      ]
+    },
+    {
+      "id_passage": "cf6055712f8af21fc228",
+      "vente": "Automne 2025",
+      "lot": "68",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Compound No. 104",
+          "extrait": "\u0007Compound No. 104"
+        }
+      ]
+    },
+    {
+      "id_passage": "8b4ef57b2b19400eefe9",
+      "vente": "Automne 2025",
+      "lot": "69",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Ruine (Skyscape)",
+          "extrait": "\u0007Ruine (Skyscape)"
+        }
+      ]
+    },
+    {
+      "id_passage": "fe25e10220e4a1b4b3de",
+      "vente": "Automne 2025",
+      "lot": "70",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Urban Landscape with",
+          "extrait": "\u0007Urban Landscape with"
+        }
+      ]
+    },
+    {
+      "id_passage": "43e780a600866d64cb1e",
+      "vente": "Automne 2025",
+      "lot": "71",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Roulette Russe",
+          "extrait": "\u0007Roulette Russe"
+        }
+      ]
+    },
+    {
+      "id_passage": "499c0401ae218bdd61fd",
+      "vente": "Printemps 2026",
+      "lot": "03",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean Paul Lemieux",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "311ed35471e5a6b27636",
+      "vente": "Printemps 2026",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Harold Barling Town",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "836ed363de2a3e02708d",
+      "vente": "Printemps 2026",
+      "lot": "09",
+      "conflits": [
+        {
+          "champ": "artiste",
+          "ancien": "Jean-Paul Armand Mousseau",
+          "extrait": "A. L."
+        }
+      ]
+    },
+    {
+      "id_passage": "f2c0cb75ab8c0224e45f",
+      "vente": "Printemps 2026",
+      "lot": "26",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Constellation",
+          "extrait": "\u0007Constellation"
+        }
+      ]
+    },
+    {
+      "id_passage": "4969205ffec88ba5cbed",
+      "vente": "Printemps 2026",
+      "lot": "27",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Rétine tout seul",
+          "extrait": "\u0007Rétine tout seul"
+        }
+      ]
+    },
+    {
+      "id_passage": "0fc261f55ce36cb8d4c4",
+      "vente": "Printemps 2026",
+      "lot": "28",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Minerva",
+          "extrait": "\u0007Minerva"
+        }
+      ]
+    },
+    {
+      "id_passage": "868b043e23ae18f09ae1",
+      "vente": "Printemps 2026",
+      "lot": "29",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Square Infinity",
+          "extrait": "\u0007Square Infinity"
+        }
+      ]
+    },
+    {
+      "id_passage": "8cd738b02d8794b7010b",
+      "vente": "Printemps 2026",
+      "lot": "30",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Hibou",
+          "extrait": "\u0007Hibou"
+        }
+      ]
+    },
+    {
+      "id_passage": "1837412d3d13e08ad076",
+      "vente": "Printemps 2026",
+      "lot": "31",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "La galère",
+          "extrait": "\u0007La galère"
+        }
+      ]
+    },
+    {
+      "id_passage": "157b14f427b928a4a4c1",
+      "vente": "Printemps 2026",
+      "lot": "32",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Peace Stars for Vince No. IV",
+          "extrait": "\u0007Peace Stars for Vince No. IV"
+        }
+      ]
+    },
+    {
+      "id_passage": "0a0b2f70e5652bf89030",
+      "vente": "Printemps 2026",
+      "lot": "33",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Le gros Bill",
+          "extrait": "\u0007Le gros Bill"
+        }
+      ]
+    },
+    {
+      "id_passage": "df32585ecbdededf0676",
+      "vente": "Printemps 2026",
+      "lot": "34",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Thalia No. 11",
+          "extrait": "\u0007Thalia No. 11"
+        }
+      ]
+    },
+    {
+      "id_passage": "9f1850299e9209dee695",
+      "vente": "Printemps 2026",
+      "lot": "35",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Tamatagamie",
+          "extrait": "\u0007Tamatagamie"
+        }
+      ]
+    },
+    {
+      "id_passage": "d166213cea96661b1beb",
+      "vente": "Printemps 2026",
+      "lot": "36",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Amaryllis",
+          "extrait": "\u0007Amaryllis"
+        }
+      ]
+    },
+    {
+      "id_passage": "3b298a48e28e833990be",
+      "vente": "Printemps 2026",
+      "lot": "37",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "008fb46cd54fce48b3e8",
+      "vente": "Printemps 2026",
+      "lot": "38",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Dernier rayon d’un rouge",
+          "extrait": "\u0007Dernier rayon d’un rouge"
+        }
+      ]
+    },
+    {
+      "id_passage": "3025b2d1754d9a864af5",
+      "vente": "Printemps 2026",
+      "lot": "39",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Fleuron soutenu de rouge no 3",
+          "extrait": "\u0007Fleuron soutenu de rouge no 3"
+        }
+      ]
+    },
+    {
+      "id_passage": "5154284a9f0816afe18d",
+      "vente": "Printemps 2026",
+      "lot": "40",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Variante d’une variation",
+          "extrait": "\u0007Variante d’une variation"
+        }
+      ]
+    },
+    {
+      "id_passage": "d8d87a3ecdecfd13858e",
+      "vente": "Printemps 2026",
+      "lot": "42",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Les Tourennes des vents no 20",
+          "extrait": "\u0007Les Tourennes des vents no 20"
+        }
+      ]
+    },
+    {
+      "id_passage": "f64d7d35fc6096d1210d",
+      "vente": "Printemps 2026",
+      "lot": "43",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Contrastes",
+          "extrait": "\u0007Contrastes"
+        }
+      ]
+    },
+    {
+      "id_passage": "4f18dfae47f651c2f24e",
+      "vente": "Printemps 2026",
+      "lot": "44",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Quantificateur bleu 3/94",
+          "extrait": "\u0007Quantificateur bleu 3/94"
+        }
+      ]
+    },
+    {
+      "id_passage": "2b5a3ec48ea2de8827a8",
+      "vente": "Printemps 2026",
+      "lot": "45",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Océan no 23",
+          "extrait": "\u0007Océan no 23"
+        }
+      ]
+    },
+    {
+      "id_passage": "21db5362b5179e062ee0",
+      "vente": "Printemps 2026",
+      "lot": "46",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Three Generations",
+          "extrait": "\u0007Three Generations"
+        }
+      ]
+    },
+    {
+      "id_passage": "e1ce15d7c5b9687f5ded",
+      "vente": "Succession printemps 2026",
+      "lot": "49",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Street, Winter, Arthabaska",
+          "extrait": "\u0007Street, Winter, Arthabaska"
+        }
+      ]
+    },
+    {
+      "id_passage": "ea0d3b5f13e99171c8b5",
+      "vente": "Succession printemps 2026",
+      "lot": "50",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sunglow, a Bend in the River",
+          "extrait": "\u0007Sunglow, a Bend in the River"
+        }
+      ]
+    },
+    {
+      "id_passage": "0c03bafb8986866b6af7",
+      "vente": "Succession printemps 2026",
+      "lot": "54",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "King, Queen, and Jokers VI:",
+          "extrait": "\u0007King, Queen, and Jokers VI: It’s a Democratic Age"
+        }
+      ]
+    },
+    {
+      "id_passage": "25bde6c8f9eccb90630c",
+      "vente": "Succession printemps 2026",
+      "lot": "55",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Austin, Eastern Townships, Québec",
+          "extrait": "\u0007Austin, Eastern Townships, Québec"
+        }
+      ]
+    },
+    {
+      "id_passage": "1315d21490217a69db36",
+      "vente": "Succession printemps 2026",
+      "lot": "57",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "October Snow",
+          "extrait": "\u0007October Snow"
+        }
+      ]
+    },
+    {
+      "id_passage": "75544a8e172f532795fb",
+      "vente": "Succession printemps 2026",
+      "lot": "60",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Georgian Bay Pool",
+          "extrait": "\u0007Georgian Bay Pool"
         }
       ]
     },
@@ -241,218 +1526,213 @@
       "lot": "68",
       "conflits": [
         {
-          "champ": "estimation",
-          "motif": "plusieurs estimations detectees"
-        }
-      ]
-    }
-  ],
-  "propositions_corrections": [
-    {
-      "id_passage": "eeaf913dad21160c7bfe",
-      "vente": "Printemps 2023",
-      "lot": "07",
-      "propositions": [
-        {
           "champ": "titre",
-          "ancien": "Sans titre (nature morte) /",
-          "proposition": "Sans titre (nature morte) / Untitled (Still Life)",
-          "motif": "titre_plus_complet"
+          "ancien": "Alaskan Border",
+          "extrait": "\u0007Alaskan Border"
         }
       ]
     },
     {
-      "id_passage": "6009ee12ca2c53dbf8e4",
-      "vente": "Automne 2023",
-      "lot": "22",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Danse carrée :",
-          "proposition": "Danse carrée : Once Upon a Square",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "d00645cb3ebaca5cfba7",
-      "vente": "Automne 2023",
-      "lot": "58",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (Nature morte) /",
-          "proposition": "Sans titre (Nature morte) / Untitled (Still Life)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "a75937b80f326ce9d721",
-      "vente": "Printemps 2024",
-      "lot": "11",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (de la série Gitksan) /",
-          "proposition": "Sans titre (de la série Gitksan) / Untitled (from the series Gitksan)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "b8a9b05852002a64f4a0",
-      "vente": "Printemps 2024",
-      "lot": "18",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Square Dance:",
-          "proposition": "Square Dance: Blues for Green",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "c7a4597abc99340486bf",
-      "vente": "Printemps 2024",
-      "lot": "19",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (de la série Triangulaires) /",
-          "proposition": "Sans titre (de la série Triangulaires) / Untitled (from the series Triangulaires)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "89398fb9841ee357c430",
-      "vente": "Printemps 2024",
-      "lot": "29",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (de la série Théâtre) /",
-          "proposition": "Sans titre (de la série Théâtre) / Untitled (from the series Théâtre)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "b70673abc97f1e13231c",
-      "vente": "Printemps 2024",
-      "lot": "30",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (de la série Bleu, blanc, rouge) /",
-          "proposition": "Sans titre (de la série Bleu, blanc, rouge) / Untitled (from the series Bleu, blanc, rouge)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "05509707f405e279c965",
-      "vente": "Printemps 2024",
-      "lot": "31",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (de la série Bleu, blanc, rouge) /",
-          "proposition": "Sans titre (de la série Bleu, blanc, rouge) / Untitled (from the series Bleu, blanc, rouge)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "a0ba95b57a76c43ea41f",
-      "vente": "Printemps 2024",
-      "lot": "46",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Étude de tête de jeune fille /",
-          "proposition": "Étude de tête de jeune fille / Study of Girl’s Head",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "85e2a605557a7180ebcd",
-      "vente": "Printemps 2025",
-      "lot": "60",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Cycle crétois 2, n o 5 –",
-          "proposition": "Cycle crétois 2, n o 5 – Pâques",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "6817ee1e382af0e92e78",
-      "vente": "Automne 2025",
-      "lot": "09",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (Promenade nocturne) /",
-          "proposition": "Sans titre (Promenade nocturne) / Untitled (Evening Stroll)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "d589499f536e7a4febf2",
-      "vente": "Automne 2025",
-      "lot": "10",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (Maison de l’artiste) /",
-          "proposition": "Sans titre (Maison de l’artiste) / Untitled (Artist’s House)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "df0adbdf85d4353d1cd4",
-      "vente": "Automne 2025",
-      "lot": "58",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Sans titre (de la série La maison ) /",
-          "proposition": "Sans titre (de la série La maison ) / Untitled (from the series La maison)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "a121e24e662866269aa8",
-      "vente": "Automne 2025",
-      "lot": "59",
-      "propositions": [
-        {
-          "champ": "titre",
-          "ancien": "Losange (de la série /",
-          "proposition": "Losange (de la série / from the series Continuum)",
-          "motif": "titre_plus_complet"
-        }
-      ]
-    },
-    {
-      "id_passage": "0c03bafb8986866b6af7",
+      "id_passage": "3d75cee1ee1c77698fce",
       "vente": "Succession printemps 2026",
-      "lot": "54",
-      "propositions": [
+      "lot": "71",
+      "conflits": [
         {
           "champ": "titre",
-          "ancien": "King, Queen, and Jokers VI:",
-          "proposition": "King, Queen, and Jokers VI: It’s a Democratic Age",
-          "motif": "titre_plus_complet"
+          "ancien": "Dene (The People)",
+          "extrait": "\u0007Dene (The People)"
+        }
+      ]
+    },
+    {
+      "id_passage": "911c5d1a67076d4cd203",
+      "vente": "Succession printemps 2026",
+      "lot": "72",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "On Reserve Indians and",
+          "extrait": "\u0007On Reserve Indians and"
+        }
+      ]
+    },
+    {
+      "id_passage": "ba045ed666f6d7e1ba88",
+      "vente": "Succession printemps 2026",
+      "lot": "73",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Oil Painting No. 2",
+          "extrait": "\u0007Oil Painting No. 2"
+        }
+      ]
+    },
+    {
+      "id_passage": "f331614604f629fe5ff7",
+      "vente": "Succession printemps 2026",
+      "lot": "76",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Abstraction rouge et noire",
+          "extrait": "\u0007Abstraction rouge et noire"
+        }
+      ]
+    },
+    {
+      "id_passage": "56fe7314d9057c647afa",
+      "vente": "Succession printemps 2026",
+      "lot": "77",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "\u0007Sans titre / Untitled"
+        }
+      ]
+    },
+    {
+      "id_passage": "2dc52e14443a5347f998",
+      "vente": "Succession printemps 2026",
+      "lot": "78",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Le lait du jour",
+          "extrait": "\u0007Le lait du jour"
+        }
+      ]
+    },
+    {
+      "id_passage": "d85f6f9c3c8fe273eab1",
+      "vente": "Succession printemps 2026",
+      "lot": "81",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Painting",
+          "extrait": "\u0007Painting"
+        }
+      ]
+    },
+    {
+      "id_passage": "398a52f8601635c1c4f2",
+      "vente": "Succession printemps 2026",
+      "lot": "84",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "AC-91-023",
+          "extrait": "\u0007AC-91-023"
+        }
+      ]
+    },
+    {
+      "id_passage": "f3ddcf68fe7c8302eba3",
+      "vente": "Succession printemps 2026",
+      "lot": "86",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "LSH 8",
+          "extrait": "\u0007LSH 8"
+        }
+      ]
+    },
+    {
+      "id_passage": "cbf52a472351aa9c560d",
+      "vente": "Succession printemps 2026",
+      "lot": "88",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Non Objective (Bluish)",
+          "extrait": "\u0007Non Objective (Bluish)"
+        }
+      ]
+    },
+    {
+      "id_passage": "679fb1dbcdd05dfcd0a0",
+      "vente": "Succession printemps 2026",
+      "lot": "89",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Snap No. 39",
+          "extrait": "\u0007Snap No. 39"
+        }
+      ]
+    },
+    {
+      "id_passage": "1c527a45c023c8b34d65",
+      "vente": "Succession printemps 2026",
+      "lot": "90",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Lake Landscape",
+          "extrait": "\u0007Lake Landscape"
+        }
+      ]
+    },
+    {
+      "id_passage": "4061a7525de9c0aba358",
+      "vente": "Succession printemps 2026",
+      "lot": "91",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Two Musicians",
+          "extrait": "\u0007Two Musicians"
+        }
+      ]
+    },
+    {
+      "id_passage": "7d42b4c5da772c3343a6",
+      "vente": "Succession printemps 2026",
+      "lot": "94",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Tête d’ange / Head of an Angel",
+          "extrait": "\u0007Tête d’ange / Head of an Angel"
+        }
+      ]
+    },
+    {
+      "id_passage": "7927b7163506fea4af43",
+      "vente": "Succession printemps 2026",
+      "lot": "95",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Feu de forêt",
+          "extrait": "\u0007Feu de forêt"
+        }
+      ]
+    },
+    {
+      "id_passage": "c9e474b9682e54382287",
+      "vente": "Succession printemps 2026",
+      "lot": "97",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "La danse",
+          "extrait": "\u0007La danse"
+        }
+      ]
+    },
+    {
+      "id_passage": "2d423acaab7e316ab82b",
+      "vente": "Succession printemps 2026",
+      "lot": "98",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Le cyclope",
+          "extrait": "\u0007Le cyclope"
         }
       ]
     },
@@ -460,14 +1740,150 @@
       "id_passage": "26f7c38292aa588889ea",
       "vente": "Succession printemps 2026",
       "lot": "99",
-      "propositions": [
+      "conflits": [
         {
           "champ": "titre",
           "ancien": "Portrait of Eddie Barnes and Ed Murphy,",
-          "proposition": "Portrait of Eddie Barnes and Ed Murphy, Lobster Fishermen, Bay View, Nova Scotia",
-          "motif": "titre_plus_complet"
+          "extrait": "\u0007Portrait of Eddie Barnes and Ed Murphy, Lobster Fishermen, Bay View, Nova Scotia"
         }
       ]
+    }
+  ],
+  "corrections_appliquees": [
+    {
+      "id_passage": "6009ee12ca2c53dbf8e4",
+      "vente": "Automne 2023",
+      "lot": "22",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Danse carrée :",
+          "nouveau": "Danse carrée : Once Upon a Square",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "d00645cb3ebaca5cfba7",
+      "vente": "Automne 2023",
+      "lot": "58",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (Nature morte) /",
+          "nouveau": "Sans titre (Nature morte) / Untitled (Still Life)",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "a75937b80f326ce9d721",
+      "vente": "Printemps 2024",
+      "lot": "11",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (de la série Gitksan) /",
+          "nouveau": "Sans titre (de la série Gitksan) / Untitled (from the series Gitksan)",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "b8a9b05852002a64f4a0",
+      "vente": "Printemps 2024",
+      "lot": "18",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Square Dance:",
+          "nouveau": "Square Dance: Blues for Green",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "c7a4597abc99340486bf",
+      "vente": "Printemps 2024",
+      "lot": "19",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (de la série Triangulaires) /",
+          "nouveau": "Sans titre (de la série Triangulaires) / Untitled (from the series Triangulaires)",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "89398fb9841ee357c430",
+      "vente": "Printemps 2024",
+      "lot": "29",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (de la série Théâtre) /",
+          "nouveau": "Sans titre (de la série Théâtre) / Untitled (from the series Théâtre)",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "b70673abc97f1e13231c",
+      "vente": "Printemps 2024",
+      "lot": "30",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (de la série Bleu, blanc, rouge) /",
+          "nouveau": "Sans titre (de la série Bleu, blanc, rouge) / Untitled (from the series Bleu, blanc, rouge)",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "05509707f405e279c965",
+      "vente": "Printemps 2024",
+      "lot": "31",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (de la série Bleu, blanc, rouge) /",
+          "nouveau": "Sans titre (de la série Bleu, blanc, rouge) / Untitled (from the series Bleu, blanc, rouge)",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    },
+    {
+      "id_passage": "a0ba95b57a76c43ea41f",
+      "vente": "Printemps 2024",
+      "lot": "46",
+      "corrections": [
+        {
+          "champ": "titre",
+          "ancien": "Étude de tête de jeune fille /",
+          "nouveau": "Étude de tête de jeune fille / Study of Girl’s Head",
+          "motif": "continuation_multiligne"
+        }
+      ]
+    }
+  ],
+  "estimations_historiques_corrigees": [
+    {
+      "id_passage": "c60ac7b3013233ec7a51",
+      "ancienne_estimation": [
+        1953,
+        1954
+      ],
+      "motif": "annees_interpretees_comme_prix"
+    },
+    {
+      "id_passage": "c5aca100f04adb09c7ee",
+      "ancienne_estimation": [
+        1900,
+        1942
+      ],
+      "motif": "annees_interpretees_comme_prix"
     }
   ]
 }

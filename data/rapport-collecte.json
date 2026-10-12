@@ -1,6 +1,6 @@
 {
-  "version": "V8.4",
-  "date": "2026-10-12T22:20:53.084733+00:00",
+  "version": "V8.6",
+  "date": "2026-10-12T22:32:21.061363+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
@@ -82,10 +82,12 @@
     }
   ],
   "total_oeuvres": 491,
-  "avec_estimation": 286,
+  "avec_estimation": 284,
+  "avec_dimensions": 482,
   "rapprochements_potentiels": 3,
   "lots_historiques_non_redetectes": 0,
-  "conflits_a_verifier": 19,
-  "propositions_corrections": 17,
-  "note": "Estimations de catalogues uniquement. Aucun prix marteau deduit ou invente."
+  "conflits_a_verifier": 145,
+  "corrections_titres": 9,
+  "estimations_corrigees": 2,
+  "note": "Estimations de catalogues seulement. Aucun prix marteau invente."
 }
