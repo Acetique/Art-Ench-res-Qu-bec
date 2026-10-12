@@ -1,22 +1,23 @@
 {
-  "version": "V4",
-  "date": "2026-10-12T20:22:32.289116+00:00",
+  "version": "V5",
+  "date": "2026-10-12T20:31:06.735524+00:00",
+  "anciennes_entrees_pdf_v4_retirees": 116,
   "sources": {
     "BYDealers": {
       "pages_consultees": 12,
       "pages_accessibles": 11,
       "pdf_lus": 5,
-      "oeuvres_detectees": 129,
-      "nouvelles_oeuvres": 116,
+      "oeuvres_detectees": 0,
+      "nouvelles_oeuvres": 0,
       "erreurs_ou_blocages": 1
     },
     "Heffel": {
-      "pages_consultees": 25,
+      "pages_consultees": 30,
       "pages_accessibles": 3,
       "pdf_lus": 0,
       "oeuvres_detectees": 0,
       "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 22
+      "erreurs_ou_blocages": 27
     },
     "Gelineau": {
       "pages_consultees": 2,
@@ -27,5 +28,5 @@
       "erreurs_ou_blocages": 0
     }
   },
-  "total_oeuvres": 116
+  "total_oeuvres": 0
 }
