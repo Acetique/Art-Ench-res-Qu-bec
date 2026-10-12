@@ -1,53 +1,11 @@
 {
-  "version": "V8",
-  "date": "2026-10-12T21:41:22.061625+00:00",
+  "version": "V8.1",
+  "date": "2026-10-12T21:47:20.727667+00:00",
   "total_oeuvres": 488,
   "avec_dimensions": 479,
-  "avec_estimation": 276,
+  "avec_estimation": 280,
   "prix_marteau_verifies": 0,
   "rapprochements_potentiels": [
-    {
-      "artiste": "Alfred Pellan",
-      "titre": "Fines tiges",
-      "dimensions": "30,5 x 57,7 cm",
-      "verification": "requise",
-      "risque": "possible_remise_en_vente",
-      "passages": [
-        {
-          "id_passage": "78b58b75493abadaf7c5",
-          "vente": "Automne 2023",
-          "lot": "34",
-          "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf"
-        },
-        {
-          "id_passage": "581298d3fb296ed2e3b7",
-          "vente": "Automne 2025",
-          "lot": "04",
-          "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
-        }
-      ]
-    },
-    {
-      "artiste": "Fernand Leduc",
-      "titre": "Érosion partout",
-      "dimensions": "237,5 x 72,4 cm",
-      "verification": "requise",
-      "risque": "possible_remise_en_vente",
-      "passages": [
-        {
-          "id_passage": "0d1959a91b85afadbe8e",
-          "vente": "Automne 2023",
-          "lot": "37",
-          "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf"
-        },
-        {
-          "id_passage": "311deae2c18f1e7f752c",
-          "vente": "Automne 2025",
-          "lot": "51",
-          "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf"
-        }
-      ]
-    },
     {
       "artiste": "Jean Paul Riopelle",
       "titre": "Sans titre / Untitled",
@@ -70,7 +28,7 @@
       ]
     }
   ],
-  "nombre_rapprochements": 3,
+  "nombre_rapprochements": 1,
   "anomalies": [
     {
       "id": "e029d682928d185103fc",
@@ -233,6 +191,16 @@
       "page": 44
     },
     {
+      "id": "75544a8e172f532795fb",
+      "artiste": "Arthur Lismer",
+      "titre": "\u0007Georgian Bay Pool",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
+      "page": 30
+    },
+    {
       "id": "647d851a1c08edc50a09",
       "artiste": "Arthur Lismer",
       "titre": "Blue Pool with Rocks",
@@ -241,16 +209,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 32
-    },
-    {
-      "id": "75544a8e172f532795fb",
-      "artiste": "Arthur Lismer",
-      "titre": "Georgian Bay Pool",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
-      "page": 30
     },
     {
       "id": "966e09fd5d40a2d822e9",
@@ -263,6 +221,16 @@
       "page": 76
     },
     {
+      "id": "70941a5ef725cf50babb",
+      "artiste": "Charles Daudelin",
+      "titre": "\u0007Vase cornu",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 9
+    },
+    {
       "id": "ef6923107cbad4da9966",
       "artiste": "Charles Daudelin",
       "titre": "La mer",
@@ -273,14 +241,14 @@
       "page": 13
     },
     {
-      "id": "70941a5ef725cf50babb",
-      "artiste": "Charles Daudelin",
-      "titre": "Vase cornu",
+      "id": "d85f6f9c3c8fe273eab1",
+      "artiste": "Charles Gagnon",
+      "titre": "\u0007Painting",
       "problemes": [
         "estimation_absente"
       ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 9
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
+      "page": 64
     },
     {
       "id": "4c477e0d5a6b6ebac43d",
@@ -291,16 +259,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
       "page": 28
-    },
-    {
-      "id": "d85f6f9c3c8fe273eab1",
-      "artiste": "Charles Gagnon",
-      "titre": "Painting",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
-      "page": 64
     },
     {
       "id": "07a9f5738267eb9ba33d",
@@ -460,6 +418,17 @@
       "page": 45
     },
     {
+      "id": "0c03bafb8986866b6af7",
+      "artiste": "David Brown Milne",
+      "titre": "\u0007King, Queen, and Jokers VI:",
+      "problemes": [
+        "estimation_absente",
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
+      "page": 21
+    },
+    {
       "id": "230bd8cadaa20e4b7172",
       "artiste": "David Brown Milne",
       "titre": "Divided Forms, New York",
@@ -468,17 +437,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 20
-    },
-    {
-      "id": "0c03bafb8986866b6af7",
-      "artiste": "David Brown Milne",
-      "titre": "King, Queen, and Jokers VI:",
-      "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
-      "page": 21
     },
     {
       "id": "1722994781185e0a88c2",
@@ -621,6 +579,16 @@
       "page": 49
     },
     {
+      "id": "5154284a9f0816afe18d",
+      "artiste": "Francine Simonin",
+      "titre": "\u0007Variante d’une variation",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 38
+    },
+    {
       "id": "34a20545160b3586202b",
       "artiste": "Francine Simonin",
       "titre": "Coq gaulois",
@@ -641,14 +609,14 @@
       "page": 47
     },
     {
-      "id": "5154284a9f0816afe18d",
-      "artiste": "Francine Simonin",
-      "titre": "Variante d’une variation",
+      "id": "1315d21490217a69db36",
+      "artiste": "Francis Hans (Frank/Franz) Johnston",
+      "titre": "\u0007October Snow",
       "problemes": [
         "estimation_absente"
       ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 38
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
+      "page": 26
     },
     {
       "id": "46fe2b7ee4d1797efbb8",
@@ -659,16 +627,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 28
-    },
-    {
-      "id": "1315d21490217a69db36",
-      "artiste": "Francis Hans (Frank/Franz) Johnston",
-      "titre": "October Snow",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
-      "page": 26
     },
     {
       "id": "662c2db371298b6e36aa",
@@ -741,6 +699,26 @@
       "page": 68
     },
     {
+      "id": "a121e24e662866269aa8",
+      "artiste": "Guido Molinari",
+      "titre": "\u0007Losange (de la série /",
+      "problemes": [
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 51
+    },
+    {
+      "id": "4f18dfae47f651c2f24e",
+      "artiste": "Guido Molinari",
+      "titre": "\u0007Quantificateur bleu 3/94",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 42
+    },
+    {
       "id": "1cafe8f2f5fd7975d192",
       "artiste": "Guido Molinari",
       "titre": "Bi-sériel orange-bleu",
@@ -771,21 +749,12 @@
       "page": 37
     },
     {
-      "id": "4f18dfae47f651c2f24e",
-      "artiste": "Guido Molinari",
-      "titre": "Quantificateur bleu 3/94",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 42
-    },
-    {
       "id": "c7a4597abc99340486bf",
       "artiste": "Guido Molinari",
-      "titre": "Sans titre (de la série Triangulaires) / Untitled (from the series Triangulaires)",
+      "titre": "Sans titre (de la série Triangulaires) /",
       "problemes": [
-        "estimation_absente"
+        "estimation_absente",
+        "titre_possiblement_tronque"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 21
@@ -803,7 +772,7 @@
     {
       "id": "679fb1dbcdd05dfcd0a0",
       "artiste": "Harold Barling Town",
-      "titre": "Snap No. 39",
+      "titre": "\u0007Snap No. 39",
       "problemes": [
         "estimation_absente"
       ],
@@ -813,7 +782,7 @@
     {
       "id": "a387fdf9bb6f06b6f0dc",
       "artiste": "Harold Barling Town",
-      "titre": "The Cave of Longing",
+      "titre": "\u0007The Cave of Longing",
       "problemes": [
         "estimation_absente"
       ],
@@ -833,7 +802,7 @@
     {
       "id": "c5aca100f04adb09c7ee",
       "artiste": "Helmut Newton",
-      "titre": "Sie kommen (Undressed)",
+      "titre": "\u0007Sie kommen (Undressed)",
       "problemes": [
         "estimation_absente"
       ],
@@ -853,7 +822,7 @@
     {
       "id": "4061a7525de9c0aba358",
       "artiste": "Jack Leonard Shadbolt",
-      "titre": "Two Musicians",
+      "titre": "\u0007Two Musicians",
       "problemes": [
         "estimation_absente"
       ],
@@ -879,6 +848,26 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 10
+    },
+    {
+      "id": "883345b63cb091a6fb2a",
+      "artiste": "Jacques Hurtubise",
+      "titre": "\u0007Sunmove",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 54
+    },
+    {
+      "id": "9f1850299e9209dee695",
+      "artiste": "Jacques Hurtubise",
+      "titre": "\u0007Tamatagamie",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 34
     },
     {
       "id": "8878a46d48b001a713d8",
@@ -951,16 +940,6 @@
       "page": 47
     },
     {
-      "id": "883345b63cb091a6fb2a",
-      "artiste": "Jacques Hurtubise",
-      "titre": "Sunmove",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 54
-    },
-    {
       "id": "5f601ba09968b6ae19d8",
       "artiste": "Jacques Hurtubise",
       "titre": "Takakouna",
@@ -971,16 +950,6 @@
       "page": 44
     },
     {
-      "id": "9f1850299e9209dee695",
-      "artiste": "Jacques Hurtubise",
-      "titre": "Tamatagamie",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 34
-    },
-    {
       "id": "e10bf0588ccd55c47ff2",
       "artiste": "James Wilson Morrice",
       "titre": "Study for Golden Venice",
@@ -989,6 +958,26 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 12
+    },
+    {
+      "id": "008fb46cd54fce48b3e8",
+      "artiste": "Jean Albert McEwen",
+      "titre": "\u0007Dernier rayon d’un rouge",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 36
+    },
+    {
+      "id": "3025b2d1754d9a864af5",
+      "artiste": "Jean Albert McEwen",
+      "titre": "\u0007Fleuron soutenu de rouge nº 3",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 37
     },
     {
       "id": "bc542766351bfcb8abe4",
@@ -1009,26 +998,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 53
-    },
-    {
-      "id": "008fb46cd54fce48b3e8",
-      "artiste": "Jean Albert McEwen",
-      "titre": "Dernier rayon d’un rouge",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 36
-    },
-    {
-      "id": "3025b2d1754d9a864af5",
-      "artiste": "Jean Albert McEwen",
-      "titre": "Fleuron soutenu de rouge nº 3",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 37
     },
     {
       "id": "d455c3e8326d2ba52086",
@@ -1091,6 +1060,27 @@
       "page": 15
     },
     {
+      "id": "6817ee1e382af0e92e78",
+      "artiste": "Jean Paul Lemieux",
+      "titre": "\u0007Sans titre (Promenade nocturne) /",
+      "problemes": [
+        "estimation_absente",
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 11
+    },
+    {
+      "id": "d164e68de13bc924cd45",
+      "artiste": "Jean Paul Lemieux",
+      "titre": "\u0007Sans titre / Untitled",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 10
+    },
+    {
       "id": "7586bffc7b4d0cae2aa2",
       "artiste": "Jean Paul Lemieux",
       "titre": "Album de famille",
@@ -1099,26 +1089,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
       "page": 8
-    },
-    {
-      "id": "0d615a662073ec50c03b",
-      "artiste": "Jean Paul Lemieux",
-      "titre": "Le temps retrouvé – Kent House 1913",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
-      "page": 54
-    },
-    {
-      "id": "6817ee1e382af0e92e78",
-      "artiste": "Jean Paul Lemieux",
-      "titre": "Sans titre (Promenade nocturne) / Untitled (Evening Stroll)",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 11
     },
     {
       "id": "6a5417a7d34777b12f38",
@@ -1131,16 +1101,6 @@
       "page": 11
     },
     {
-      "id": "d164e68de13bc924cd45",
-      "artiste": "Jean Paul Lemieux",
-      "titre": "Sans titre / Untitled",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 10
-    },
-    {
       "id": "6751afde989ff70b0085",
       "artiste": "Jean Paul Lemieux",
       "titre": "Sans titre / Untitled",
@@ -1149,6 +1109,26 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 94
+    },
+    {
+      "id": "1220fc6d30f7cf7f99a0",
+      "artiste": "Jean Paul Riopelle",
+      "titre": "\u0007Iceberg n o 7 (Passes)",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 32
+    },
+    {
+      "id": "2dc52e14443a5347f998",
+      "artiste": "Jean Paul Riopelle",
+      "titre": "\u0007Le lait du jour",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
+      "page": 60
     },
     {
       "id": "0ca7262b1c1d753240c1",
@@ -1191,26 +1171,6 @@
       "page": 22
     },
     {
-      "id": "1220fc6d30f7cf7f99a0",
-      "artiste": "Jean Paul Riopelle",
-      "titre": "Iceberg n o 7 (Passes)",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 32
-    },
-    {
-      "id": "2dc52e14443a5347f998",
-      "artiste": "Jean Paul Riopelle",
-      "titre": "Le lait du jour",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
-      "page": 60
-    },
-    {
       "id": "d4d804957431378aec30",
       "artiste": "Jean Paul Riopelle",
       "titre": "Moose sipi",
@@ -1229,6 +1189,16 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
       "page": 23
+    },
+    {
+      "id": "a75937b80f326ce9d721",
+      "artiste": "Jean Paul Riopelle",
+      "titre": "Sans titre (de la série Gitksan) /",
+      "problemes": [
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
+      "page": 14
     },
     {
       "id": "8eeeb1e49f0bd7d72b5e",
@@ -1261,6 +1231,26 @@
       "page": 18
     },
     {
+      "id": "f64d7d35fc6096d1210d",
+      "artiste": "Jean-Paul Jérôme",
+      "titre": "\u0007Contrastes",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 41
+    },
+    {
+      "id": "d8d87a3ecdecfd13858e",
+      "artiste": "Jean-Paul Jérôme",
+      "titre": "\u0007Les Tourennes des vents nº 20",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 40
+    },
+    {
       "id": "ce48f97c6c51adf1be0f",
       "artiste": "Jean-Paul Jérôme",
       "titre": "Albatros du soleil",
@@ -1269,16 +1259,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 31
-    },
-    {
-      "id": "f64d7d35fc6096d1210d",
-      "artiste": "Jean-Paul Jérôme",
-      "titre": "Contrastes",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 41
     },
     {
       "id": "9922d805ca13e9c1230b",
@@ -1299,16 +1279,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
       "page": 36
-    },
-    {
-      "id": "d8d87a3ecdecfd13858e",
-      "artiste": "Jean-Paul Jérôme",
-      "titre": "Les Tourennes des vents nº 20",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 40
     },
     {
       "id": "742df0c09dc4d1f0c445",
@@ -1343,7 +1313,7 @@
     {
       "id": "7927b7163506fea4af43",
       "artiste": "Jean-Philippe Dallaire",
-      "titre": "Feu de forêt",
+      "titre": "\u0007Feu de forêt",
       "problemes": [
         "estimation_absente"
       ],
@@ -1353,7 +1323,7 @@
     {
       "id": "7d42b4c5da772c3343a6",
       "artiste": "Jean-Philippe Dallaire",
-      "titre": "Tête d’ange / Head of an Angel",
+      "titre": "\u0007Tête d’ange / Head of an Angel",
       "problemes": [
         "estimation_absente"
       ],
@@ -1403,7 +1373,7 @@
     {
       "id": "ce5c668bf5a7edca6177",
       "artiste": "Kazuo Nakamura",
-      "titre": "Bridges, Winter",
+      "titre": "\u0007Bridges, Winter",
       "problemes": [
         "estimation_absente"
       ],
@@ -1413,7 +1383,7 @@
     {
       "id": "73aa4437bdd88a9ac856",
       "artiste": "Kazuo Nakamura",
-      "titre": "Inner Expansion",
+      "titre": "\u0007Inner Expansion",
       "problemes": [
         "estimation_absente"
       ],
@@ -1423,7 +1393,7 @@
     {
       "id": "1c527a45c023c8b34d65",
       "artiste": "Kazuo Nakamura",
-      "titre": "Lake Landscape",
+      "titre": "\u0007Lake Landscape",
       "problemes": [
         "estimation_absente"
       ],
@@ -1433,7 +1403,7 @@
     {
       "id": "868b043e23ae18f09ae1",
       "artiste": "Kazuo Nakamura",
-      "titre": "Square Infinity",
+      "titre": "\u0007Square Infinity",
       "problemes": [
         "estimation_absente"
       ],
@@ -1463,7 +1433,7 @@
     {
       "id": "f3ddcf68fe7c8302eba3",
       "artiste": "Lawren Stewart Harris",
-      "titre": "LSH 8",
+      "titre": "\u0007LSH 8",
       "problemes": [
         "estimation_absente"
       ],
@@ -1531,6 +1501,16 @@
       "page": 6
     },
     {
+      "id": "56fe7314d9057c647afa",
+      "artiste": "Lise Gervais",
+      "titre": "\u0007Sans titre / Untitled",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
+      "page": 58
+    },
+    {
       "id": "23cff5388b9d31572721",
       "artiste": "Lise Gervais",
       "titre": "Sans titre / Untitled",
@@ -1539,16 +1519,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
       "page": 29
-    },
-    {
-      "id": "56fe7314d9057c647afa",
-      "artiste": "Lise Gervais",
-      "titre": "Sans titre / Untitled",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
-      "page": 58
     },
     {
       "id": "a973df246aa679b91b52",
@@ -1593,12 +1563,32 @@
     {
       "id": "e1ce15d7c5b9687f5ded",
       "artiste": "Marc-Aurèle de Foy Suzor-Coté",
-      "titre": "Street, Winter, Arthabaska",
+      "titre": "\u0007Street, Winter, Arthabaska",
       "problemes": [
         "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 14
+    },
+    {
+      "id": "29e335b73e530bd2f333",
+      "artiste": "Marc-Aurèle Fortin",
+      "titre": "\u0007Sans titre / Untitled",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 6
+    },
+    {
+      "id": "9345441d6365bde23f2b",
+      "artiste": "Marc-Aurèle Fortin",
+      "titre": "\u0007The Sandpile Harbour Scene, Montreal",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
+      "page": 10
     },
     {
       "id": "748174dafeb489b1b1d0",
@@ -1611,39 +1601,9 @@
       "page": 17
     },
     {
-      "id": "29e335b73e530bd2f333",
-      "artiste": "Marc-Aurèle Fortin",
-      "titre": "Sans titre / Untitled",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 6
-    },
-    {
-      "id": "9345441d6365bde23f2b",
-      "artiste": "Marc-Aurèle Fortin",
-      "titre": "The Sandpile Harbour Scene, Montreal",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
-      "page": 10
-    },
-    {
-      "id": "637e96f05de05615b425",
-      "artiste": "Marcel Christian Barbeau",
-      "titre": "Blue and White Striations",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf",
-      "page": 31
-    },
-    {
       "id": "d4640e1b69a0d56b693c",
       "artiste": "Marcel Christian Barbeau",
-      "titre": "Fond marin n o 23",
+      "titre": "\u0007Fond marin n o 23",
       "problemes": [
         "estimation_absente"
       ],
@@ -1651,19 +1611,9 @@
       "page": 20
     },
     {
-      "id": "e3078d0b4614b09a7ccb",
-      "artiste": "Marcel Christian Barbeau",
-      "titre": "L’île nue",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page": 18
-    },
-    {
       "id": "0fc261f55ce36cb8d4c4",
       "artiste": "Marcel Christian Barbeau",
-      "titre": "Minerva",
+      "titre": "\u0007Minerva",
       "problemes": [
         "dimensions_absentes",
         "estimation_absente"
@@ -1674,12 +1624,22 @@
     {
       "id": "4969205ffec88ba5cbed",
       "artiste": "Marcel Christian Barbeau",
-      "titre": "Rétine tout seul",
+      "titre": "\u0007Rétine tout seul",
       "problemes": [
         "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
       "page": 27
+    },
+    {
+      "id": "e3078d0b4614b09a7ccb",
+      "artiste": "Marcel Christian Barbeau",
+      "titre": "L’île nue",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
+      "page": 18
     },
     {
       "id": "a20b125e897b6172f7a5",
@@ -1712,6 +1672,16 @@
       "page": 25
     },
     {
+      "id": "3b298a48e28e833990be",
+      "artiste": "Marcelle Ferron",
+      "titre": "\u0007Sans titre / Untitled",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
+      "page": 35
+    },
+    {
       "id": "bd0cf7f89ca4e161e6d1",
       "artiste": "Marcelle Ferron",
       "titre": "Dents de sable",
@@ -1732,16 +1702,6 @@
       "page": 26
     },
     {
-      "id": "a33d4ba9e84159473449",
-      "artiste": "Marcelle Ferron",
-      "titre": "Sans titre / Untitled",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
-      "page": 26
-    },
-    {
       "id": "9093062c05de3dc36559",
       "artiste": "Marcelle Ferron",
       "titre": "Sans titre / Untitled",
@@ -1750,6 +1710,16 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 25
+    },
+    {
+      "id": "a33d4ba9e84159473449",
+      "artiste": "Marcelle Ferron",
+      "titre": "Sans titre / Untitled",
+      "problemes": [
+        "estimation_absente"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
+      "page": 26
     },
     {
       "id": "ae320da40fda56c6ac66",
@@ -1772,21 +1742,12 @@
       "page": 17
     },
     {
-      "id": "3b298a48e28e833990be",
-      "artiste": "Marcelle Ferron",
-      "titre": "Sans titre / Untitled",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 35
-    },
-    {
       "id": "26f7c38292aa588889ea",
       "artiste": "Maud Kathleen Lewis",
-      "titre": "Portrait of Eddie Barnes and Ed Murphy, Lobster Fishermen, Bay View, Nova Scotia",
+      "titre": "\u0007Portrait of Eddie Barnes and Ed Murphy,",
       "problemes": [
-        "estimation_absente"
+        "estimation_absente",
+        "titre_possiblement_tronque"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 100
@@ -1814,7 +1775,7 @@
     {
       "id": "25bde6c8f9eccb90630c",
       "artiste": "Nora Frances Elizabeth Collyer",
-      "titre": "Austin, Eastern Townships, Québec",
+      "titre": "\u0007Austin, Eastern Townships, Québec",
       "problemes": [
         "estimation_absente"
       ],
@@ -1842,16 +1803,6 @@
       "page": 46
     },
     {
-      "id": "21db5362b5179e062ee0",
-      "artiste": "Norval Morrisseau",
-      "titre": "Three Generations",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
-      "page": 44
-    },
-    {
       "id": "c60ac7b3013233ec7a51",
       "artiste": "Oscar Cahén",
       "titre": "Sans titre / Untitled",
@@ -1874,7 +1825,7 @@
     {
       "id": "a067abb7f0c4d853cc80",
       "artiste": "Paul-Émile Borduas",
-      "titre": "Bombardement",
+      "titre": "\u0007Bombardement",
       "problemes": [
         "estimation_absente"
       ],
@@ -1892,14 +1843,15 @@
       "page": 19
     },
     {
-      "id": "abd94b682d3df170295a",
-      "artiste": "Paul-Émile Borduas",
-      "titre": "Métropole minérale",
+      "id": "eeaf913dad21160c7bfe",
+      "artiste": "Paul-Vanier Beaulieu",
+      "titre": "\u0007Sans titre (nature morte) /",
       "problemes": [
-        "estimation_absente"
+        "estimation_absente",
+        "titre_possiblement_tronque"
       ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 23
+      "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
+      "page": 11
     },
     {
       "id": "d6be0c36450deaf1aaf2",
@@ -1912,19 +1864,9 @@
       "page": 11
     },
     {
-      "id": "eeaf913dad21160c7bfe",
-      "artiste": "Paul-Vanier Beaulieu",
-      "titre": "Sans titre (nature morte) / Untitled (Still Life)",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
-      "page": 11
-    },
-    {
       "id": "ebca58f57720e01de39e",
       "artiste": "Pierre Gauvreau",
-      "titre": "Il y a un oiseau derrière",
+      "titre": "\u0007Il y a un oiseau derrière",
       "problemes": [
         "estimation_absente"
       ],
@@ -1942,11 +1884,22 @@
       "page": 20
     },
     {
+      "id": "a0ba95b57a76c43ea41f",
+      "artiste": "Pierre-Auguste Renoir",
+      "titre": "Étude de tête de jeune fille /",
+      "problemes": [
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
+      "page": 42
+    },
+    {
       "id": "d589499f536e7a4febf2",
       "artiste": "René Richard",
-      "titre": "Sans titre (Maison de l’artiste) / Untitled (Artist’s House)",
+      "titre": "\u0007Sans titre (Maison de l’artiste) /",
       "problemes": [
-        "estimation_absente"
+        "estimation_absente",
+        "titre_possiblement_tronque"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
       "page": 12
@@ -1964,7 +1917,7 @@
     {
       "id": "f331614604f629fe5ff7",
       "artiste": "Rita Letendre",
-      "titre": "Abstraction rouge et noire",
+      "titre": "\u0007Abstraction rouge et noire",
       "problemes": [
         "estimation_absente"
       ],
@@ -2034,7 +1987,7 @@
     {
       "id": "157b14f427b928a4a4c1",
       "artiste": "Ronald Langley Bloore",
-      "titre": "Peace Stars for Vince No. IV",
+      "titre": "\u0007Peace Stars for Vince No. IV",
       "problemes": [
         "estimation_absente"
       ],
@@ -2054,7 +2007,7 @@
     {
       "id": "443e2c181b2b6d26c047",
       "artiste": "Serge Lemoyne",
-      "titre": "Assemblage n o 19",
+      "titre": "\u0007Assemblage n o 19",
       "problemes": [
         "estimation_absente"
       ],
@@ -2064,7 +2017,7 @@
     {
       "id": "fc40bfa60b36fcf153ed",
       "artiste": "Serge Lemoyne",
-      "titre": "Balustrade",
+      "titre": "\u0007Balustrade",
       "problemes": [
         "estimation_absente"
       ],
@@ -2074,12 +2027,22 @@
     {
       "id": "0a0b2f70e5652bf89030",
       "artiste": "Serge Lemoyne",
-      "titre": "Le gros Bill",
+      "titre": "\u0007Le gros Bill",
       "problemes": [
         "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
       "page": 32
+    },
+    {
+      "id": "df0adbdf85d4353d1cd4",
+      "artiste": "Serge Lemoyne",
+      "titre": "\u0007Sans titre (de la série La maison ) /",
+      "problemes": [
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
+      "page": 50
     },
     {
       "id": "7e2360e4a2078dd59341",
@@ -2094,19 +2057,31 @@
     {
       "id": "b70673abc97f1e13231c",
       "artiste": "Serge Lemoyne",
-      "titre": "Sans titre (de la série Bleu, blanc, rouge) / Untitled (from the series Bleu, blanc, rouge)",
+      "titre": "Sans titre (de la série Bleu, blanc, rouge) /",
       "problemes": [
-        "estimation_absente"
+        "estimation_absente",
+        "titre_possiblement_tronque"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 28
     },
     {
+      "id": "05509707f405e279c965",
+      "artiste": "Serge Lemoyne",
+      "titre": "Sans titre (de la série Bleu, blanc, rouge) /",
+      "problemes": [
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
+      "page": 29
+    },
+    {
       "id": "89398fb9841ee357c430",
       "artiste": "Serge Lemoyne",
-      "titre": "Sans titre (de la série Théâtre) / Untitled (from the series Théâtre)",
+      "titre": "Sans titre (de la série Théâtre) /",
       "problemes": [
-        "estimation_absente"
+        "estimation_absente",
+        "titre_possiblement_tronque"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
       "page": 27
@@ -2124,7 +2099,7 @@
     {
       "id": "c9e474b9682e54382287",
       "artiste": "Sorel Etrog",
-      "titre": "La danse",
+      "titre": "\u0007La danse",
       "problemes": [
         "estimation_absente"
       ],
@@ -2144,7 +2119,7 @@
     {
       "id": "cbf52a472351aa9c560d",
       "artiste": "Thomas Sherlock (Tom) Hodgson",
-      "titre": "Non Objective (Bluish)",
+      "titre": "\u0007Non Objective (Bluish)",
       "problemes": [
         "estimation_absente"
       ],
@@ -2162,9 +2137,19 @@
       "page": 52
     },
     {
+      "id": "d00645cb3ebaca5cfba7",
+      "artiste": "William Goodridge Roberts",
+      "titre": "Sans titre (Nature morte) /",
+      "problemes": [
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
+      "page": 47
+    },
+    {
       "id": "ba045ed666f6d7e1ba88",
       "artiste": "William Paterson Ewen",
-      "titre": "Oil Painting No. 2",
+      "titre": "\u0007Oil Painting No. 2",
       "problemes": [
         "estimation_absente"
       ],
@@ -2174,7 +2159,7 @@
     {
       "id": "398a52f8601635c1c4f2",
       "artiste": "William Perehudoff",
-      "titre": "AC-91-023",
+      "titre": "\u0007AC-91-023",
       "problemes": [
         "estimation_absente"
       ],
@@ -2184,7 +2169,7 @@
     {
       "id": "df32585ecbdededf0676",
       "artiste": "William Perehudoff",
-      "titre": "Thalia No. 11",
+      "titre": "\u0007Thalia No. 11",
       "problemes": [
         "estimation_absente"
       ],
@@ -2194,7 +2179,7 @@
     {
       "id": "ecea713e586df1e0ab2f",
       "artiste": "William Ronald",
-      "titre": "Jazz Town",
+      "titre": "\u0007Jazz Town",
       "problemes": [
         "estimation_absente"
       ],
@@ -2225,7 +2210,7 @@
     {
       "id": "2d423acaab7e316ab82b",
       "artiste": "Yves Trudeau",
-      "titre": "Le cyclope",
+      "titre": "\u0007Le cyclope",
       "problemes": [
         "estimation_absente"
       ],
@@ -2233,5 +2218,5 @@
       "page": 98
     }
   ],
-  "nombre_notices_a_controler": 215
+  "nombre_notices_a_controler": 217
 }

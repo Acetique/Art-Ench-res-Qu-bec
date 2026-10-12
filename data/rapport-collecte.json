@@ -1,14 +1,14 @@
 {
-  "version": "V8",
-  "date": "2026-10-12T21:41:22.061749+00:00",
+  "version": "V8.1",
+  "date": "2026-10-12T21:47:20.727755+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
       "pages_accessibles": 8,
       "pdf_lus": 8,
-      "oeuvres_detectees": 0,
+      "oeuvres_detectees": 398,
       "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 8
+      "erreurs_ou_blocages": 0
     },
     "Heffel": {
       "statut": "connecteur_a_developper",
@@ -19,9 +19,50 @@
       "oeuvres_detectees": 0
     }
   },
-  "catalogues": [],
+  "catalogues": [
+    {
+      "vente": "Printemps 2023",
+      "statut": "ok",
+      "oeuvres": 40
+    },
+    {
+      "vente": "Automne 2023",
+      "statut": "ok",
+      "oeuvres": 58
+    },
+    {
+      "vente": "Printemps 2024",
+      "statut": "ok",
+      "oeuvres": 46
+    },
+    {
+      "vente": "Automne 2024",
+      "statut": "ok",
+      "oeuvres": 50
+    },
+    {
+      "vente": "Printemps 2025",
+      "statut": "ok",
+      "oeuvres": 53
+    },
+    {
+      "vente": "Automne 2025",
+      "statut": "ok",
+      "oeuvres": 62
+    },
+    {
+      "vente": "Printemps 2026",
+      "statut": "ok",
+      "oeuvres": 39
+    },
+    {
+      "vente": "Succession printemps 2026",
+      "statut": "ok",
+      "oeuvres": 50
+    }
+  ],
   "total_oeuvres": 488,
-  "avec_estimation": 276,
-  "rapprochements_potentiels": 3,
-  "note": "Estimations de catalogues seulement. Aucun prix marteau n'est deduit."
+  "avec_estimation": 280,
+  "rapprochements_potentiels": 1,
+  "note": "Les estimations des catalogues ne sont pas des prix marteau verifies."
 }
