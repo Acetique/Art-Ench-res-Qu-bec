@@ -1,6 +1,6 @@
 {
-  "version": "V8.6",
-  "date": "2026-10-12T22:32:21.061285+00:00",
+  "version": "V8.7",
+  "date": "2026-10-12T22:38:35.531790+00:00",
   "total_oeuvres": 491,
   "avec_dimensions": 482,
   "avec_estimation": 284,
@@ -511,10 +511,9 @@
       "id": "c2e0fca45d417c02e8a7",
       "id_passage": "0c03bafb8986866b6af7",
       "artiste": "David Brown Milne",
-      "titre": "King, Queen, and Jokers VI:",
+      "titre": "King, Queen, and Jokers VI: It’s a Democratic Age",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 21
@@ -740,17 +739,6 @@
       "page": 38
     },
     {
-      "id": "85e2a605557a7180ebcd",
-      "id_passage": "85e2a605557a7180ebcd",
-      "artiste": "Françoise Sullivan",
-      "titre": "Cycle crétois 2, n o 5 –",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf",
-      "page": 49
-    },
-    {
       "id": "d22bb4e42be7dd90ab4f",
       "id_passage": "d22bb4e42be7dd90ab4f",
       "artiste": "Françoise Sullivan",
@@ -815,17 +803,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/04/Catalogue_Printemps2026.pdf",
       "page": 24
-    },
-    {
-      "id": "b40d6f40a9eb690e3aa0",
-      "id_passage": "a121e24e662866269aa8",
-      "artiste": "Guido Molinari",
-      "titre": "Losange (de la série /",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 51
     },
     {
       "id": "2ad22c93178a8104f9e1",
@@ -1227,10 +1204,9 @@
       "id": "c933942d7ebe40b7d010",
       "id_passage": "6817ee1e382af0e92e78",
       "artiste": "Jean Paul Lemieux",
-      "titre": "Sans titre (Promenade nocturne) /",
+      "titre": "Sans titre (Promenade nocturne) / Untitled (Evening Stroll)",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
       "page": 11
@@ -1944,10 +1920,9 @@
       "id": "cbe2e1895bea8af9a582",
       "id_passage": "26f7c38292aa588889ea",
       "artiste": "Maud Kathleen Lewis",
-      "titre": "Portrait of Eddie Barnes and Ed Murphy,",
+      "titre": "Portrait of Eddie Barnes and Ed Murphy, Lobster Fishermen, Bay View, Nova Scotia",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 100
@@ -2066,10 +2041,9 @@
       "id": "d192ff04c01e45e70dc8",
       "id_passage": "eeaf913dad21160c7bfe",
       "artiste": "Paul-Vanier Beaulieu",
-      "titre": "Sans titre (nature morte) /",
+      "titre": "Sans titre (nature morte) / Untitled (Still Life)",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2023/04/Catalogue_108p_Printemps2023_Web_Spread.pdf",
       "page": 11
@@ -2100,10 +2074,9 @@
       "id": "5b49796f2df34dc6be2d",
       "id_passage": "d589499f536e7a4febf2",
       "artiste": "René Richard",
-      "titre": "Sans titre (Maison de l’artiste) /",
+      "titre": "Sans titre (Maison de l’artiste) / Untitled (Artist’s House)",
       "problemes": [
-        "estimation_absente",
-        "titre_possiblement_tronque"
+        "estimation_absente"
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
       "page": 12
@@ -2274,17 +2247,6 @@
       "page": 28
     },
     {
-      "id": "8af347c61b4caaee4115",
-      "id_passage": "df0adbdf85d4353d1cd4",
-      "artiste": "Serge Lemoyne",
-      "titre": "Sans titre (de la série La maison ) /",
-      "problemes": [
-        "titre_possiblement_tronque"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 50
-    },
-    {
       "id": "e9f7da06760283fc9ea0",
       "id_passage": "89398fb9841ee357c430",
       "artiste": "Serge Lemoyne",
@@ -2417,5 +2379,5 @@
       "page": 98
     }
   ],
-  "nombre_notices_a_controler": 212
+  "nombre_notices_a_controler": 209
 }
