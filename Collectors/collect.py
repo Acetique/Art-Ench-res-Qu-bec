@@ -50,7 +50,7 @@ import requests
 # CONFIGURATION
 # ============================================================
 
-VERSION = "V8.10.3"
+VERSION = "V8.11"
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -66,7 +66,7 @@ REPORT_PATH = DATA / "rapport-collecte.json"
 QUALITY_PATH = DATA / "rapport-qualite.json"
 DIFF_PATH = DATA / "rapport-differences.json"
 
-USER_AGENT = "ArtEncheresQuebec/8.10.3"
+USER_AGENT = "ArtEncheresQuebec/8.11"
 
 TIMEOUT = 60
 MAX_PDF_BYTES = 50 * 1024 * 1024
@@ -77,7 +77,7 @@ REQUEST_PAUSE = 2
 # Les images sont seulement publiees si leur
 # reutilisation est autorisee.
 EXTRACT_IMAGES = True
-PUBLISH_IMAGES = False
+PUBLISH_IMAGES = True
 
 MIN_IMAGE_WIDTH = 250
 MIN_IMAGE_HEIGHT = 250
@@ -1202,97 +1202,107 @@ def image_candidates(page, document):
 
 
 def save_pdf_image(document, xref, identifier):
-    """
-    Sauvegarde une image seulement si
-    sa publication est autorisee.
+    """Sauvegarde l'image source, seulement si la republication est autorisee.
 
-    Le parametre PUBLISH_IMAGES est
-    volontairement desactive par defaut.
+    Ne publie pas une image dont le fichier depasse la limite. Le contenu
+    source est conserve (pas de recadrage potentiellement trompeur).
     """
-
-    if not (
-        EXTRACT_IMAGES
-        and PUBLISH_IMAGES
-    ):
+    if not (EXTRACT_IMAGES and PUBLISH_IMAGES):
         return None
-
     try:
-        pix = fitz.Pixmap(
-            document,
-            xref
-        )
-
-        if pix.n not in (1, 3):
-            pix = fitz.Pixmap(
-                fitz.csRGB,
-                pix
-            )
-
-        image_data = pix.tobytes(
-            "png"
-        )
-
-        if len(image_data) > MAX_IMAGE_BYTES:
+        source = document.extract_image(xref)
+        content = source.get("image", b"")
+        ext = str(source.get("ext", "")).lower()
+        if ext not in ("png", "jpg", "jpeg", "webp") or not content:
             return None
-
-        filename = (
-            identifier + ".png"
-        )
-
+        if len(content) > MAX_IMAGE_BYTES:
+            return None
+        if ext == "jpeg":
+            ext = "jpg"
+        filename = identifier + "." + ext
         destination = IMAGES / filename
-
-        destination.write_bytes(
-            image_data
-        )
-
-        return (
-            "images/bydealers/"
-            + filename
-        )
-
-    except Exception:
+        destination.write_bytes(content)
+        return "images/bydealers/" + filename
+    except Exception as exc:
+        print("Image non enregistree :", identifier, str(exc), flush=True)
         return None
 
 
-def match_image_to_lot(
-    page,
-    document,
-    item,
-    entries_on_page
-):
+def associate_page_images(page, document, entries, candidates, sale, url, detected):
+    """Association geometrique conservatrice, sans doublon d'image.
+
+    Une image doit etre dans la meme moitie de page que le titre du lot.
+    Les pages a un seul lot / une seule image sont des cas fiables.
+    Sinon on exige un gagnant geometrique net et une image non partagee.
     """
-    Association prudente.
+    if not PUBLISH_IMAGES or not entries or not candidates:
+        return 0, []
 
-    Une image n'est associee que lorsqu'il
-    n'existe qu'un seul lot detecte dans
-    la zone examinee et une seule image
-    candidate.
+    placements = []
+    for candidate in candidates:
+        for rect in candidate["rects"]:
+            box = fitz.Rect(rect["x0"], rect["y0"], rect["x1"], rect["y1"])
+            if box.is_empty or box.width < 55 or box.height < 55:
+                continue
+            # Eviter les bandeaux et les petites decorations.
+            if box.width * box.height < page.rect.width * page.rect.height * 0.012:
+                continue
+            placements.append((candidate["xref"], box))
 
-    Sinon, aucune association automatique.
-    """
+    if not placements:
+        return 0, []
 
-    if not PUBLISH_IMAGES:
-        return None
+    proposals = []
+    for entry in entries:
+        key = hash_id("BYDealers", url, lot_number(entry["lot"]))
+        if key not in detected:
+            continue
+        ex = (entry["x"] + entry["x2"]) / 2
+        ey = (entry["y"] + entry["y2"]) / 2
+        # Les doubles pages sont divisees au centre dans split_columns.
+        half = page.rect.width / 2
+        spread = page.rect.width > 850
+        scored = []
+        for xref, box in placements:
+            cx, cy = (box.x0 + box.x1) / 2, (box.y0 + box.y1) / 2
+            if spread and (ex < half) != (cx < half):
+                continue
+            # Le titre peut se trouver au-dessous de l'image.
+            dy = abs(cy - ey)
+            dx = abs(cx - ex)
+            if dy > page.rect.height * 0.62:
+                continue
+            score = dy + dx * 0.6
+            scored.append((score, xref, box))
+        scored.sort(key=lambda x: x[0])
+        if not scored:
+            continue
+        if len(entries) == 1 and len(placements) == 1:
+            confident = True
+        else:
+            # Exiger une marge importante par rapport a la 2e image.
+            confident = len(scored) == 1 or scored[0][0] * 1.65 < scored[1][0]
+        if confident:
+            proposals.append((scored[0][0], key, scored[0][1]))
 
-    if IMAGE_MATCHING_STRICT:
-        if len(entries_on_page) != 1:
-            return None
+    # Une image ne peut etre attribuee qu'a un seul lot sur la page.
+    by_xref = defaultdict(list)
+    for score, key, xref in proposals:
+        by_xref[xref].append((score, key))
 
-    candidates = image_candidates(
-        page,
-        document
-    )
-
-    if len(candidates) != 1:
-        return None
-
-    candidate = candidates[0]
-
-    return save_pdf_image(
-        document,
-        candidate["xref"],
-        passage_id(item)
-    )
+    assigned = 0
+    ambiguous = []
+    for xref, choices in by_xref.items():
+        choices.sort()
+        if len(choices) > 1 and choices[0][0] * 1.65 >= choices[1][0]:
+            ambiguous.extend(key for _, key in choices)
+            continue
+        _, key = choices[0]
+        path = save_pdf_image(document, xref, key)
+        if path:
+            detected[key]["image"] = path
+            assigned += 1
+    return assigned, ambiguous
 
 
 # ============================================================
@@ -1420,6 +1430,8 @@ def parse_catalogue(
 
     page_errors = []
     image_candidates_count = 0
+    images_assigned_count = 0
+    images_ambiguous = []
 
     with fitz.open(
         stream=pdf_data,
@@ -1507,32 +1519,11 @@ def parse_catalogue(
                         candidates
                     )
 
-                    if (
-                        PUBLISH_IMAGES
-                        and len(all_entries) == 1
-                        and len(candidates) == 1
-                    ):
-                        entry = all_entries[0]
-
-                        key = hash_id(
-                            "BYDealers",
-                            url,
-                            lot_number(
-                                entry["lot"]
-                            )
-                        )
-
-                        if key in detected:
-                            image = save_pdf_image(
-                                document,
-                                candidates[0]["xref"],
-                                key
-                            )
-
-                            if image:
-                                detected[key][
-                                    "image"
-                                ] = image
+                    assigned, ambiguous = associate_page_images(
+                        page, document, all_entries, candidates, sale, url, detected
+                    )
+                    images_assigned_count += assigned
+                    images_ambiguous.extend(ambiguous)
 
             except Exception as exc:
                 page_errors.append({
@@ -1546,7 +1537,9 @@ def parse_catalogue(
         list(detected.values()),
         total_pages,
         page_errors,
-        image_candidates_count
+        image_candidates_count,
+        images_assigned_count,
+        images_ambiguous
     )
 
 
@@ -2182,7 +2175,7 @@ def main():
     print("")
     print("======================================")
     print("ART ENCHERES QUEBEC")
-    print("COLLECTEUR V8.10.3")
+    print("COLLECTEUR V8.11")
     print("======================================")
 
     historical_records = load_database()
@@ -2254,7 +2247,9 @@ def main():
         "oeuvres_detectees": 0,
         "nouvelles_oeuvres": 0,
         "erreurs_ou_blocages": 0,
-        "images_candidates": 0
+        "images_candidates": 0,
+        "images_associees": 0,
+        "images_ambiguës": 0
     }
 
     # --------------------------------------------------------
@@ -2303,7 +2298,9 @@ def main():
                 found,
                 pages,
                 page_errors,
-                image_count
+                image_count,
+                images_assigned,
+                images_ambiguous
             ) = parse_catalogue(
                 pdf_data,
                 url,
@@ -2321,6 +2318,8 @@ def main():
             stats["images_candidates"] += (
                 image_count
             )
+            stats["images_associees"] += images_assigned
+            stats["images_ambiguës"] += len(images_ambiguous)
 
             stats["erreurs_ou_blocages"] += len(
                 page_errors
@@ -2343,7 +2342,9 @@ def main():
 
                 "erreurs_pages": page_errors,
 
-                "images_candidates": image_count
+                "images_candidates": image_count,
+                "images_associees": images_assigned,
+                "images_ambiguës": len(images_ambiguous)
             })
 
             print(
@@ -2360,6 +2361,8 @@ def main():
                 "Images candidates :",
                 image_count
             )
+            print("Images associees :", images_assigned)
+            print("Images ambiguës :", len(images_ambiguous))
 
             for item in found:
                 key = passage_id(
@@ -2461,7 +2464,7 @@ def main():
     )
 
     if missing_ids:
-        print("\nAUDIT V8.10.3 : lots historiques non redetectes :", len(missing_ids))
+        print("\nAUDIT V8.11 : lots historiques non redetectes :", len(missing_ids))
         for missing_id in missing_ids:
             old = database.get(missing_id, {})
             print(json.dumps({
@@ -2610,6 +2613,8 @@ def main():
         "images_candidates": stats[
             "images_candidates"
         ],
+        "images_associees": stats["images_associees"],
+        "images_ambiguës": stats["images_ambiguës"],
 
         "rapprochements_potentiels": len(
             matches
@@ -2670,7 +2675,7 @@ def main():
 
     print("")
     print("======================================")
-    print("RESULTATS V8.10.3")
+    print("RESULTATS V8.11")
     print("======================================")
 
     print(
@@ -2729,7 +2734,7 @@ def main():
     )
 
     print("")
-    print("COLLECTE V8.10.3 TERMINEE")
+    print("COLLECTE V8.11 TERMINEE")
     print("======================================")
 
 
