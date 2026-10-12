@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   collecte:
-    name: Art Encheres Quebec V8.10.1
+    name: Art Encheres Quebec V8.10.2
     runs-on: ubuntu-24.04
     timeout-minutes: 45
 
@@ -37,7 +37,7 @@ jobs:
       - name: Verifier la syntaxe du collecteur
         run: python -m py_compile Collectors/collect.py
 
-      - name: Executer la collecte V8.10.1
+      - name: Executer la collecte V8.10.2
         run: python -u Collectors/collect.py
 
       - name: Valider les rapports et la base
@@ -77,7 +77,7 @@ jobs:
               ('qualite', quality),
               ('differences', differences),
           ]:
-              assert obj.get('version') == 'V8.10.1', f'Version incorrecte : {name}'
+              assert obj.get('version') == 'V8.10.2', f'Version incorrecte : {name}'
 
           assert report.get('total_oeuvres') == len(records), 'Total collecte incoherent'
           assert quality.get('total_oeuvres') == len(records), 'Total qualite incoherent'
@@ -87,7 +87,7 @@ jobs:
           assert bydealers.get('erreurs_ou_blocages') == 0, 'Erreurs de collecte'
           assert len(report.get('catalogues', [])) == 8, 'Catalogues manquants'
           assert all(c.get('statut') == 'ok' for c in report['catalogues']), 'Catalogue en erreur'
-          # La V8.10.1 conserve les lots historiques non redetectes
+          # La V8.10.2 conserve les lots historiques non redetectes
           # et les signale explicitement au lieu de bloquer la collecte.
           missing = report.get('lots_historiques_non_redetectes', 0)
           assert isinstance(missing, int) and 0 <= missing <= 11, (
@@ -108,18 +108,18 @@ jobs:
 
           assert isinstance(differences.get('conflits_a_verifier', []), list), 'Liste de conflits invalide'
 
-          print('VALIDATION V8.10.1 REUSSIE')
+          print('VALIDATION V8.10.2 REUSSIE')
           print('Oeuvres :', len(records))
           print('Estimations :', quality.get('avec_estimation'))
           print('Dimensions :', quality.get('avec_dimensions'))
           print('Conflits a verifier :', len(differences.get('conflits_a_verifier', [])))
           PY
 
-      - name: Archiver les rapports V8.10.1
+      - name: Archiver les rapports V8.10.2
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: rapports-collecte-v8-10-1
+          name: rapports-collecte-v8-10-2
           path: |
             data/rapport-collecte.json
             data/rapport-qualite.json
@@ -135,12 +135,12 @@ jobs:
           if git diff --cached --quiet; then
             echo 'Aucun changement a enregistrer.'
           else
-            git commit -m 'Collecte BYDealers V8.10.1'
+            git commit -m 'Collecte BYDealers V8.10.2'
             git push
           fi
 
       - name: Afficher le rapport final
         run: |
-          echo 'ART ENCHERES QUEBEC - RAPPORT V8.10.1'
+          echo 'ART ENCHERES QUEBEC - RAPPORT V8.10.2'
           echo '======================================'
           cat data/rapport-collecte.json
