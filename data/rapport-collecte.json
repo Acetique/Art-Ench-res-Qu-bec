@@ -1,6 +1,6 @@
 {
-  "version": "V8.3",
-  "date": "2026-10-12T22:10:13.626084+00:00",
+  "version": "V8.4",
+  "date": "2026-10-12T22:20:53.084733+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
@@ -15,6 +15,10 @@
       "oeuvres_detectees": 0
     },
     "Gelineau": {
+      "statut": "connecteur_a_developper",
+      "oeuvres_detectees": 0
+    },
+    "Iegor": {
       "statut": "connecteur_a_developper",
       "oeuvres_detectees": 0
     }
@@ -78,9 +82,10 @@
     }
   ],
   "total_oeuvres": 491,
-  "avec_estimation": 284,
+  "avec_estimation": 286,
   "rapprochements_potentiels": 3,
   "lots_historiques_non_redetectes": 0,
-  "conflits_a_verifier": 2,
-  "note": "Estimations de catalogues uniquement; aucun prix marteau deduit."
+  "conflits_a_verifier": 19,
+  "propositions_corrections": 17,
+  "note": "Estimations de catalogues uniquement. Aucun prix marteau deduit ou invente."
 }

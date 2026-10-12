@@ -1,9 +1,9 @@
 {
-  "version": "V8.3",
-  "date": "2026-10-12T22:10:13.625761+00:00",
+  "version": "V8.4",
+  "date": "2026-10-12T22:20:53.084534+00:00",
   "total_oeuvres": 491,
   "avec_dimensions": 482,
-  "avec_estimation": 284,
+  "avec_estimation": 286,
   "prix_marteau_verifies": 0,
   "rapprochements_potentiels": [
     {
@@ -740,6 +740,17 @@
       "page": 38
     },
     {
+      "id": "85e2a605557a7180ebcd",
+      "id_passage": "85e2a605557a7180ebcd",
+      "artiste": "Françoise Sullivan",
+      "titre": "Cycle crétois 2, n o 5 –",
+      "problemes": [
+        "titre_possiblement_tronque"
+      ],
+      "url": "https://bydealers.com/wp-content/uploads/2025/12/Catalogue_Printemps2025_Web_Double_pages.pdf",
+      "page": 49
+    },
+    {
       "id": "d22bb4e42be7dd90ab4f",
       "id_passage": "d22bb4e42be7dd90ab4f",
       "artiste": "Françoise Sullivan",
@@ -904,17 +915,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2026/05/Catalogue_102p_Printemps_succession2026_Web_simple-1.pdf",
       "page": 18
-    },
-    {
-      "id": "e09789f326ccca938793",
-      "id_passage": "c5aca100f04adb09c7ee",
-      "artiste": "Helmut Newton",
-      "titre": "Sie kommen (Undressed)",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fall_2025-1.pdf",
-      "page": 57
     },
     {
       "id": "50dd41c574f9f37b7979",
@@ -2009,17 +2009,6 @@
       "page": 46
     },
     {
-      "id": "038cac92780704c6b27f",
-      "id_passage": "c60ac7b3013233ec7a51",
-      "artiste": "Oscar Cahén",
-      "titre": "Sans titre / Untitled",
-      "problemes": [
-        "estimation_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2026/02/Catalogue_Fix_Automne_2023-1.pdf",
-      "page": 18
-    },
-    {
       "id": "a0a258cd4748b159a2ac",
       "id_passage": "591070172f9178295ad7",
       "artiste": "Oscar Cahén",
@@ -2465,5 +2454,5 @@
       "page": 98
     }
   ],
-  "nombre_notices_a_controler": 216
+  "nombre_notices_a_controler": 215
 }
