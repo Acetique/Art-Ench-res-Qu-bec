@@ -3,6 +3,7 @@ name: Collecte publique quotidienne
 
 on:
   workflow_dispatch:
+
   schedule:
     - cron: '0 12 * * *'
 
@@ -15,15 +16,24 @@ concurrency:
 
 jobs:
   collecte:
-    name: Art Encheres Quebec V8.2
+    name: Art Encheres Quebec V8.3
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     steps:
+
+      # ==========================================
+      # 1. RECUPERER LE DEPOT
+      # ==========================================
+
       - name: Recuperer le depot
         uses: actions/checkout@v5
         with:
           persist-credentials: true
+
+      # ==========================================
+      # 2. INSTALLER PYTHON
+      # ==========================================
 
       - name: Installer Python
         uses: actions/setup-python@v6
@@ -32,112 +42,299 @@ jobs:
           cache: pip
           cache-dependency-path: Collectors/requirements.txt
 
+      # ==========================================
+      # 3. INSTALLER LES DEPENDANCES
+      # ==========================================
+
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r Collectors/requirements.txt
 
+      # ==========================================
+      # 4. VERIFIER LE SCRIPT
+      # ==========================================
+
       - name: Verifier la syntaxe Python
         run: |
           python -m py_compile Collectors/collect.py
+          echo "Syntaxe Python valide."
 
-      - name: Executer la collecte V8.2
+      # ==========================================
+      # 5. EXECUTER LA COLLECTE
+      # ==========================================
+
+      - name: Executer la collecte V8.3
         run: |
+          echo "======================================"
+          echo "ART ENCHERES QUEBEC - COLLECTE V8.3"
+          echo "======================================"
+
           python -u Collectors/collect.py
 
-      - name: Valider les fichiers JSON
+      # ==========================================
+      # 6. VALIDER LES FICHIERS ET LES DONNEES
+      # ==========================================
+
+      - name: Valider les resultats
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          fichiers = [
-              "data/oeuvres.json",
-              "data/rapport-collecte.json",
-              "data/rapport-qualite.json",
-              "data/rapport-differences.json",
-          ]
+          print("=" * 55)
+          print("ART ENCHERES QUEBEC - DIAGNOSTIC V8.3")
+          print("=" * 55)
 
-          for nom in fichiers:
+          def lire(nom):
               chemin = Path(nom)
 
               if not chemin.exists():
                   raise SystemExit(
-                      f"Fichier manquant : {nom}"
+                      f"ERREUR : fichier absent : {nom}"
                   )
 
-              with chemin.open(encoding="utf-8") as f:
-                  json.load(f)
+              try:
+                  with chemin.open(encoding="utf-8") as f:
+                      resultat = json.load(f)
+              except Exception as exc:
+                  raise SystemExit(
+                      f"ERREUR JSON dans {nom} : {exc}"
+                  )
 
-              print("JSON valide :", nom)
+              print(f"JSON valide : {nom}")
+              return resultat
 
-          with open(
-              "data/oeuvres.json",
-              encoding="utf-8"
-          ) as f:
-              oeuvres = json.load(f)
+          # Charger les quatre fichiers
+          oeuvres = lire("data/oeuvres.json")
+          rapport = lire("data/rapport-collecte.json")
+          qualite = lire("data/rapport-qualite.json")
+          differences = lire("data/rapport-differences.json")
 
-          with open(
-              "data/rapport-collecte.json",
-              encoding="utf-8"
-          ) as f:
-              rapport = json.load(f)
+          # Afficher les valeurs reelles
+          print("\n===== DIAGNOSTIC V8.3 =====")
 
-          with open(
-              "data/rapport-qualite.json",
-              encoding="utf-8"
-          ) as f:
-              qualite = json.load(f)
+          print(
+              "Version collecte :",
+              rapport.get("version")
+          )
 
-          with open(
-              "data/rapport-differences.json",
-              encoding="utf-8"
-          ) as f:
-              differences = json.load(f)
+          print(
+              "Version qualite :",
+              qualite.get("version")
+          )
 
-          assert isinstance(oeuvres, list)
-          assert rapport["version"] == "V8.2"
-          assert qualite["version"] == "V8.2"
-          assert differences["version"] == "V8.2"
+          print(
+              "Version differences :",
+              differences.get("version")
+          )
 
-          assert rapport["total_oeuvres"] == len(oeuvres)
+          print(
+              "Type de base :",
+              type(oeuvres).__name__
+          )
 
-          if len(oeuvres) < 488:
-              raise SystemExit(
-                  "ERREUR : moins de 488 notices. "
-                  "Publication annulee."
-              )
+          print(
+              "Notices :",
+              len(oeuvres)
+          )
 
-          print("=" * 50)
-          print("ART ENCHERES QUEBEC V8.2")
-          print("=" * 50)
+          print(
+              "Total rapporte :",
+              rapport.get("total_oeuvres")
+          )
 
-          print("Notices :", len(oeuvres))
           print(
               "Estimations :",
-              qualite["avec_estimation"]
+              qualite.get("avec_estimation")
           )
+
           print(
               "Dimensions :",
-              qualite["avec_dimensions"]
+              qualite.get("avec_dimensions")
           )
+
           print(
-              "Rapprochements :",
-              qualite["nombre_rapprochements"]
+              "Lots non redetectes :",
+              differences.get("non_redetectes")
           )
-          print(
-              "Notices a controler :",
-              qualite["nombre_notices_a_controler"]
-          )
-          print(
-              "Lots historiques non redetectes :",
-              differences["non_redetectes"]
-          )
+
           print(
               "Conflits :",
-              len(differences["conflits_a_verifier"])
+              len(
+                  differences.get(
+                      "conflits_a_verifier", []
+                  )
+              )
           )
+
+          print(
+              "Rapprochements :",
+              qualite.get("nombre_rapprochements")
+          )
+
+          # ======================================
+          # VERIFICATIONS
+          # ======================================
+
+          erreurs = []
+          avertissements = []
+
+          if not isinstance(oeuvres, list):
+              erreurs.append(
+                  "oeuvres.json doit etre une liste."
+              )
+
+          if rapport.get("version") != "V8.3":
+              erreurs.append(
+                  "Le rapport de collecte n'est pas V8.3."
+              )
+
+          if qualite.get("version") != "V8.3":
+              erreurs.append(
+                  "Le rapport de qualite n'est pas V8.3."
+              )
+
+          if differences.get("version") != "V8.3":
+              erreurs.append(
+                  "Le rapport de differences n'est pas V8.3."
+              )
+
+          if isinstance(oeuvres, list):
+
+              if len(oeuvres) < 491:
+                  erreurs.append(
+                      "Moins de 491 notices conservees."
+                  )
+
+              if rapport.get("total_oeuvres") != len(oeuvres):
+                  erreurs.append(
+                      "Le total du rapport differe de la base."
+                  )
+
+              # Verification des doublons
+              identifiants = set()
+              doublons = []
+
+              for oeuvre in oeuvres:
+                  if not isinstance(oeuvre, dict):
+                      erreurs.append(
+                          "Une notice n'est pas un objet JSON."
+                      )
+                      continue
+
+                  identifiant = oeuvre.get("id_passage")
+
+                  if not identifiant:
+                      erreurs.append(
+                          "Une notice n'a pas d'id_passage."
+                      )
+                      continue
+
+                  if identifiant in identifiants:
+                      doublons.append(identifiant)
+
+                  identifiants.add(identifiant)
+
+              print(
+                  "Doublons id_passage :",
+                  len(doublons)
+              )
+
+              if doublons:
+                  erreurs.append(
+                      f"{len(doublons)} identifiants dupliques."
+                  )
+
+          # Verification des catalogues
+          catalogues = rapport.get("catalogues", [])
+
+          if not isinstance(catalogues, list):
+              erreurs.append(
+                  "Liste des catalogues invalide."
+              )
+              catalogues = []
+
+          print("\n===== CATALOGUES =====")
+
+          for catalogue in catalogues:
+              print(
+                  catalogue.get("vente"),
+                  "| statut :",
+                  catalogue.get("statut"),
+                  "| oeuvres :",
+                  catalogue.get("oeuvres"),
+                  "| pages :",
+                  catalogue.get("pages")
+              )
+
+          if len(catalogues) != 8:
+              avertissements.append(
+                  f"{len(catalogues)}/8 catalogues repertories."
+              )
+
+          catalogues_en_erreur = [
+              c for c in catalogues
+              if c.get("statut") != "ok"
+          ]
+
+          if catalogues_en_erreur:
+              avertissements.append(
+                  f"{len(catalogues_en_erreur)} catalogue(s) "
+                  "necessitent une verification."
+              )
+
+          # Verification des estimations
+          nb_estimations = qualite.get("avec_estimation")
+
+          if (
+              isinstance(nb_estimations, int)
+              and nb_estimations < 284
+          ):
+              avertissements.append(
+                  "Moins de 284 estimations presentes."
+              )
+
+          # Lots non redetectes
+          non_redetectes = differences.get("non_redetectes")
+
+          if (
+              isinstance(non_redetectes, int)
+              and non_redetectes > 0
+          ):
+              avertissements.append(
+                  f"{non_redetectes} lots historiques "
+                  "non redetectes."
+              )
+
+          # ======================================
+          # RAPPORT FINAL
+          # ======================================
+
+          print("\n===== AVERTISSEMENTS =====")
+
+          if avertissements:
+              for message in avertissements:
+                  print("ATTENTION :", message)
+          else:
+              print("Aucun avertissement.")
+
+          print("\n===== ERREURS =====")
+
+          if erreurs:
+              for message in erreurs:
+                  print("ERREUR :", message)
+
+              print("\nECHEC DE VALIDATION")
+              raise SystemExit(1)
+
+          print("Aucune erreur bloquante.")
+          print("\nVALIDATION V8.3 REUSSIE")
           PY
+
+      # ==========================================
+      # 7. ENREGISTRER LES RESULTATS
+      # ==========================================
 
       - name: Enregistrer les resultats sur GitHub
         run: |
@@ -152,18 +349,27 @@ jobs:
           if git diff --cached --quiet; then
             echo "Aucun changement a enregistrer."
           else
-            git commit -m "Actualisation Art Encheres Quebec V8.2"
+            git commit -m "Actualisation Art Encheres Quebec V8.3"
             git pull --rebase
             git push
           fi
+
+      # ==========================================
+      # 8. AFFICHER LE RAPPORT FINAL
+      # ==========================================
 
       - name: Afficher le rapport final
         if: always()
         run: |
           echo "======================================"
-          echo "ART ENCHERES QUEBEC - RAPPORT V8.2"
+          echo "ART ENCHERES QUEBEC - RAPPORT V8.3"
           echo "======================================"
 
           if [ -f data/rapport-collecte.json ]; then
             cat data/rapport-collecte.json
           fi
+
+          echo ""
+          echo "======================================"
+          echo "FIN DU WORKFLOW"
+          echo "======================================"
