@@ -1,14 +1,1430 @@
 {
-  "version": "V8.7",
-  "date": "2026-10-12T22:50:19.817134+00:00",
+  "version": "V8.8",
+  "date": "2026-10-12T22:58:52.083849+00:00",
   "historique_avant": 491,
   "detectes_cette_execution": 491,
   "non_redetectes": 0,
   "lots_non_redetectes": [],
   "nouveaux_passages": [],
   "nettoyages": [],
-  "champs_completes": [],
-  "conflits_a_verifier": [],
+  "champs_completes": [
+    {
+      "id_passage": "af984c685a57bb3d030b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "58770bf7debe55ad6b4b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "701343eb6ae22366cef9",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9345441d6365bde23f2b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "23cff5388b9d31572721",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "09d1c0cfef969ce0908c",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "adbc0bbb727c1773d570",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "495b1ae370e44313b54f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9f08732f61b09dcde9b4",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "8da8a2b4545788a20f91",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "e968bda756ed9da01bc4",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d455c3e8326d2ba52086",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "bc542766351bfcb8abe4",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "02c2ea670c542a71bab1",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "c88c021723bb26c8e708",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "a973df246aa679b91b52",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "52b133d7375c7f712a42",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "92a17399b90e9b2886cd",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "46f0c5816dd58fb3f15c",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "a57dbcb89d5c3f349d91",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "fd054f0bf99f54ac30fd",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d22bb4e42be7dd90ab4f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "662c2db371298b6e36aa",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ba652f7ef479bc0bb3c3",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "68ade5a76dfb8a588c1f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "7e2360e4a2078dd59341",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ae39aa2a941bb1e628d9",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "885e4b00b38e84d5ed3f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ff192695930240811b16",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "02339b689fa76d487568",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "524505bd9333b65245b7",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "eb682f95baa33d5572bf",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "deb309c81f826a0d136f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "a644d27ae0e2a1410b54",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "e566b6473eefde95c8ed",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "5182169459b9712adff0",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "982a07c25d7b2d4c77a4",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "2640da2b0a62822ac477",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "8019656f5ac35399b4a8",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9093062c05de3dc36559",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9c1182170c7cab733b37",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "b2c4ed1e83744729127d",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "4f56dffe7e0c10e6d215",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "e3078d0b4614b09a7ccb",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "98ef2add03248c9824de",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "b70673abc97f1e13231c",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "c7a4597abc99340486bf",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "e65dcc631a36debb660f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "8878a46d48b001a713d8",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "89398fb9841ee357c430",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "241183e6ae580c435d32",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ce48f97c6c51adf1be0f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "07eee7644d17917d632f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "81b507776dbf44af6db0",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "7ae91f01dd70a895b2db",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "275b2d4ff0d33ebf0843",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "b0949a8da92118178cd3",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "a33d4ba9e84159473449",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "0c50932a9742afaffd0b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "05dc8a3d224daa0477be",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "742df0c09dc4d1f0c445",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "591070172f9178295ad7",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "fc40bfa60b36fcf153ed",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "c3065539f1e73961f239",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "8eeeb1e49f0bd7d72b5e",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "5f601ba09968b6ae19d8",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "4c477e0d5a6b6ebac43d",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9388d20d044bef215cde",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "21786ecef1cf47a58a3b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "da6d77c90c995ff2ce34",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "b9f9148d21b6e9f708a3",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "1722994781185e0a88c2",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "5e041b80dcd482e40082",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "c5431312ef6e11294fc4",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ebca58f57720e01de39e",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "443e2c181b2b6d26c047",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "1039b8c7c884c886b49b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "0d0f71ee14742650d65d",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "99ce5527a94b397fb25f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "f0038c44c3cfd7fd8624",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "46d19e716db57b8b65b1",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d164e68de13bc924cd45",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "1220fc6d30f7cf7f99a0",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "6817ee1e382af0e92e78",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d589499f536e7a4febf2",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ce5c668bf5a7edca6177",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ecea713e586df1e0ab2f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "a387fdf9bb6f06b6f0dc",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "e72248118b368e8de35b",
+      "champs": [
+        "dimensions"
+      ]
+    },
+    {
+      "id_passage": "ae320da40fda56c6ac66",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "a16ed36522f64ded4c8e",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9f528b719f34fae9de78",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "b89441fa99d3a162163f",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "2b5a3ec48ea2de8827a8",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d4d804957431378aec30",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ed483877aa9d1b2540c6",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ac824c043eb93c245afb",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "4969205ffec88ba5cbed",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "1cafe8f2f5fd7975d192",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ae61ad990f16b4a6a62d",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "cdbcc99c3bcb271fffa2",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "0fc261f55ce36cb8d4c4",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "868b043e23ae18f09ae1",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "157b14f427b928a4a4c1",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "0a0b2f70e5652bf89030",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "df32585ecbdededf0676",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9f1850299e9209dee695",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "3b298a48e28e833990be",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "008fb46cd54fce48b3e8",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "3025b2d1754d9a864af5",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "5154284a9f0816afe18d",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d8d87a3ecdecfd13858e",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "f64d7d35fc6096d1210d",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "4f18dfae47f651c2f24e",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d7d284f5e39e9520d9d3",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "e10bf0588ccd55c47ff2",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "e1ce15d7c5b9687f5ded",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "748174dafeb489b1b1d0",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "3bdc9789e25a872f32a7",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "230bd8cadaa20e4b7172",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "0c03bafb8986866b6af7",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "42b7b93cc80db70e5b7b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "1315d21490217a69db36",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "46fe2b7ee4d1797efbb8",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "dc37b143df67b902e75c",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "75544a8e172f532795fb",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "647d851a1c08edc50a09",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "6855654823804667585c",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "de0521fb5801241baed7",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "8ea4a21ce6b4e19faa01",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "bfa80b2ef5d45efb48bf",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "85374180c04c993625f2",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "ba045ed666f6d7e1ba88",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "8f6d74ee299d0a902abc",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "bd0cf7f89ca4e161e6d1",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "56fe7314d9057c647afa",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "b868c4540df6c4d273d9",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "d85f6f9c3c8fe273eab1",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "9922d805ca13e9c1230b",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "26f7c38292aa588889ea",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "398a52f8601635c1c4f2",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "c5f0f7e2f65f236cc9d0",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "f3ddcf68fe7c8302eba3",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "966e09fd5d40a2d822e9",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "cbf52a472351aa9c560d",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "679fb1dbcdd05dfcd0a0",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "7d42b4c5da772c3343a6",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "449a2ad7a1305b799bfa",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "cfee423bca760069a211",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "7927b7163506fea4af43",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "c9e474b9682e54382287",
+      "champs": [
+        "estimation"
+      ]
+    },
+    {
+      "id_passage": "2d423acaab7e316ab82b",
+      "champs": [
+        "estimation"
+      ]
+    }
+  ],
+  "conflits_a_verifier": [
+    {
+      "id_passage": "d6be0c36450deaf1aaf2",
+      "vente": "Printemps 2023",
+      "lot": "06",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Rome",
+          "extrait": "- 28 MAI/MAY 2023"
+        }
+      ]
+    },
+    {
+      "id_passage": "41581229d7b92e46dd5f",
+      "vente": "Printemps 2023",
+      "lot": "26",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "mai 2013"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            8000,
+            12000
+          ],
+          "extrait": [
+            7000,
+            9000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "c88c021723bb26c8e708",
+      "vente": "Printemps 2023",
+      "lot": "21",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Hibou-White Stone",
+          "extrait": "novembre 2021"
+        }
+      ]
+    },
+    {
+      "id_passage": "b7131e6dd517cde8e867",
+      "vente": "Automne 2023",
+      "lot": "02",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Fleurs de mai",
+          "extrait": "ART CANADIEN IMPORTANT / IMPORTANT CANADIAN ART"
+        }
+      ]
+    },
+    {
+      "id_passage": "c762195d4f923d926302",
+      "vente": "Automne 2023",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled (n o 1)",
+          "extrait": "ART CANADIEN IMPORTANT / IMPORTANT CANADIAN ART"
+        }
+      ]
+    },
+    {
+      "id_passage": "d0ca495e95fd937ffe98",
+      "vente": "Automne 2023",
+      "lot": "23",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Otal",
+          "extrait": "x 30,5 cm / 9 1⁄8 x 12 in"
+        }
+      ]
+    },
+    {
+      "id_passage": "9701d069c15b14a64b08",
+      "vente": "Automne 2023",
+      "lot": "30",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Double 42 en blanc, noir et bleu",
+          "extrait": "décembre 2010; TrépanierBaer Contemporary Art, Calgary, du 18 novembre 2010"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            100000,
+            150000
+          ],
+          "extrait": [
+            55000,
+            65000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "7712878059a23679ac78",
+      "vente": "Automne 2023",
+      "lot": "60",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "La scène hivernale de la rue",
+          "extrait": "années de carrière, il explore des champs artistiques qui vont de la peinture à"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            30000,
+            40000
+          ],
+          "extrait": [
+            35000,
+            45000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "9153f5b60e497ae80f76",
+      "vente": "Automne 2023",
+      "lot": "71",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Le repos, Alberta",
+          "extrait": "x 115 cm (triptyque) / 28 x 45 1⁄4 in (triptych)"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            20000,
+            30000
+          ],
+          "extrait": [
+            30000,
+            40000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "be2bf065cb3fbff89e6e",
+      "vente": "Printemps 2024",
+      "lot": "05",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Bleu-éclats",
+          "extrait": "novembre au 14 décembre 1998"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            70000,
+            90000
+          ],
+          "extrait": [
+            35000,
+            45000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "0aa997c873cc68f06d39",
+      "vente": "Printemps 2024",
+      "lot": "52",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            10000,
+            13000
+          ],
+          "extrait": [
+            15000,
+            20000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "da73718ad6d919704ace",
+      "vente": "Printemps 2024",
+      "lot": "59",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            18000,
+            22000
+          ],
+          "extrait": [
+            8000,
+            12000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "45eee424ab5570c79450",
+      "vente": "Automne 2024",
+      "lot": "23",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Dès le matin",
+          "extrait": "OCTOBRE – 18 NOVEMBRE 2024"
+        }
+      ]
+    },
+    {
+      "id_passage": "b8902ff66eec57e850e2",
+      "vente": "Automne 2024",
+      "lot": "08",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            15000,
+            20000
+          ],
+          "extrait": [
+            20000,
+            30000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "a45c0fdf3d452c2770f7",
+      "vente": "Automne 2024",
+      "lot": "04",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            18000,
+            22000
+          ],
+          "extrait": [
+            5000,
+            7000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "275b2d4ff0d33ebf0843",
+      "vente": "Automne 2024",
+      "lot": "06",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "La femme usine",
+          "extrait": "novembre 2017 (lot 27)"
+        }
+      ]
+    },
+    {
+      "id_passage": "b0949a8da92118178cd3",
+      "vente": "Automne 2024",
+      "lot": "07",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Buste de femme",
+          "extrait": "mai au 3 juillet 1994; Beaverbrook Art Gallery, Frederiction, du 1 er au 30 octobre 1994; Musée des beaux-arts de"
+        }
+      ]
+    },
+    {
+      "id_passage": "aba5cbd2cdc1e8095b52",
+      "vente": "Automne 2024",
+      "lot": "10",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre / Untitled",
+          "extrait": "x 13,2 cm / 4 x 5 1⁄8 in"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            40000,
+            60000
+          ],
+          "extrait": [
+            15000,
+            20000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "7193d7004426f2e5b9f8",
+      "vente": "Automne 2024",
+      "lot": "11",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            10000,
+            15000
+          ],
+          "extrait": [
+            5000,
+            7000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "0c50932a9742afaffd0b",
+      "vente": "Automne 2024",
+      "lot": "33",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Varèse : Accélérateur chromatique 66-68",
+          "extrait": "x 20,3 x 20,3 cm / 13 x 8 x 8 in"
+        }
+      ]
+    },
+    {
+      "id_passage": "e6d8ba31fb3c17000499",
+      "vente": "Automne 2024",
+      "lot": "13",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            10000,
+            15000
+          ],
+          "extrait": [
+            20000,
+            30000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "cea7804917622e0b37b7",
+      "vente": "Printemps 2025",
+      "lot": "30",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Les palais de la mer I & II",
+          "extrait": "décembre 2010; Mayberry Fine Art, Winnipeg, du 28 octobre au 13 novembre 2010;"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            40000,
+            60000
+          ],
+          "extrait": [
+            70000,
+            90000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "b4352cfb6b805cbd2e96",
+      "vente": "Printemps 2025",
+      "lot": "09",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Massawippi",
+          "extrait": "e Biennale de São Paulo, au Brésil. Jean-René Ostiguy, alors conservateur de l’art"
+        },
+        {
+          "champ": "estimation",
+          "ancien": [
+            9000,
+            12000
+          ],
+          "extrait": [
+            40000,
+            50000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "a5a4f7c165e6074e7422",
+      "vente": "Automne 2025",
+      "lot": "15",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Dindonnet",
+          "extrait": "février 1998 (cat. n o 29)"
+        }
+      ]
+    },
+    {
+      "id_passage": "1220fc6d30f7cf7f99a0",
+      "vente": "Automne 2025",
+      "lot": "34",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Iceberg n o 7 (Passes)",
+          "extrait": "et 35; listée à la page 130 (cat. n o 29). / Work reproduced"
+        }
+      ]
+    },
+    {
+      "id_passage": "d589499f536e7a4febf2",
+      "vente": "Automne 2025",
+      "lot": "10",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "Sans titre (Maison de l’artiste) / Untitled (Artist’s House)",
+          "extrait": "tableaux matiéristes et colorés qui fait contrepoint aux œuvres plus sobres présentées"
+        }
+      ]
+    },
+    {
+      "id_passage": "f2c0cb75ab8c0224e45f",
+      "vente": "Printemps 2026",
+      "lot": "26",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            30000,
+            40000
+          ],
+          "extrait": [
+            15000,
+            20000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "1837412d3d13e08ad076",
+      "vente": "Printemps 2026",
+      "lot": "31",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            35000,
+            45000
+          ],
+          "extrait": [
+            15000,
+            20000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "d166213cea96661b1beb",
+      "vente": "Printemps 2026",
+      "lot": "36",
+      "conflits": [
+        {
+          "champ": "estimation",
+          "ancien": [
+            25000,
+            35000
+          ],
+          "extrait": [
+            20000,
+            30000
+          ]
+        }
+      ]
+    },
+    {
+      "id_passage": "0c03bafb8986866b6af7",
+      "vente": "Succession printemps 2026",
+      "lot": "54",
+      "conflits": [
+        {
+          "champ": "titre",
+          "ancien": "King, Queen, and Jokers VI: It’s a Democratic Age",
+          "extrait": "× 42 cm / 21 1⁄4 × 16 1⁄2 in"
+        }
+      ]
+    }
+  ],
   "corrections_appliquees": [],
   "estimations_historiques_corrigees": []
 }

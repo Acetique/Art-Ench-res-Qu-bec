@@ -1,6 +1,6 @@
 {
-  "version": "V8.7",
-  "date": "2026-10-12T22:50:19.817144+00:00",
+  "version": "V8.8",
+  "date": "2026-10-12T22:58:52.083852+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
@@ -8,7 +8,8 @@
       "pdf_lus": 8,
       "oeuvres_detectees": 491,
       "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 0
+      "erreurs_ou_blocages": 0,
+      "images_candidates": 548
     },
     "Heffel": {
       "statut": "connecteur_a_developper",
@@ -29,65 +30,75 @@
       "statut": "ok",
       "oeuvres": 57,
       "pages": 57,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 66
     },
     {
       "vente": "Automne 2023",
       "statut": "ok",
       "oeuvres": 77,
       "pages": 64,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 82
     },
     {
       "vente": "Printemps 2024",
       "statut": "ok",
       "oeuvres": 62,
       "pages": 57,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 70
     },
     {
       "vente": "Automne 2024",
       "statut": "ok",
       "oeuvres": 60,
       "pages": 56,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 66
     },
     {
       "vente": "Printemps 2025",
       "statut": "ok",
       "oeuvres": 66,
       "pages": 57,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 75
     },
     {
       "vente": "Automne 2025",
       "statut": "ok",
       "oeuvres": 71,
       "pages": 63,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 78
     },
     {
       "vente": "Printemps 2026",
       "statut": "ok",
       "oeuvres": 45,
       "pages": 47,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 52
     },
     {
       "vente": "Succession printemps 2026",
       "statut": "ok",
       "oeuvres": 53,
       "pages": 106,
-      "erreurs_pages": []
+      "erreurs_pages": [],
+      "images_candidates": 59
     }
   ],
   "total_oeuvres": 491,
-  "avec_estimation": 284,
-  "avec_dimensions": 482,
+  "avec_estimation": 435,
+  "avec_dimensions": 483,
+  "avec_image": 0,
+  "images_candidates": 548,
   "rapprochements_potentiels": 3,
   "lots_historiques_non_redetectes": 0,
-  "conflits_a_verifier": 0,
+  "conflits_a_verifier": 30,
   "corrections_titres": 0,
   "estimations_corrigees": 0,
-  "note": "Estimations de catalogues seulement. Aucun prix marteau invente."
+  "note": "Les prix marteau ne sont jamais inventes. Les rapprochements entre oeuvres doivent etre verifies."
 }
