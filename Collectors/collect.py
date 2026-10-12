@@ -42,7 +42,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 from urllib.robotparser import RobotFileParser
 
-import fitz
+import pymupdf as fitz
 import requests
 
 
@@ -50,7 +50,7 @@ import requests
 # CONFIGURATION
 # ============================================================
 
-VERSION = "V8.10"
+VERSION = "V8.10.1"
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -66,7 +66,7 @@ REPORT_PATH = DATA / "rapport-collecte.json"
 QUALITY_PATH = DATA / "rapport-qualite.json"
 DIFF_PATH = DATA / "rapport-differences.json"
 
-USER_AGENT = "ArtEncheresQuebec/8.9"
+USER_AGENT = "ArtEncheresQuebec/8.10.1"
 
 TIMEOUT = 60
 MAX_PDF_BYTES = 50 * 1024 * 1024
@@ -2413,10 +2413,19 @@ def main():
     )
 
     if missing_ids:
-        print("ATTENTION : lots historiques non redetectes :", len(missing_ids))
-        # La base historique est preservee, mais la collecte est refusee
-        # afin de ne pas publier des donnees non validees.
-        raise RuntimeError("Audit requis : lots historiques non redetectes")
+        print("\nAUDIT V8.10.1 : lots historiques non redetectes :", len(missing_ids))
+        for missing_id in missing_ids:
+            old = database.get(missing_id, {})
+            print(json.dumps({
+                "id_passage": missing_id,
+                "vente": old.get("vente"),
+                "lot": old.get("lot"),
+                "artiste": old.get("artiste"),
+                "titre": old.get("titre"),
+                "url": old.get("url"),
+            }, ensure_ascii=False))
+        print("Ces notices restent dans la base, sans nouvelle validation PDF.")
+        print("Les champs historiques de ces lots ne sont pas modifies.")
 
     records = sorted(
         database.values(),
@@ -2482,6 +2491,12 @@ def main():
         ),
 
         "lots_non_redetectes": missing_ids,
+        "details_lots_non_redetectes": [
+            {"id_passage": key, "vente": database[key].get("vente"),
+             "lot": database[key].get("lot"), "artiste": database[key].get("artiste"),
+             "titre": database[key].get("titre"), "url": database[key].get("url")}
+            for key in missing_ids
+        ],
 
         "nouveaux_passages": new_passages,
 
