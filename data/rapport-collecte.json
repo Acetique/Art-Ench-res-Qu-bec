@@ -1,28 +1,31 @@
 {
-  "version": "V3",
-  "date": "2026-10-12T20:12:35.160708+00:00",
+  "version": "V4",
+  "date": "2026-10-12T20:22:32.289116+00:00",
   "sources": {
     "BYDealers": {
-      "pages_consultees": 30,
+      "pages_consultees": 12,
       "pages_accessibles": 11,
-      "oeuvres_detectees": 0,
-      "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 19
+      "pdf_lus": 5,
+      "oeuvres_detectees": 129,
+      "nouvelles_oeuvres": 116,
+      "erreurs_ou_blocages": 1
     },
     "Heffel": {
-      "pages_consultees": 2,
-      "pages_accessibles": 0,
+      "pages_consultees": 25,
+      "pages_accessibles": 3,
+      "pdf_lus": 0,
       "oeuvres_detectees": 0,
       "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 2
+      "erreurs_ou_blocages": 22
     },
     "Gelineau": {
-      "pages_consultees": 1,
-      "pages_accessibles": 0,
+      "pages_consultees": 2,
+      "pages_accessibles": 2,
+      "pdf_lus": 0,
       "oeuvres_detectees": 0,
       "nouvelles_oeuvres": 0,
-      "erreurs_ou_blocages": 1
+      "erreurs_ou_blocages": 0
     }
   },
-  "total_oeuvres": 0
+  "total_oeuvres": 116
 }
