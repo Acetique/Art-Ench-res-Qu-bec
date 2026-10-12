@@ -1,13 +1,13 @@
 {
   "version": "V8.2",
-  "date": "2026-10-12T21:55:54.620986+00:00",
+  "date": "2026-10-12T21:58:48.630024+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
       "pages_accessibles": 8,
       "pdf_lus": 8,
       "oeuvres_detectees": 491,
-      "nouvelles_oeuvres": 3,
+      "nouvelles_oeuvres": 0,
       "erreurs_ou_blocages": 0
     },
     "Heffel": {
