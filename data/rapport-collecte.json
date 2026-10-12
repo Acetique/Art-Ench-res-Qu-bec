@@ -1,14 +1,14 @@
 {
-  "version": "V5",
-  "date": "2026-10-12T20:36:57.943675+00:00",
-  "anciennes_entrees_pdf_v4_retirees": 0,
+  "version": "V6",
+  "date": "2026-10-12T20:47:29.339686+00:00",
+  "anciennes_entrees_retirees": 0,
   "sources": {
     "BYDealers": {
-      "pages_consultees": 12,
-      "pages_accessibles": 11,
-      "pdf_lus": 5,
-      "oeuvres_detectees": 0,
-      "nouvelles_oeuvres": 0,
+      "pages_consultees": 15,
+      "pages_accessibles": 14,
+      "pdf_lus": 8,
+      "oeuvres_detectees": 402,
+      "nouvelles_oeuvres": 402,
       "erreurs_ou_blocages": 1
     },
     "Heffel": {
@@ -28,5 +28,6 @@
       "erreurs_ou_blocages": 0
     }
   },
-  "total_oeuvres": 0
+  "total_oeuvres": 402,
+  "note": "Les estimations de catalogue ne sont pas des prix de vente."
 }
