@@ -1,6 +1,6 @@
 {
-  "version": "V8.11",
-  "date": "2026-10-12T23:59:40.525241+00:00",
+  "version": "V8.12",
+  "date": "2026-10-13T00:15:43.230879+00:00",
   "sources": {
     "BYDealers": {
       "pages_consultees": 8,
@@ -10,8 +10,8 @@
       "nouvelles_oeuvres": 0,
       "erreurs_ou_blocages": 0,
       "images_candidates": 548,
-      "images_associees": 184,
-      "images_ambiguës": 8
+      "images_associees": 179,
+      "images_ambiguës": 17
     },
     "Heffel": {
       "statut": "connecteur_a_developper",
@@ -34,8 +34,8 @@
       "pages": 57,
       "erreurs_pages": [],
       "images_candidates": 66,
-      "images_associees": 17,
-      "images_ambiguës": 2
+      "images_associees": 15,
+      "images_ambiguës": 5
     },
     {
       "vente": "Automne 2023",
@@ -44,8 +44,8 @@
       "pages": 64,
       "erreurs_pages": [],
       "images_candidates": 82,
-      "images_associees": 43,
-      "images_ambiguës": 0
+      "images_associees": 41,
+      "images_ambiguës": 2
     },
     {
       "vente": "Printemps 2024",
@@ -54,8 +54,8 @@
       "pages": 57,
       "erreurs_pages": [],
       "images_candidates": 70,
-      "images_associees": 24,
-      "images_ambiguës": 4
+      "images_associees": 25,
+      "images_ambiguës": 6
     },
     {
       "vente": "Automne 2024",
@@ -74,8 +74,8 @@
       "pages": 57,
       "erreurs_pages": [],
       "images_candidates": 75,
-      "images_associees": 39,
-      "images_ambiguës": 0
+      "images_associees": 37,
+      "images_ambiguës": 2
     },
     {
       "vente": "Automne 2025",
@@ -111,10 +111,10 @@
   "total_oeuvres": 491,
   "avec_estimation": 435,
   "avec_dimensions": 483,
-  "avec_image": 184,
+  "avec_image": 185,
   "images_candidates": 548,
-  "images_associees": 184,
-  "images_ambiguës": 8,
+  "images_associees": 179,
+  "images_ambiguës": 17,
   "rapprochements_potentiels": 3,
   "lots_historiques_non_redetectes": 0,
   "conflits_a_verifier": 0,

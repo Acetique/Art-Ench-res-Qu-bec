@@ -1,10 +1,10 @@
 {
-  "version": "V8.11",
-  "date": "2026-10-12T23:59:40.525029+00:00",
+  "version": "V8.12",
+  "date": "2026-10-13T00:15:43.230531+00:00",
   "total_oeuvres": 491,
   "avec_dimensions": 483,
   "avec_estimation": 435,
-  "avec_image": 184,
+  "avec_image": 185,
   "prix_marteau_verifies": 0,
   "rapprochements_potentiels": [
     {
@@ -690,17 +690,6 @@
       ],
       "url": "https://bydealers.com/wp-content/uploads/2024/10/Catalogue_106p_Automne2024_Web_Double_pages.pdf",
       "page": 35
-    },
-    {
-      "id": "039d64d2e45b8d10d88d",
-      "id_passage": "d4a19d74e32a38f5c211",
-      "artiste": "Denis Juneau",
-      "titre": "Ronds rouges sur bleu",
-      "problemes": [
-        "image_absente"
-      ],
-      "url": "https://bydealers.com/wp-content/uploads/2024/04/Catalogue_BYD_Printemps2024_Double.pdf",
-      "page": 22
     },
     {
       "id": "4ea600deea53725443ce",
@@ -3675,5 +3664,5 @@
       "page": 98
     }
   ],
-  "nombre_notices_a_controler": 323
+  "nombre_notices_a_controler": 322
 }
