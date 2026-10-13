@@ -94,6 +94,7 @@ button:hover { background:#304868; }
   align-items:center;
   justify-content:center;
   color:var(--muted);
+  text-align:center;
 }
 .photo img {
   width:100%;
@@ -154,39 +155,31 @@ footer {
 </style>
 </head>
 <body>
-
 <header>
   <h1>ART ENCHÈRES QUÉBEC</h1>
-  <p>
-    BYDealers · Heffel · Gélineau
-  </p>
+  <p>BYDealers · Heffel · Gélineau</p>
 </header>
 
 <main>
-
 <section class="panel">
   <h2>Rechercher des œuvres</h2>
-
   <div class="filters">
     <input
       id="search"
       placeholder="Artiste, titre, série..."
     >
-
     <select id="house">
       <option value="">Toutes les maisons</option>
       <option value="BYDealers">BYDealers</option>
       <option value="Heffel">Heffel</option>
       <option value="Gelineau">Gélineau</option>
     </select>
-
     <select id="status">
       <option value="">Tous les statuts</option>
       <option value="en_vente">En vente</option>
       <option value="vendu">Vendu</option>
       <option value="a_verifier">À vérifier</option>
     </select>
-
     <select id="sort">
       <option value="recent">Plus récents</option>
       <option value="price_asc">Prix croissant</option>
@@ -216,7 +209,6 @@ footer {
 <div id="message" class="empty">
   Chargement des œuvres...
 </div>
-
 </main>
 
 <footer>
@@ -254,11 +246,15 @@ function escapeHTML(value) {
 function money(value, currency="CAD") {
   if (value === null ||
       value === undefined ||
-      value === "") return "Prix non disponible";
+      value === "") {
+    return "Prix non disponible";
+  }
 
   const number = Number(value);
-  if (!Number.isFinite(number))
+
+  if (!Number.isFinite(number)) {
     return "Prix non disponible";
+  }
 
   return new Intl.NumberFormat("fr-CA", {
     style:"currency",
@@ -267,11 +263,19 @@ function money(value, currency="CAD") {
   }).format(number);
 }
 
+// CORRECTION V8.11 : accepte les chemins relatifs
+// comme images/bydealers/photo.jpg.
 function safeURL(value) {
+  if (typeof value !== "string" || !value.trim()) {
+    return "";
+  }
+
   try {
-    const url = new URL(value);
+    const url = new URL(value.trim(), document.baseURI);
+
     return ["https:","http:"].includes(url.protocol)
-      ? url.href : "";
+      ? url.href
+      : "";
   } catch {
     return "";
   }
@@ -369,35 +373,64 @@ function render() {
     card.innerHTML = `
       <div class="photo">
         ${image
-          ? `<img src="${escapeHTML(image)}"
-              alt="${escapeHTML(w.titre || "Œuvre")}"
-              loading="lazy">`
+          ? `<img
+               src="${escapeHTML(image)}"
+               alt="${escapeHTML(w.titre || "Œuvre")}"
+               loading="lazy"
+             >`
           : "Photo non disponible"}
       </div>
+
       <div class="details">
         <span class="badge ${badgeClass}">
           ${badgeText}
         </span>
-        <p class="meta">${escapeHTML(w.maison)}</p>
-        <h3>${escapeHTML(w.artiste || "Artiste inconnu")}</h3>
-        <p>${escapeHTML(w.titre || "Sans titre")}</p>
+
         <p class="meta">
-          ${escapeHTML(w.dimensions || "Dimensions non disponibles")}
+          ${escapeHTML(w.maison)}
         </p>
+
+        <h3>
+          ${escapeHTML(w.artiste || "Artiste inconnu")}
+        </h3>
+
+        <p>
+          ${escapeHTML(w.titre || "Sans titre")}
+        </p>
+
+        <p class="meta">
+          ${escapeHTML(
+            w.dimensions || "Dimensions non disponibles"
+          )}
+        </p>
+
         <div class="price">
           ${money(w.prix,w.devise)}
         </div>
+
         <p class="meta">${priceLabel}</p>
+
         ${link
           ? `<a class="link"
-               href="${escapeHTML(link)}"
-               target="_blank"
-               rel="noopener noreferrer">
-               Voir l'œuvre
-             </a>`
+                href="${escapeHTML(link)}"
+                target="_blank"
+                rel="noopener noreferrer">
+                Voir l'œuvre
+              </a>`
           : ""}
       </div>
     `;
+
+    // Affiche un message si le fichier image est
+    // absent ou inaccessible sur GitHub Pages.
+    const img = card.querySelector(".photo img");
+
+    if (img) {
+      img.addEventListener("error", () => {
+        const photo = card.querySelector(".photo");
+        photo.textContent = "Photo non disponible";
+      });
+    }
 
     gallery.appendChild(card);
   });
@@ -423,7 +456,6 @@ async function loadWorks() {
       : [];
 
     render();
-
   } catch(error) {
     message.style.display = "block";
     message.textContent =
@@ -440,6 +472,5 @@ async function loadWorks() {
 
 loadWorks();
 </script>
-
 </body>
 </html>
