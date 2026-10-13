@@ -1,6 +1,6 @@
 {
   "version": "V8.12",
-  "date": "2026-10-13T00:15:43.230872+00:00",
+  "date": "2026-10-13T12:17:35.860965+00:00",
   "historique_avant": 491,
   "detectes_cette_execution": 491,
   "non_redetectes": 0,
@@ -8,14 +8,7 @@
   "details_lots_non_redetectes": [],
   "nouveaux_passages": [],
   "nettoyages": [],
-  "champs_completes": [
-    {
-      "id_passage": "d4a19d74e32a38f5c211",
-      "champs": [
-        "image"
-      ]
-    }
-  ],
+  "champs_completes": [],
   "conflits_a_verifier": [],
   "audit_conflits_historiques": "non_resolus_sans_revue_manuellement_documentee",
   "absence_conflits_nouveaux_ne_prouve_pas_resolution": true,
