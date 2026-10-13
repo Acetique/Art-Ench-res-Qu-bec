@@ -50,7 +50,7 @@ import requests
 # CONFIGURATION
 # ============================================================
 
-VERSION = "V8.11"
+VERSION = "V8.12"
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -66,7 +66,7 @@ REPORT_PATH = DATA / "rapport-collecte.json"
 QUALITY_PATH = DATA / "rapport-qualite.json"
 DIFF_PATH = DATA / "rapport-differences.json"
 
-USER_AGENT = "ArtEncheresQuebec/8.11"
+USER_AGENT = "ArtEncheresQuebec/8.12"
 
 TIMEOUT = 60
 MAX_PDF_BYTES = 50 * 1024 * 1024
@@ -1229,80 +1229,92 @@ def save_pdf_image(document, xref, identifier):
 
 
 def associate_page_images(page, document, entries, candidates, sale, url, detected):
-    """Association geometrique conservatrice, sans doublon d'image.
+    """V8.12 : attribution prudente par geometrie et unicite reciproque.
 
-    Une image doit etre dans la meme moitie de page que le titre du lot.
-    Les pages a un seul lot / une seule image sont des cas fiables.
-    Sinon on exige un gagnant geometrique net et une image non partagee.
+    Une image doit appartenir a la meme zone (demi-page pour les planches).
+    On ne publie pas si deux lots convoitent la meme image ou si deux images
+    ont des scores trop proches. Les associations deja en base sont preservees
+    par merge_notice(). Les cas douteux restent sans image.
     """
     if not PUBLISH_IMAGES or not entries or not candidates:
         return 0, []
 
     placements = []
+    seen = set()
     for candidate in candidates:
         for rect in candidate["rects"]:
             box = fitz.Rect(rect["x0"], rect["y0"], rect["x1"], rect["y1"])
             if box.is_empty or box.width < 55 or box.height < 55:
                 continue
-            # Eviter les bandeaux et les petites decorations.
             if box.width * box.height < page.rect.width * page.rect.height * 0.012:
                 continue
+            signature = (candidate["xref"], round(box.x0), round(box.y0))
+            if signature in seen:
+                continue
+            seen.add(signature)
             placements.append((candidate["xref"], box))
 
     if not placements:
         return 0, []
 
-    proposals = []
+    spread = page.rect.width > 850
+    half = page.rect.width / 2
+    # Les PDF en planches peuvent presenter un ordre de texte different
+    # de l'ordre des images; le centre de chaque image sert de reference.
+    per_lot = {}
+    image_competition = defaultdict(list)
+    ambiguous = set()
+
     for entry in entries:
         key = hash_id("BYDealers", url, lot_number(entry["lot"]))
         if key not in detected:
             continue
         ex = (entry["x"] + entry["x2"]) / 2
         ey = (entry["y"] + entry["y2"]) / 2
-        # Les doubles pages sont divisees au centre dans split_columns.
-        half = page.rect.width / 2
-        spread = page.rect.width > 850
         scored = []
         for xref, box in placements:
-            cx, cy = (box.x0 + box.x1) / 2, (box.y0 + box.y1) / 2
+            cx = (box.x0 + box.x1) / 2
+            cy = (box.y0 + box.y1) / 2
             if spread and (ex < half) != (cx < half):
                 continue
-            # Le titre peut se trouver au-dessous de l'image.
-            dy = abs(cy - ey)
-            dx = abs(cx - ex)
-            if dy > page.rect.height * 0.62:
+            dx, dy = abs(cx - ex), abs(cy - ey)
+            if dy > page.rect.height * 0.70:
                 continue
-            score = dy + dx * 0.6
+            # Mesures normalisees pour ne pas favoriser les pages tres larges.
+            score = (dy / max(page.rect.height, 1)
+                     + 0.60 * dx / max(half if spread else page.rect.width, 1))
             scored.append((score, xref, box))
-        scored.sort(key=lambda x: x[0])
+        scored.sort(key=lambda row: row[0])
         if not scored:
             continue
-        if len(entries) == 1 and len(placements) == 1:
-            confident = True
-        else:
-            # Exiger une marge importante par rapport a la 2e image.
-            confident = len(scored) == 1 or scored[0][0] * 1.65 < scored[1][0]
-        if confident:
-            proposals.append((scored[0][0], key, scored[0][1]))
 
-    # Une image ne peut etre attribuee qu'a un seul lot sur la page.
-    by_xref = defaultdict(list)
-    for score, key, xref in proposals:
-        by_xref[xref].append((score, key))
-
-    assigned = 0
-    ambiguous = []
-    for xref, choices in by_xref.items():
-        choices.sort()
-        if len(choices) > 1 and choices[0][0] * 1.65 >= choices[1][0]:
-            ambiguous.extend(key for _, key in choices)
+        # Sur les pages complexes, le premier candidat doit se detacher.
+        if len(scored) > 1:
+            best, second = scored[0][0], scored[1][0]
+            if best > 0.45 or not (best + 0.025 < second * 0.80):
+                ambiguous.add(key)
+                continue
+        elif scored[0][0] > 0.60:
+            ambiguous.add(key)
             continue
-        _, key = choices[0]
+
+        score, xref, box = scored[0]
+        per_lot[key] = (score, xref)
+        image_competition[xref].append((score, key))
+
+    # Regle stricte : un xref ne peut pas etre attribue a deux lots.
+    # Meme le meilleur candidat n'est pas retenu si un concurrent existe.
+    assigned = 0
+    for key, (score, xref) in per_lot.items():
+        competitors = image_competition[xref]
+        if len(competitors) != 1:
+            ambiguous.add(key)
+            continue
         path = save_pdf_image(document, xref, key)
         if path:
             detected[key]["image"] = path
             assigned += 1
-    return assigned, ambiguous
+    return assigned, sorted(ambiguous)
 
 
 # ============================================================
@@ -2175,7 +2187,7 @@ def main():
     print("")
     print("======================================")
     print("ART ENCHERES QUEBEC")
-    print("COLLECTEUR V8.11")
+    print("COLLECTEUR V8.12")
     print("======================================")
 
     historical_records = load_database()
@@ -2464,7 +2476,7 @@ def main():
     )
 
     if missing_ids:
-        print("\nAUDIT V8.11 : lots historiques non redetectes :", len(missing_ids))
+        print("\nAUDIT V8.12 : lots historiques non redetectes :", len(missing_ids))
         for missing_id in missing_ids:
             old = database.get(missing_id, {})
             print(json.dumps({
@@ -2675,7 +2687,7 @@ def main():
 
     print("")
     print("======================================")
-    print("RESULTATS V8.11")
+    print("RESULTATS V8.12")
     print("======================================")
 
     print(
@@ -2734,7 +2746,7 @@ def main():
     )
 
     print("")
-    print("COLLECTE V8.11 TERMINEE")
+    print("COLLECTE V8.12 TERMINEE")
     print("======================================")
 
 
