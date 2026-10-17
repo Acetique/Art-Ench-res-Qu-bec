@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-17T04:13:57.802979+00:00",
+  "date": "2026-10-17T04:18:15.145487+00:00",
   "catalogues_tentes": 7,
   "pages_distinctes": 7,
   "lots_nouveaux_detectes": 699,
@@ -8,5 +8,203 @@
   "prix_vente_affiches": 546,
   "prix_marteau_verifies": 0,
   "images_referencees": 699,
-  "erreurs": []
+  "erreurs": [],
+  "diagnostic_pagination": [
+    {
+      "catalogue": "784138",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/quebec/catalog/784138/encans-g-lineau-and-fils-no-71",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.71 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/quebec/catalog/784138/encans-g-lineau-and-fils-no-71?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.71 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/quebec/catalog/784138/encans-g-lineau-and-fils-no-71?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.71 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    },
+    {
+      "catalogue": "772786",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/canada/catalog/772786/encans-g-lineau-and-fils-no-70",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.70 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/canada/catalog/772786/encans-g-lineau-and-fils-no-70?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.70 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/canada/catalog/772786/encans-g-lineau-and-fils-no-70?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.70 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    },
+    {
+      "catalogue": "537190",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/quebec/catalog/537190/encans-g-lineau-and-fils-no-52",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.52 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/quebec/catalog/537190/encans-g-lineau-and-fils-no-52?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.52 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/quebec/catalog/537190/encans-g-lineau-and-fils-no-52?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.52 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    },
+    {
+      "catalogue": "502294",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/quebec/catalog/502294/encans-g-lineau-and-fils-no-47",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.47 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/quebec/catalog/502294/encans-g-lineau-and-fils-no-47?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.47 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/quebec/catalog/502294/encans-g-lineau-and-fils-no-47?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.47 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    },
+    {
+      "catalogue": "406312",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/quebec/catalog/406312/encans-g-lineau-and-fils-no-37",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.37 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/quebec/catalog/406312/encans-g-lineau-and-fils-no-37?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.37 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/quebec/catalog/406312/encans-g-lineau-and-fils-no-37?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.37 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    },
+    {
+      "catalogue": "349662",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/quebec/catalog/349662/encans-g-lineau-and-fils-no-30",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.30 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/quebec/catalog/349662/encans-g-lineau-and-fils-no-30?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.30 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/quebec/catalog/349662/encans-g-lineau-and-fils-no-30?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.30 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    },
+    {
+      "catalogue": "309514",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/quebec/catalog/309514/encans-g-lineau-and-fils-no-25",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.25 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/quebec/catalog/309514/encans-g-lineau-and-fils-no-25?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.25 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/quebec/catalog/309514/encans-g-lineau-and-fils-no-25?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.25 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    }
+  ]
 }
