@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Art Enchères Québec — collecteur Gélineau V1 (HTML public HiBid).
+"""Art Enchères Québec — collecteur Gélineau V3 (HTML public HiBid).
 Dépendances: requests, beautifulsoup4. Ne contourne aucune restriction d'accès.
 """
 import hashlib
@@ -9,7 +9,7 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, parse_qsl, urlencode, urlunparse
 from urllib.robotparser import RobotFileParser
 
 import requests
@@ -34,8 +34,9 @@ HEADERS = {'User-Agent': 'ArtEncheresQuebec/1.0 (+public-catalog-research)', 'Ac
 SESSION = requests.Session()
 SESSION.headers.update(HEADERS)
 PAUSE = 2
-MAX_PAGES = 12
-MAX_CATALOGUES = 30
+MAX_PAGES = 30
+MAX_EMPTY_PAGES = 2
+MAX_CATALOGUES = 60
 
 
 def stamp():
@@ -72,9 +73,10 @@ def fetch(url):
     if not url:
         raise ValueError('URL externe non autorisée')
     host = urlparse(url).netloc
-    if host not in ROBOTS:
-        ROBOTS[host] = allowed(url)
-    if not ROBOTS[host]:
+    # robots.txt peut varier selon le chemin; ne pas cacher une permission globale.
+    if url not in ROBOTS:
+        ROBOTS[url] = allowed(url)
+    if not ROBOTS[url]:
         raise PermissionError('robots.txt inaccessible ou accès interdit: ' + host)
     resp = SESSION.get(url, timeout=35, allow_redirects=False)
     if resp.status_code in (301, 302, 303, 307, 308):
@@ -219,20 +221,116 @@ def parse_lot(url, block, auction_id, auction_title, is_past):
     return enrich(item)
 
 
-def pages_for(soup, url):
-    links = {url}
+def page_number(url):
+    for k, v in parse_qsl(urlparse(url).query, keep_blank_values=True):
+        if k.lower() in ('page', 'p') and v.isdigit():
+            return int(v)
+    return 1
+
+
+def set_page(url, number):
+    parts = urlparse(url)
+    params = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True)
+              if k.lower() not in ('page', 'p')]
+    params.append(('page', str(number)))
+    return urlunparse(parts._replace(query=urlencode(params)))
+
+
+def page_links(soup, url):
     auction = catalog_id(url)
+    links = {}
     for a in soup.select('a[href]'):
         target = canonical(urljoin(url, a['href']))
         if target and catalog_id(target) == auction and re.search(r'[?&](?:page|p)=\d+', target, re.I):
-            links.add(target)
-    # Les pages supplementaires ne sont explorees que si elles sont explicitement liees.
-    # HiBid peut utiliser un chargement dynamique : une page detectee ne garantit pas l'exhaustivite.
-    return sorted(links)[:MAX_PAGES]
+            links[page_number(target)] = target
+    return links
+
+
+def catalog_candidates(soup, source_url):
+    """Liens catalogues trouvés dans le HTML; ne pas inventer d'identifiants."""
+    out = []
+    for a in soup.select('a[href]'):
+        target = canonical(urljoin(source_url, a.get('href', '')))
+        if not target or not catalog_id(target):
+            continue
+        label = clean(a.get_text(' ', strip=True))
+        # Page entreprise: ses catalogues sont pertinents. Ailleurs: exiger Gélineau.
+        if source_url == COMPANY or re.search(r'g[ée]lineau|gelineau', label + ' ' + target, re.I):
+            out.append(target)
+    return out
+
+
+def unique_lot_ids(soup):
+    ids = set()
+    for a in soup.select('a[href*="/lot/"]'):
+        href = canonical(urljoin(BASE, a.get('href', '')))
+        m = re.search(r'/lot/(\d+)', href or '')
+        if m:
+            ids.add(m.group(1))
+    return ids
+
+
+def collect_pages(url, first_soup, auction_id, title, past, items, errors):
+    """Suit les liens de pagination et teste page=N tant que les lots changent."""
+    seen_lots = set()
+    visited_urls = set()
+    queue = {1: url}
+    queue.update(page_links(first_soup, url))
+    tested = 0
+    consecutive_empty = 0
+    page_number_next = 2
+    pages_with_lots = 0
+    while tested < MAX_PAGES:
+        candidates = sorted((n, u) for n, u in queue.items() if u not in visited_urls)
+        if candidates:
+            number, page_url = candidates[0]
+        else:
+            # HiBid ne publie pas toujours de liens HTML de pagination.
+            # Tester prudemment la page suivante et s'arrêter si elle répète la première.
+            while page_number_next in queue:
+                page_number_next += 1
+            number, page_url = page_number_next, set_page(url, page_number_next)
+            page_number_next += 1
+        visited_urls.add(page_url)
+        tested += 1
+        try:
+            page = first_soup if page_url == url else fetch(page_url)
+        except (PermissionError, requests.HTTPError, RuntimeError, ValueError) as exc:
+            errors.append({'catalogue': auction_id, 'page': number, 'erreur': str(exc)})
+            if number > 1:
+                break
+            raise
+        except requests.RequestException as exc:
+            errors.append({'catalogue': auction_id, 'page': number, 'erreur': str(exc)})
+            break
+        ids = unique_lot_ids(page)
+        fresh_ids = ids - seen_lots
+        if not fresh_ids:
+            consecutive_empty += 1
+            print(f'  Page {number}: aucun nouveau lot ({len(ids)} identifiants), arrêt possible', flush=True)
+            if consecutive_empty >= MAX_EMPTY_PAGES:
+                break
+            continue
+        consecutive_empty = 0
+        seen_lots.update(fresh_ids)
+        pages_with_lots += 1
+        count_before = len(items)
+        for lot_url, block in lot_blocks(page):
+            match = re.search(r'/lot/(\d+)', lot_url)
+            if not match or match.group(1) not in fresh_ids:
+                continue
+            item = parse_lot(lot_url, block, auction_id, title, past)
+            if item:
+                items[item['id']] = item
+        queue.update({n: u for n, u in page_links(page, page_url).items() if u not in visited_urls})
+        print(f'  Page {number}: {len(fresh_ids)} nouveaux identifiants, {len(items)-count_before} fiches', flush=True)
+        # Si page 1 a moins de 100 lots et aucun lien suivant, une deuxième page
+        # peut néanmoins exister; le test est limité et contrôlé.
+    return pages_with_lots, tested
 
 
 def main():
-    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V2.0', flush=True)
+    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V3.0', flush=True)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     previous = []
     if OUTPUT.exists():
@@ -261,27 +359,38 @@ def main():
     errors = []
     try:
         home = fetch(COMPANY)
-        for url in discover(home):
-            if catalog_id(url) not in {catalog_id(u) for u in catalogs}:
-                catalogs.insert(0, url)
+        for candidate in catalog_candidates(home, COMPANY):
+            if catalog_id(candidate) not in {catalog_id(u) for u in catalogs}:
+                catalogs.append(candidate)
     except Exception as exc:
         errors.append({'catalogue': 'entreprise', 'erreur': str(exc)})
+    # Recherche de catalogues supplémentaires à partir des pages de catalogues.
     items = {}
-    for url in catalogs[:MAX_CATALOGUES]:
+    visited_catalogs = set()
+    page_count = 0
+    attempted = 0
+    index = 0
+    while index < len(catalogs) and attempted < MAX_CATALOGUES:
+        url = catalogs[index]
+        index += 1
+        auction_id = catalog_id(url)
+        if not auction_id or auction_id in visited_catalogs:
+            continue
+        visited_catalogs.add(auction_id)
+        attempted += 1
         try:
             soup = fetch(url)
+            for candidate in catalog_candidates(soup, url):
+                if catalog_id(candidate) not in visited_catalogs and catalog_id(candidate) not in {catalog_id(u) for u in catalogs}:
+                    catalogs.append(candidate)
             heading = soup.find('h1')
-            title = clean(heading.get_text(' ', strip=True)) if heading else f'Gélineau {catalog_id(url)}'
+            title = clean(heading.get_text(' ', strip=True)) if heading else f'Gélineau {auction_id}'
             body = clean(soup.get_text(' ', strip=True))
             past = bool(re.search(r'\bPast Auction\b|Encan termin[ée]', body, re.I))
-            page_urls = pages_for(soup, url)
-            print(f'Catalogue {catalog_id(url)} : {title} — pages découvertes {len(page_urls)}', flush=True)
-            for page_url in page_urls:
-                page = soup if page_url == url else fetch(page_url)
-                for lot_url, block in lot_blocks(page):
-                    item = parse_lot(lot_url, block, catalog_id(url), title, past)
-                    if item:
-                        items[item['id']] = item
+            print(f'Catalogue {auction_id} : {title}', flush=True)
+            actual, tested = collect_pages(url, soup, auction_id, title, past, items, errors)
+            page_count += actual
+            print(f'  Bilan : {actual} pages distinctes sur {tested} testées', flush=True)
         except Exception as exc:
             errors.append({'catalogue': url, 'erreur': str(exc)})
             print('AVERTISSEMENT :', url, exc, flush=True)
@@ -294,10 +403,10 @@ def main():
                 fresh[field] = old[field]
         if old.get('prix_realise_verifie') and fresh.get('prix_marteau') is not None:
             fresh['prix_realise_verifie'] = True
-        merged[key] = fresh
+        merged[key] = {**old, **fresh}
     merged = {key: enrich(value) for key, value in merged.items()}
-    report = {'date': stamp(), 'catalogues_tentes': len(catalogs[:MAX_CATALOGUES]),
-              'lots_nouveaux_detectes': len(items), 'lots_conserves': len(merged),
+    report = {'date': stamp(), 'catalogues_tentes': attempted, 'pages_distinctes': page_count,
+              'lots_nouveaux_detectes': len(items), 'catalogues_decouverts': len({catalog_id(u) for u in catalogs}), 'lots_conserves': len(merged),
               'prix_vente_affiches': sum(x.get('prix_vendu') is not None for x in merged.values()),
               'prix_marteau_verifies': sum(x.get('prix_marteau') is not None for x in merged.values()),
               'images_referencees': sum(bool(x.get('image')) for x in merged.values()),
