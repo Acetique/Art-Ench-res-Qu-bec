@@ -199,12 +199,31 @@ def pages_for(soup, url):
 
 
 def main():
-    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V1', flush=True)
+    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V1.1', flush=True)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     previous = []
     if OUTPUT.exists():
-        obj = json.loads(OUTPUT.read_text(encoding='utf-8'))
-        previous = obj if isinstance(obj, list) else obj.get('oeuvres', [])
+        raw = OUTPUT.read_text(encoding='utf-8-sig').strip()
+        if not raw:
+            print('Base Gelineau vide : initialisation de la premiere collecte.', flush=True)
+        else:
+            try:
+                obj = json.loads(raw)
+            except json.JSONDecodeError as exc:
+                raise RuntimeError(
+                    'data/gelineau.json contient du texte non vide mais un JSON invalide. '
+                    'Sauvegarder ou corriger ce fichier avant de relancer : ' + str(exc)
+                ) from exc
+            if isinstance(obj, list):
+                previous = obj
+            elif isinstance(obj, dict) and isinstance(obj.get('oeuvres'), list):
+                previous = obj['oeuvres']
+            elif isinstance(obj, dict) and isinstance(obj.get('lots'), list):
+                previous = obj['lots']
+            else:
+                raise RuntimeError('Structure de data/gelineau.json non reconnue : sauvegarde interrompue.')
+            if not all(isinstance(item, dict) for item in previous):
+                raise RuntimeError('Notices historiques invalides : sauvegarde interrompue.')
     catalogs = list(SEEDS)
     errors = []
     try:
@@ -258,4 +277,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
