@@ -5,7 +5,6 @@ on:
   workflow_dispatch:
 
   schedule:
-    # Chaque jour à 11 h 20 UTC
     - cron: "20 11 * * *"
 
 permissions:
@@ -26,46 +25,40 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
-      # 1. Recuperer le depot
+      # 1. Recuperation du depot
       - name: Recuperer le depot
         uses: actions/checkout@v4
         with:
           persist-credentials: true
 
-      # 2. Installer Python
+      # 2. Installation de Python
       - name: Installer Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # 3. Installer les dependances
+      # 3. Installation des dependances
       - name: Installer les dependances
         shell: bash
         run: |
           python -m pip install --upgrade pip
-
           if [ -f requirements.txt ]; then
             python -m pip install -r requirements.txt
           fi
+          python -m pip install requests beautifulsoup4 lxml
 
-          python -m pip install \
-            requests \
-            beautifulsoup4 \
-            lxml
-
-      # 4. Verifier le collecteur
-      - name: Verifier le collecteur Gelineau
+      # 4. Verification du collecteur
+      - name: Verifier le collecteur
         shell: bash
         run: |
-          test -f Collectors/collect_gelineau.py || {
-            echo "ERREUR : collecteur introuvable"
+          if [ ! -f Collectors/collect_gelineau.py ]; then
+            echo "ERREUR : collecteur Gelineau absent"
             exit 1
-          }
-
+          fi
           python -m py_compile Collectors/collect_gelineau.py
-          echo "Collecteur Python valide"
+          echo "Collecteur valide"
 
-      # 5. Executer la collecte
+      # 5. Collecte
       - name: Collecter les encans Gelineau
         shell: bash
         run: |
@@ -73,10 +66,9 @@ jobs:
           echo "ART ENCHERES QUEBEC"
           echo "COLLECTE GELINEAU"
           echo "======================================"
-
           python -u Collectors/collect_gelineau.py
 
-      # 6. Verifier le fichier JSON
+      # 6. Validation des donnees
       - name: Verifier les donnees Gelineau
         shell: bash
         run: |
@@ -89,12 +81,11 @@ jobs:
           if not path.exists():
               raise SystemExit("ERREUR : data/gelineau.json absent")
 
-          raw = path.read_text(encoding="utf-8").strip()
-
-          if not raw:
+          content = path.read_text(encoding="utf-8").strip()
+          if not content:
               raise SystemExit("ERREUR : fichier JSON vide")
 
-          data = json.loads(raw)
+          data = json.loads(content)
 
           if isinstance(data, list):
               lots = data
@@ -104,7 +95,7 @@ jobs:
               raise SystemExit("ERREUR : format JSON invalide")
 
           if not isinstance(lots, list):
-              raise SystemExit("ERREUR : lots invalides")
+              raise SystemExit("ERREUR : liste de lots invalide")
 
           print("======================================")
           print("RESULTATS GELINEAU")
@@ -113,17 +104,19 @@ jobs:
 
           for field in ("prix_marteau", "estimation_min", "image"):
               count = sum(
-                  bool(item.get(field))
+                  item.get(field) is not None
+                  and item.get(field) != ""
                   for item in lots
                   if isinstance(item, dict)
               )
               print(field, ":", count)
 
-          print("Fichier JSON valide")
+          if len(lots) == 0:
+              print("ATTENTION : aucun lot collecte")
           PY
 
-      # 7. Enregistrer les donnees
-      - name: Enregistrer les donnees dans GitHub
+      # 7. Enregistrement des donnees
+      - name: Enregistrer les donnees
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
@@ -143,8 +136,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Aucune nouvelle donnee"
           else
-            git commit -m "Actualisation Gelineau"
-
+            git commit -m "Mise a jour Gelineau"
             git pull --rebase origin "${GITHUB_REF_NAME}"
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
@@ -160,9 +152,9 @@ jobs:
           echo "======================================"
 
           if [ -f data/gelineau.json ]; then
-            echo "Fichier Gelineau present"
+            echo "Base Gelineau presente"
           else
-            echo "Fichier Gelineau absent"
+            echo "Base Gelineau absente"
           fi
 
           echo "Fin du workflow"
