@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+name: "Test pagination Gélineau V5.1"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "Collectors/test_gelineau_v5.py"
+      - ".github/workflows/test-gelineau-v5.yml"
 """Diagnostic HiBid Gélineau V5.1 — lecture seule, aucun changement à gelineau.json.
 Dépendance : requests. Vérifie robots.txt; en cas d'indisponibilité, s'arrête.
 """
