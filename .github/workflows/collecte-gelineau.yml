@@ -1,1 +1,70 @@
 
+name: Collecte Gélineau
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '20 11 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collecte-gelineau
+  cancel-in-progress: false
+
+jobs:
+  collecter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
+        if: ${{ hashFiles('requirements.txt') != '' }}
+
+      - name: Installer Python (sans requirements.txt)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+        if: ${{ hashFiles('requirements.txt') == '' }}
+
+      - name: Installer les dépendances
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            python -m pip install -r requirements.txt
+          else
+            python -m pip install requests beautifulsoup4 lxml
+          fi
+
+      - name: Vérifier la présence du collecteur
+        shell: bash
+        run: |
+          test -f Collectors/collect_gelineau.py || {
+            echo 'Collecteur Gélineau introuvable'
+            exit 1
+          }
+
+      - name: Collecter les encans Gélineau
+        run: python -u Collectors/collect_gelineau.py
+
+      - name: Enregistrer les données et les photos
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A data/gelineau.json data/gelineau/ images/gelineau/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo 'Aucune modification à enregistrer.'
+          else
+            git commit -m 'Mise à jour automatique Gélineau'
+            git push
+          fi
