@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 
   schedule:
+    # Collecte quotidienne a 11 h 20 UTC
     - cron: "20 11 * * *"
 
 permissions:
@@ -22,53 +23,73 @@ jobs:
 
     env:
       PYTHONUNBUFFERED: "1"
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
-      # 1. Recuperation du depot
+
+      # ==========================================
+      # 1. RECUPERER LE DEPOT
+      # ==========================================
       - name: Recuperer le depot
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: true
 
-      # 2. Installation de Python
+      # ==========================================
+      # 2. INSTALLER PYTHON
+      # ==========================================
       - name: Installer Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
-      # 3. Installation des dependances
+      # ==========================================
+      # 3. INSTALLER LES DEPENDANCES
+      # ==========================================
       - name: Installer les dependances
         shell: bash
         run: |
           python -m pip install --upgrade pip
+
           if [ -f requirements.txt ]; then
             python -m pip install -r requirements.txt
           fi
-          python -m pip install requests beautifulsoup4 lxml
 
-      # 4. Verification du collecteur
-      - name: Verifier le collecteur
+          python -m pip install \
+            requests \
+            beautifulsoup4 \
+            lxml
+
+      # ==========================================
+      # 4. VERIFIER LE COLLECTEUR
+      # ==========================================
+      - name: Verifier le collecteur Gelineau
         shell: bash
         run: |
           if [ ! -f Collectors/collect_gelineau.py ]; then
-            echo "ERREUR : collecteur Gelineau absent"
+            echo "ERREUR : collect_gelineau.py introuvable"
             exit 1
           fi
-          python -m py_compile Collectors/collect_gelineau.py
-          echo "Collecteur valide"
 
-      # 5. Collecte
+          python -m py_compile Collectors/collect_gelineau.py
+
+          echo "Collecteur Python valide"
+
+      # ==========================================
+      # 5. COLLECTER LES ENCANS GELINEAU
+      # ==========================================
       - name: Collecter les encans Gelineau
         shell: bash
         run: |
           echo "======================================"
           echo "ART ENCHERES QUEBEC"
-          echo "COLLECTE GELINEAU"
+          echo "COLLECTE GELINEAU V1.4"
           echo "======================================"
+
           python -u Collectors/collect_gelineau.py
 
-      # 6. Validation des donnees
+      # ==========================================
+      # 6. VERIFIER LES DONNEES
+      # ==========================================
       - name: Verifier les donnees Gelineau
         shell: bash
         run: |
@@ -79,47 +100,94 @@ jobs:
           path = Path("data/gelineau.json")
 
           if not path.exists():
-              raise SystemExit("ERREUR : data/gelineau.json absent")
+              raise SystemExit(
+                  "ERREUR : data/gelineau.json absent"
+              )
 
-          content = path.read_text(encoding="utf-8").strip()
+          content = path.read_text(
+              encoding="utf-8"
+          ).strip()
+
           if not content:
-              raise SystemExit("ERREUR : fichier JSON vide")
+              raise SystemExit(
+                  "ERREUR : fichier JSON vide"
+              )
 
-          data = json.loads(content)
+          try:
+              data = json.loads(content)
+          except json.JSONDecodeError as exc:
+              raise SystemExit(
+                  f"ERREUR : JSON invalide : {exc}"
+              )
 
           if isinstance(data, list):
               lots = data
           elif isinstance(data, dict):
-              lots = data.get("oeuvres", data.get("lots", []))
+              lots = data.get(
+                  "oeuvres",
+                  data.get("lots", [])
+              )
           else:
-              raise SystemExit("ERREUR : format JSON invalide")
+              raise SystemExit(
+                  "ERREUR : format JSON invalide"
+              )
 
           if not isinstance(lots, list):
-              raise SystemExit("ERREUR : liste de lots invalide")
+              raise SystemExit(
+                  "ERREUR : liste de lots invalide"
+              )
 
           print("======================================")
           print("RESULTATS GELINEAU")
           print("======================================")
+
           print("Nombre de lots :", len(lots))
 
-          for field in ("prix_marteau", "estimation_min", "image"):
-              count = sum(
+          def count_field(field):
+              return sum(
                   item.get(field) is not None
                   and item.get(field) != ""
                   for item in lots
                   if isinstance(item, dict)
               )
-              print(field, ":", count)
+
+          print(
+              "Prix marteau :",
+              count_field("prix_marteau")
+          )
+
+          print(
+              "Estimations minimum :",
+              count_field("estimation_min")
+          )
+
+          print(
+              "Estimations maximum :",
+              count_field("estimation_max")
+          )
+
+          print(
+              "Photos :",
+              count_field("image")
+          )
 
           if len(lots) == 0:
-              print("ATTENTION : aucun lot collecte")
+              print(
+                  "ATTENTION : aucun lot recupere"
+              )
+
+          print("Fichier JSON valide")
           PY
 
-      # 7. Enregistrement des donnees
+      # ==========================================
+      # 7. ENREGISTRER LES DONNEES
+      # ==========================================
       - name: Enregistrer les donnees
         shell: bash
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name \
+            "github-actions[bot]"
+
           git config user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
 
@@ -133,15 +201,25 @@ jobs:
             git add -A images/gelineau
           fi
 
+          if [ -f data/rapport-gelineau.json ]; then
+            git add data/rapport-gelineau.json
+          fi
+
           if git diff --cached --quiet; then
             echo "Aucune nouvelle donnee"
           else
-            git commit -m "Mise a jour Gelineau"
+            git commit -m \
+              "Mise a jour automatique Gelineau"
+
             git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+
+            git push origin \
+              "HEAD:${GITHUB_REF_NAME}"
           fi
 
-      # 8. Rapport final
+      # ==========================================
+      # 8. RAPPORT FINAL
+      # ==========================================
       - name: Rapport final
         if: always()
         shell: bash
@@ -157,4 +235,11 @@ jobs:
             echo "Base Gelineau absente"
           fi
 
-          echo "Fin du workflow"
+          if [ -f data/rapport-gelineau.json ]; then
+            echo "Rapport de collecte present"
+            cat data/rapport-gelineau.json
+          fi
+
+          echo "======================================"
+          echo "FIN DE LA COLLECTE"
+          echo "======================================"
