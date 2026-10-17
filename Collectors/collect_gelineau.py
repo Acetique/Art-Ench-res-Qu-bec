@@ -103,7 +103,7 @@ def money(text):
 
 
 PRICE_RANGE = re.compile(r'([\d][\d, .]*)\s*[-–]\s*([\d][\d, .]*)\s*(?:CAD|CDN|Can)?', re.I)
-REALIZED = re.compile(r'(?:Price\s+Realized|Prix\s+r[ée]alis[ée])\s*:?\s*([\d][\d, .]*)\s*(?:CAD|CDN|Can)?', re.I)
+REALIZED = re.compile(r'(?:Price\s+Realized|Prix\s+r[ée]alis[ée]|Sold\s+for)\s*:?\s*\$?\s*([\d][\d, .]*)\s*(?:CAD|CDN|Can)?', re.I)
 LOT = re.compile(r'\bLot\s*#?\s*(\d+[a-z]?)\s*[|:\-]?\s*(.*)', re.I)
 
 
@@ -150,42 +150,73 @@ def image_url(block):
     return None
 
 
+def enrich(item):
+    """Nettoie les données existantes sans confondre mise et vente finale."""
+    item = dict(item)
+    raw = clean(item.get('titre', ''))
+    past = item.get('statut') == 'vente_passee'
+    sale = REALIZED.search(raw) if past else None
+    if sale:
+        value = money(sale.group(1))
+        if value is not None:
+            item['prix_vendu'] = value
+            item['prix'] = value
+            item['type_prix'] = 'prix_vendu_affiche'
+            item['source_prix'] = 'Sold for / Price Realized (HiBid)'
+            # « Sold for » n'est pas toujours une preuve du marteau hors frais.
+            # On conserve le prix_marteau antérieur uniquement s'il était vérifié.
+            if not item.get('prix_realise_verifie'):
+                item['prix_marteau'] = None
+            item['prix_realise_verifie'] = True
+    if not past:
+        bid = re.search(r'\$\s*([\d,]+(?:\.\d{2})?)\s*CAD\s*(\d+)\s*Bids?', raw, re.I)
+        if bid:
+            item['enchere_actuelle'] = money(bid.group(1))
+            item['nombre_encheres'] = int(bid.group(2))
+    # Le nom affiché sur HiBid précède les dimensions et les informations commerciales.
+    name = re.sub(r'^Online\s+Only\s+', '', raw, flags=re.I)
+    name = re.split(r'\b(?:Sold\s+for|Price\s+Realized|Date\s+Sold|Est\.|Encans\s+Gelineau)\b|\$\s*[\d,]', name, maxsplit=1, flags=re.I)[0]
+    name = re.sub(r'\s+\d+(?:[ /\d]*)(?:\s*x\s*[/\d ]+)?\s*\"?\s*$', '', name).strip(' -|')
+    # Ne pas inventer l'artiste si la notice n'est pas clairement attribuable.
+    if name and not re.match(r'^(?:Inconnu|Unknown)\b', name, re.I):
+        item['titre'] = name
+        if not item.get('artiste') or item['artiste'].startswith('Online Only'):
+            item['artiste'] = name
+    else:
+        item['titre'] = name or raw
+        item['artiste'] = None
+    return item
+
+
 def parse_lot(url, block, auction_id, auction_title, is_past):
     text = clean(block.get_text(' ', strip=True))
     match = LOT.search(text)
     if not match:
         return None
     number = match.group(1)
-    title = clean(match.group(2))
-    title = re.split(r'\b(?:Est\.|Price Realized|Internet Bidding|Shipping Available|View Lot)\b', title, maxsplit=1, flags=re.I)[0]
-    title = title[:240].strip(' |:-')
+    title = clean(match.group(2))[:500]
     if not title:
         return None
-    # Fourchette seulement lorsqu'elle est identifiée comme estimation.
     est_match = re.search(r'\bEst\.?\s*' + PRICE_RANGE.pattern, text, re.I)
-    if not est_match:
-        # Les anciens catalogues affichent parfois la fourchette sans « Est. ».
-        est_match = PRICE_RANGE.search(text)
     low = money(est_match.group(1)) if est_match else None
     high = money(est_match.group(2)) if est_match else None
     if low is not None and (high is None or low > high):
         low = high = None
-    sold = REALIZED.search(text) if is_past else None
-    realized = money(sold.group(1)) if sold else None
     item_id = hashlib.sha256(f'gelineau|{auction_id}|{number}'.encode()).hexdigest()[:20]
-    return {
+    item = {
         'id': item_id, 'id_passage': item_id, 'maison': 'Gélineau et Fils',
         'vente': auction_title, 'id_vente': auction_id, 'lot': number,
-        'titre': title, 'artiste': title.split(' / ')[0].strip() if ' / ' in title else None,
+        'titre': title, 'artiste': None,
         'estimation_min': low, 'estimation_max': high,
         'estimation': f'{low:,} - {high:,} CAD' if low is not None else None,
-        'prix_marteau': realized, 'prix_vendu': realized, 'prix': realized,
-        'prix_realise_verifie': realized is not None,
-        'type_prix': 'prix_realise' if realized is not None else ('estimation' if low is not None else 'inconnu'),
+        'prix_marteau': None, 'prix_vendu': None, 'prix': None,
+        'prix_realise_verifie': False,
+        'type_prix': 'estimation' if low is not None else 'inconnu',
         'statut': 'vente_passee' if is_past else 'en_cours',
         'devise': 'CAD', 'image': image_url(block), 'url': url,
         'date_collecte': stamp(),
     }
+    return enrich(item)
 
 
 def pages_for(soup, url):
@@ -195,11 +226,13 @@ def pages_for(soup, url):
         target = canonical(urljoin(url, a['href']))
         if target and catalog_id(target) == auction and re.search(r'[?&](?:page|p)=\d+', target, re.I):
             links.add(target)
+    # Les pages supplementaires ne sont explorees que si elles sont explicitement liees.
+    # HiBid peut utiliser un chargement dynamique : une page detectee ne garantit pas l'exhaustivite.
     return sorted(links)[:MAX_PAGES]
 
 
 def main():
-    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V1.1', flush=True)
+    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V2.0', flush=True)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     previous = []
     if OUTPUT.exists():
@@ -262,9 +295,11 @@ def main():
         if old.get('prix_realise_verifie') and fresh.get('prix_marteau') is not None:
             fresh['prix_realise_verifie'] = True
         merged[key] = fresh
+    merged = {key: enrich(value) for key, value in merged.items()}
     report = {'date': stamp(), 'catalogues_tentes': len(catalogs[:MAX_CATALOGUES]),
               'lots_nouveaux_detectes': len(items), 'lots_conserves': len(merged),
-              'prix_realises': sum(x.get('prix_marteau') is not None for x in merged.values()),
+              'prix_vente_affiches': sum(x.get('prix_vendu') is not None for x in merged.values()),
+              'prix_marteau_verifies': sum(x.get('prix_marteau') is not None for x in merged.values()),
               'images_referencees': sum(bool(x.get('image')) for x in merged.values()),
               'erreurs': errors}
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
