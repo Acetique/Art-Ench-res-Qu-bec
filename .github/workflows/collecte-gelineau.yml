@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    # Tous les jours à 11 h 20 UTC
+    # Chaque jour à 11 h 20 UTC
     - cron: "20 11 * * *"
 
 permissions:
@@ -18,35 +18,27 @@ concurrency:
 jobs:
   collecter:
     name: Collecter les encans Gelineau
-
     runs-on: ubuntu-24.04
-
     timeout-minutes: 45
 
+    env:
+      PYTHONUNBUFFERED: "1"
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
     steps:
-
-      # ==========================================
-      # 1. RECUPERATION DU DEPOT
-      # ==========================================
-
+      # 1. Recuperer le depot
       - name: Recuperer le depot
         uses: actions/checkout@v4
         with:
           persist-credentials: true
 
-      # ==========================================
-      # 2. INSTALLATION PYTHON
-      # ==========================================
-
+      # 2. Installer Python
       - name: Installer Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # ==========================================
-      # 3. DEPENDANCES
-      # ==========================================
-
+      # 3. Installer les dependances
       - name: Installer les dependances
         shell: bash
         run: |
@@ -61,27 +53,19 @@ jobs:
             beautifulsoup4 \
             lxml
 
-      # ==========================================
-      # 4. VERIFIER LE COLLECTEUR
-      # ==========================================
-
+      # 4. Verifier le collecteur
       - name: Verifier le collecteur Gelineau
         shell: bash
         run: |
-          if [ ! -f Collectors/collect_gelineau.py ]; then
-            echo "ERREUR : collect_gelineau.py introuvable"
+          test -f Collectors/collect_gelineau.py || {
+            echo "ERREUR : collecteur introuvable"
             exit 1
-          fi
+          }
 
-          echo "Collecteur Gelineau trouve"
+          python -m py_compile Collectors/collect_gelineau.py
+          echo "Collecteur Python valide"
 
-          python -m py_compile \
-            Collectors/collect_gelineau.py
-
-      # ==========================================
-      # 5. COLLECTE DES ENCHERES
-      # ==========================================
-
+      # 5. Executer la collecte
       - name: Collecter les encans Gelineau
         shell: bash
         run: |
@@ -92,66 +76,61 @@ jobs:
 
           python -u Collectors/collect_gelineau.py
 
-      # ==========================================
-      # 6. VERIFIER LES DONNEES
-      # ==========================================
-
-      - name: Verifier les fichiers generes
+      # 6. Verifier le fichier JSON
+      - name: Verifier les donnees Gelineau
         shell: bash
         run: |
-          echo "======================================"
-          echo "FICHIERS GELINEAU"
-          echo "======================================"
-
-          if [ -f data/gelineau.json ]; then
-            python - <<'PY'
+          python - <<'PY'
           import json
           from pathlib import Path
 
           path = Path("data/gelineau.json")
 
-          with path.open(encoding="utf-8") as f:
-              data = json.load(f)
+          if not path.exists():
+              raise SystemExit("ERREUR : data/gelineau.json absent")
+
+          raw = path.read_text(encoding="utf-8").strip()
+
+          if not raw:
+              raise SystemExit("ERREUR : fichier JSON vide")
+
+          data = json.loads(raw)
 
           if isinstance(data, list):
               lots = data
           elif isinstance(data, dict):
               lots = data.get("oeuvres", data.get("lots", []))
           else:
-              raise ValueError("Format JSON invalide")
+              raise SystemExit("ERREUR : format JSON invalide")
 
           if not isinstance(lots, list):
-              raise ValueError("Liste de lots invalide")
+              raise SystemExit("ERREUR : lots invalides")
 
+          print("======================================")
+          print("RESULTATS GELINEAU")
+          print("======================================")
           print("Nombre de lots :", len(lots))
+
+          for field in ("prix_marteau", "estimation_min", "image"):
+              count = sum(
+                  bool(item.get(field))
+                  for item in lots
+                  if isinstance(item, dict)
+              )
+              print(field, ":", count)
+
           print("Fichier JSON valide")
           PY
-          else
-            echo "ATTENTION : data/gelineau.json absent"
-            exit 1
-          fi
 
-          if [ -d images/gelineau ]; then
-            echo "Photos enregistrees :"
-            find images/gelineau -type f | wc -l
-          else
-            echo "Aucun dossier de photos pour le moment"
-          fi
-
-      # ==========================================
-      # 7. SAUVEGARDE DANS GITHUB
-      # ==========================================
-
-      - name: Enregistrer les donnees
+      # 7. Enregistrer les donnees
+      - name: Enregistrer les donnees dans GitHub
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if [ -f data/gelineau.json ]; then
-            git add data/gelineau.json
-          fi
+          git add data/gelineau.json
 
           if [ -d data/gelineau ]; then
             git add -A data/gelineau
@@ -164,35 +143,26 @@ jobs:
           if git diff --cached --quiet; then
             echo "Aucune nouvelle donnee"
           else
-            git commit -m \
-              "Mise a jour automatique des encans Gelineau"
+            git commit -m "Actualisation Gelineau"
 
-            git pull --rebase origin \
-              "${GITHUB_REF_NAME}"
-
-            git push origin \
-              "HEAD:${GITHUB_REF_NAME}"
-
-            echo "Donnees Gelineau sauvegardees"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
-      # ==========================================
-      # 8. RAPPORT FINAL
-      # ==========================================
-
+      # 8. Rapport final
       - name: Rapport final
         if: always()
         shell: bash
         run: |
           echo "======================================"
           echo "ART ENCHERES QUEBEC"
-          echo "RAPPORT GELINEAU"
+          echo "RAPPORT FINAL GELINEAU"
           echo "======================================"
 
           if [ -f data/gelineau.json ]; then
-            echo "Base Gelineau presente"
+            echo "Fichier Gelineau present"
           else
-            echo "Base Gelineau absente"
+            echo "Fichier Gelineau absent"
           fi
 
           echo "Fin du workflow"
