@@ -1,1 +1,39 @@
 
+name: Test pagination Gelineau V5
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-pagination:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Recuperer le depot
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installer requests
+        run: python -m pip install requests
+
+      - name: Verifier le script
+        run: test -f Collectors/test_gelineau_v5.py
+
+      - name: Tester la pagination du catalogue 784138
+        run: python Collectors/test_gelineau_v5.py
+
+      - name: Conserver le rapport meme si le test echoue
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-test-gelineau-v5
+          path: data/test-gelineau-v5.json
+          if-no-files-found: warn
+          retention-days: 14
