@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Art Enchères Québec — collecteur Gélineau V3 (HTML public HiBid).
+"""Art Enchères Québec — collecteur Gélineau V4 (HTML public HiBid).
 Dépendances: requests, beautifulsoup4. Ne contourne aucune restriction d'accès.
 """
 import hashlib
@@ -36,6 +36,7 @@ SESSION.headers.update(HEADERS)
 PAUSE = 2
 MAX_PAGES = 30
 MAX_EMPTY_PAGES = 2
+DIAGNOSTICS = []
 MAX_CATALOGUES = 60
 
 
@@ -243,6 +244,15 @@ def page_links(soup, url):
         target = canonical(urljoin(url, a['href']))
         if target and catalog_id(target) == auction and re.search(r'[?&](?:page|p)=\d+', target, re.I):
             links[page_number(target)] = target
+    # Détecter aussi les boutons « suivant » sans paramètre page explicite.
+    for a in soup.select('a[href]'):
+        label = clean(a.get_text(' ', strip=True) + ' ' + str(a.get('aria-label', ''))).lower()
+        rel = ' '.join(a.get('rel', []))
+        if not (re.search(r'\b(next|suivant|suivante|›|»)\b', label) or 'next' in rel):
+            continue
+        target = canonical(urljoin(url, a['href']))
+        if target and catalog_id(target) == auction:
+            links.setdefault(page_number(url) + 1, target)
     return links
 
 
@@ -280,6 +290,7 @@ def collect_pages(url, first_soup, auction_id, title, past, items, errors):
     consecutive_empty = 0
     page_number_next = 2
     pages_with_lots = 0
+    page_log = []
     while tested < MAX_PAGES:
         candidates = sorted((n, u) for n, u in queue.items() if u not in visited_urls)
         if candidates:
@@ -296,15 +307,18 @@ def collect_pages(url, first_soup, auction_id, title, past, items, errors):
         try:
             page = first_soup if page_url == url else fetch(page_url)
         except (PermissionError, requests.HTTPError, RuntimeError, ValueError) as exc:
+            page_log.append({'page': number, 'url': page_url, 'erreur': str(exc)})
             errors.append({'catalogue': auction_id, 'page': number, 'erreur': str(exc)})
             if number > 1:
                 break
             raise
         except requests.RequestException as exc:
+            page_log.append({'page': number, 'url': page_url, 'erreur': str(exc)})
             errors.append({'catalogue': auction_id, 'page': number, 'erreur': str(exc)})
             break
         ids = unique_lot_ids(page)
         fresh_ids = ids - seen_lots
+        page_log.append({'page': number, 'url': page_url, 'identifiants': len(ids), 'nouveaux': len(fresh_ids), 'titre_html': clean(page.title.get_text(' ', strip=True))[:120] if page.title else None})
         if not fresh_ids:
             consecutive_empty += 1
             print(f'  Page {number}: aucun nouveau lot ({len(ids)} identifiants), arrêt possible', flush=True)
@@ -326,11 +340,12 @@ def collect_pages(url, first_soup, auction_id, title, past, items, errors):
         print(f'  Page {number}: {len(fresh_ids)} nouveaux identifiants, {len(items)-count_before} fiches', flush=True)
         # Si page 1 a moins de 100 lots et aucun lien suivant, une deuxième page
         # peut néanmoins exister; le test est limité et contrôlé.
+    DIAGNOSTICS.append({'catalogue': auction_id, 'pages': page_log, 'pages_distinctes': pages_with_lots, 'pages_testees': tested})
     return pages_with_lots, tested
 
 
 def main():
-    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V3.0', flush=True)
+    print('ART ENCHERES QUEBEC — COLLECTEUR GELINEAU V4.0', flush=True)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     previous = []
     if OUTPUT.exists():
@@ -401,21 +416,25 @@ def main():
         for field in ('prix_marteau', 'prix_vendu', 'prix', 'image', 'estimation_min', 'estimation_max'):
             if fresh.get(field) is None and old.get(field) is not None:
                 fresh[field] = old[field]
-        if old.get('prix_realise_verifie') and fresh.get('prix_marteau') is not None:
+        if old.get('prix_marteau') is not None and old.get('prix_realise_verifie'):
+            fresh['prix_marteau'] = old['prix_marteau']
             fresh['prix_realise_verifie'] = True
         merged[key] = {**old, **fresh}
     merged = {key: enrich(value) for key, value in merged.items()}
+    # Ne jamais présenter une mise courante comme un prix final vérifié.
     report = {'date': stamp(), 'catalogues_tentes': attempted, 'pages_distinctes': page_count,
               'lots_nouveaux_detectes': len(items), 'catalogues_decouverts': len({catalog_id(u) for u in catalogs}), 'lots_conserves': len(merged),
               'prix_vente_affiches': sum(x.get('prix_vendu') is not None for x in merged.values()),
               'prix_marteau_verifies': sum(x.get('prix_marteau') is not None for x in merged.values()),
               'images_referencees': sum(bool(x.get('image')) for x in merged.values()),
-              'erreurs': errors}
+              'erreurs': errors, 'diagnostic_pagination': DIAGNOSTICS}
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if not items and not previous:
         print('ECHEC : aucun lot extrait. Vérifier le rapport; HTML dynamique ou accès bloqué.', flush=True)
         raise SystemExit(1)
-    OUTPUT.write_text(json.dumps(list(merged.values()), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    temp = OUTPUT.with_suffix('.json.tmp')
+    temp.write_text(json.dumps(list(merged.values()), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    temp.replace(OUTPUT)
     print(json.dumps(report, ensure_ascii=False, indent=2), flush=True)
 
 
