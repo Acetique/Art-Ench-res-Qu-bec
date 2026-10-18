@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-17T11:45:52.854595+00:00",
+  "date": "2026-10-18T11:44:52.949848+00:00",
   "catalogues_tentes": 7,
   "pages_distinctes": 7,
   "lots_nouveaux_detectes": 699,
@@ -8,13 +8,7 @@
   "prix_vente_affiches": 546,
   "prix_marteau_verifies": 0,
   "images_referencees": 699,
-  "erreurs": [
-    {
-      "catalogue": "349662",
-      "page": 3,
-      "erreur": "502 Server Error: Bad Gateway for url: https://hibid.com/quebec/catalog/349662/encans-g-lineau-and-fils-no-30?page=3"
-    }
-  ],
+  "erreurs": [],
   "diagnostic_pagination": [
     {
       "catalogue": "784138",
@@ -176,7 +170,9 @@
         {
           "page": 3,
           "url": "https://hibid.com/quebec/catalog/349662/encans-g-lineau-and-fils-no-30?page=3",
-          "erreur": "502 Server Error: Bad Gateway for url: https://hibid.com/quebec/catalog/349662/encans-g-lineau-and-fils-no-30?page=3"
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.30 | Live and Online Auctions on HiBid.com"
         }
       ],
       "pages_distinctes": 1,
