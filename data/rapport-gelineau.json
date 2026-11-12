@@ -1,13 +1,13 @@
 {
-  "date": "2026-11-11T12:11:58.607329+00:00",
-  "catalogues_tentes": 7,
-  "pages_distinctes": 7,
-  "lots_nouveaux_detectes": 699,
-  "catalogues_decouverts": 7,
-  "lots_conserves": 699,
+  "date": "2026-11-12T19:00:17.640946+00:00",
+  "catalogues_tentes": 8,
+  "pages_distinctes": 8,
+  "lots_nouveaux_detectes": 799,
+  "catalogues_decouverts": 8,
+  "lots_conserves": 799,
   "prix_vente_affiches": 629,
   "prix_marteau_verifies": 0,
-  "images_referencees": 699,
+  "images_referencees": 799,
   "erreurs": [],
   "diagnostic_pagination": [
     {
@@ -201,6 +201,34 @@
           "identifiants": 100,
           "nouveaux": 0,
           "titre_html": "Encans Gélineau & Fils no.25 | Live and Online Auctions on HiBid.com"
+        }
+      ],
+      "pages_distinctes": 1,
+      "pages_testees": 3
+    },
+    {
+      "catalogue": "794199",
+      "pages": [
+        {
+          "page": 1,
+          "url": "https://hibid.com/catalog/794199/encans-g-lineau-and-fils-no-72",
+          "identifiants": 100,
+          "nouveaux": 100,
+          "titre_html": "Encans Gélineau & Fils no.72 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 2,
+          "url": "https://hibid.com/catalog/794199/encans-g-lineau-and-fils-no-72?page=2",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.72 | Live and Online Auctions on HiBid.com"
+        },
+        {
+          "page": 3,
+          "url": "https://hibid.com/catalog/794199/encans-g-lineau-and-fils-no-72?page=3",
+          "identifiants": 100,
+          "nouveaux": 0,
+          "titre_html": "Encans Gélineau & Fils no.72 | Live and Online Auctions on HiBid.com"
         }
       ],
       "pages_distinctes": 1,
